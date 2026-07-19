@@ -1,0 +1,52 @@
+{
+  "note": "Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.",
+  "label": "lichtspiel",
+  "product": "lichtspiel",
+  "dir": "lichtspiel_github_trent",
+  "commitCount": 43,
+  "firstDate": "2026-06-11",
+  "lastDate": "2026-06-15",
+  "authors": 1,
+  "months": {
+    "2026-06": 43
+  },
+  "days": {
+    "2026-06-11": {
+      "count": 14,
+      "subjects": [
+        "feat(takeover): v2 - ♪ LISTEN mode + drive slider (musically-aware hand…",
+        "docs: roadmap revision round 2 + the polling truth + the Takeover-LISTE…",
+        "fix(ui): surface the takeover row - the restyle's third display:none ca…",
+        "chore: vendor the four saved mapping presets (force-added)"
+      ]
+    },
+    "2026-06-12": {
+      "count": 20,
+      "subjects": [
+        "feat(corpus): promote mitShadowLab",
+        "fix(monome): full hardware adaptation - twin expands for Grid 128/Arc 4…",
+        "feat: demo features - presentation mode (D1), upload-your-own (D2), lat…",
+        "feat(corpus): promote crystallineHaze, wfVoyager, wfCentrifuge, obsidia…"
+      ]
+    },
+    "2026-06-13": {
+      "count": 4,
+      "subjects": [
+        "docs: record the silver-face UI overhaul",
+        "feat(ui): re-skin generated banner, capture steps, mapping sections & i…",
+        "feat(ui): warm the monome twin LEDs grey→amber",
+        "feat(ui): silver-face reskin - chassis, faceplate tokens, brand & type"
+      ]
+    },
+    "2026-06-15": {
+      "count": 5,
+      "subjects": [
+        "docs(ui-design): note comprehensive tutorial hover coverage",
+        "feat(ui): comprehensive tutorial-mode hover help",
+        "docs: feeder self-heal + UI review-pass refinements",
+        "feat(ui): review pass - bolder labels, 3D bevels, collapsible Generate/…"
+      ]
+    }
+  },
+  "tags": []
+}

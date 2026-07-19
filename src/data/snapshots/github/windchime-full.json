@@ -1,0 +1,23 @@
+{
+  "note": "Sanitized GitHub metadata — no titles or bodies, only counts, labels, and redacted release names.",
+  "label": "windchime (umbrella)",
+  "product": "windchime",
+  "repo": "Grashopr-888/windchime",
+  "issues": {
+    "state": {
+      "open": 0,
+      "closed": 0,
+      "total": 0
+    },
+    "labels": {}
+  },
+  "prs": {
+    "state": {
+      "open": 0,
+      "closed": 0,
+      "total": 0
+    },
+    "labels": {}
+  },
+  "releases": []
+}

@@ -1,0 +1,23 @@
+{
+  "note": "Sanitized GitHub metadata — no titles or bodies, only counts, labels, and redacted release names.",
+  "label": "lichtspiel",
+  "product": "lichtspiel",
+  "repo": "Grashopr-888/lichtspiel",
+  "issues": {
+    "state": {
+      "open": 0,
+      "closed": 0,
+      "total": 0
+    },
+    "labels": {}
+  },
+  "prs": {
+    "state": {
+      "open": 0,
+      "closed": 0,
+      "total": 0
+    },
+    "labels": {}
+  },
+  "releases": []
+}
