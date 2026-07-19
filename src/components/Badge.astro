@@ -1,0 +1,54 @@
+---
+import type { Tone } from '../lib/taxonomy';
+
+interface Props {
+  tone?: Tone;
+  dot?: boolean;
+  class?: string;
+}
+const { tone = 'neutral', dot = true, class: klass } = Astro.props;
+---
+
+<span class:list={['badge', `t-${tone}`, klass]}>
+  {dot && <span class="dot" aria-hidden="true" />}
+  <slot />
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42em;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.01em;
+    padding: 0.22em 0.62em;
+    border-radius: 100px;
+    white-space: nowrap;
+    color: var(--tone, var(--muted));
+    border: var(--hair) solid color-mix(in oklab, var(--tone, var(--muted)) 35%, var(--hairline));
+    background: color-mix(in oklab, var(--tone, var(--muted)) 9%, var(--surface));
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 100px;
+    background: var(--tone, var(--muted));
+    flex: none;
+  }
+  .t-positive {
+    --tone: var(--t-positive);
+  }
+  .t-warn {
+    --tone: var(--t-warn);
+  }
+  .t-danger {
+    --tone: var(--t-danger);
+  }
+  .t-info {
+    --tone: var(--t-info);
+  }
+  .t-neutral {
+    --tone: var(--muted);
+  }
+</style>

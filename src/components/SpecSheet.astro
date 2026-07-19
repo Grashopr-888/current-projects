@@ -1,0 +1,92 @@
+---
+interface Row {
+  term: string;
+  value?: string;
+  values?: string[];
+}
+interface Props {
+  rows: Row[];
+  class?: string;
+}
+const { rows, class: klass } = Astro.props;
+---
+
+<dl class:list={['spec', klass]}>
+  {
+    rows
+      .filter((r) => r.value || (r.values && r.values.length))
+      .map((r) => (
+        <div class="spec-row">
+          <dt>{r.term}</dt>
+          <dd>
+            {r.values ? (
+              <ul class="spec-list">
+                {r.values.map((v) => (
+                  <li>{v}</li>
+                ))}
+              </ul>
+            ) : (
+              r.value
+            )}
+          </dd>
+        </div>
+      ))
+  }
+</dl>
+
+<style>
+  .spec {
+    margin: 0;
+  }
+  .spec-row {
+    display: grid;
+    grid-template-columns: minmax(7rem, 9rem) 1fr;
+    gap: var(--sp-4);
+    padding-block: var(--sp-3);
+    border-top: var(--hair) solid var(--hairline);
+    align-items: baseline;
+  }
+  .spec-row:first-child {
+    border-top: none;
+  }
+  dt {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+  }
+  dd {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: var(--step-0);
+  }
+  .spec-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .spec-list li {
+    padding-left: 1rem;
+    position: relative;
+  }
+  .spec-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 5px;
+    height: 5px;
+    border-radius: 100px;
+    background: var(--accent, var(--brand));
+  }
+  @media (max-width: 560px) {
+    .spec-row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-1);
+    }
+  }
+</style>

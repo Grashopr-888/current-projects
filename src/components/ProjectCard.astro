@@ -1,0 +1,170 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/url';
+import { PROJECT_META } from '../config';
+import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
+import Badge from './Badge.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const d = project.data;
+const slug = project.id;
+const meta = PROJECT_META[slug as keyof typeof PROJECT_META];
+---
+
+<a class="pcard card" href={url(`/projects/${slug}`)} data-accent={slug}>
+  <span class="pcard-spine" aria-hidden="true"></span>
+  {
+    meta?.art && (
+      <div class="pcard-media">
+        <img src={url(meta.art)} alt={meta.artAlt} loading="lazy" />
+      </div>
+    )
+  }
+  <div class="pcard-top">
+    <span class="pcard-kind">{meta?.kind ?? d.role}</span>
+    <Badge tone={STATUS_TONE[d.status] ?? 'neutral'}>{lbl(d.status)}</Badge>
+  </div>
+  <div class="pcard-idrow">
+    {meta?.logo && <img class="pcard-logo" src={url(meta.logo)} alt="" aria-hidden="true" />}
+    <h3 class="pcard-title">{d.title}</h3>
+  </div>
+  <p class="pcard-summary">{d.summary}</p>
+  {
+    d.languages.length > 0 && (
+      <div class="pcard-langs">
+        <span class="pcard-langs-label">Languages</span>
+        <span class="cluster">
+          {d.languages.map((t) => (
+            <span class="chip">{t}</span>
+          ))}
+        </span>
+      </div>
+    )
+  }
+  <div class="pcard-foot">
+    <span class="pcard-tf">{d.timeframe}</span>
+    <span class="pcard-go">Explore <span class="arrow">→</span></span>
+  </div>
+</a>
+
+<style>
+  .pcard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-5);
+    padding-left: calc(var(--sp-5) + 3px);
+    overflow: hidden;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+  .pcard:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--hairline));
+    background: color-mix(in oklab, var(--accent) 4%, var(--surface));
+  }
+  .pcard-spine {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0.85;
+    z-index: 1;
+  }
+  .pcard-media {
+    margin: calc(var(--sp-5) * -1) calc(var(--sp-5) * -1) 0 calc(var(--sp-5) * -1 - 3px);
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
+    border-bottom: var(--hair) solid var(--hairline);
+    background: var(--surface-2);
+  }
+  .pcard-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .pcard:hover .pcard-media img {
+    transform: scale(1.025);
+  }
+  .pcard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .pcard-kind {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .pcard-idrow {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .pcard-logo {
+    width: 2.2rem;
+    height: 2.2rem;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .pcard-title {
+    font-size: var(--step-3);
+    text-transform: uppercase;
+    font-stretch: var(--display-stretch);
+  }
+  .pcard-summary {
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+    max-width: 52ch;
+  }
+  .pcard-langs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+  }
+  .pcard-langs-label {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+  }
+  .pcard-foot {
+    margin-top: auto;
+    padding-top: var(--sp-4);
+    border-top: var(--hair) solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+  }
+  .pcard-tf {
+    color: var(--muted);
+  }
+  .pcard-go {
+    color: var(--accent);
+  }
+  .arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+  .pcard:hover .arrow {
+    transform: translateX(3px);
+  }
+</style>

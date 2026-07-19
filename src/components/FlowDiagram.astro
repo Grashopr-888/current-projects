@@ -1,0 +1,123 @@
+---
+/** A system-boundary architecture diagram: a labeled pipeline that fans out to outputs.
+ *  CSS-only, responsive, theme-aware. No external images. */
+interface Stage {
+  label: string;
+  note?: string;
+}
+interface Props {
+  stages: Stage[];
+  outputs?: Stage[];
+  caption?: string;
+}
+const { stages, outputs = [], caption } = Astro.props;
+---
+
+<figure class="flow">
+  <div class="flow-pipe">
+    {
+      stages.map((s, i) => (
+        <>
+          <div class="flow-node">
+            <span class="flow-label">{s.label}</span>
+            {s.note && <span class="flow-note">{s.note}</span>}
+          </div>
+          {(i < stages.length - 1 || outputs.length > 0) && (
+            <span class="flow-arrow" aria-hidden="true" />
+          )}
+        </>
+      ))
+    }
+    {
+      outputs.length > 0 && (
+        <div class="flow-outputs">
+          {outputs.map((o) => (
+            <div class="flow-node flow-out">
+              <span class="flow-label">{o.label}</span>
+              {o.note && <span class="flow-note">{o.note}</span>}
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .flow {
+    margin: 0;
+  }
+  .flow-pipe {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    overflow-x: auto;
+  }
+  .flow-node {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.7rem 0.9rem;
+    min-width: 6.5rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-left: 3px solid var(--accent, var(--brand));
+    border-radius: var(--radius);
+    background: var(--bg-tint);
+  }
+  .flow-label {
+    font-weight: 650;
+    font-size: var(--step-0);
+    color: var(--ink);
+  }
+  .flow-note {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--muted);
+  }
+  .flow-arrow {
+    flex: none;
+    width: 1.4rem;
+    height: 2px;
+    background: var(--hairline-strong);
+    position: relative;
+  }
+  .flow-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border-top: 2px solid var(--hairline-strong);
+    border-right: 2px solid var(--hairline-strong);
+  }
+  .flow-outputs {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .flow-out {
+    border-left-color: var(--accent, var(--brand));
+    background: color-mix(in oklab, var(--accent, var(--brand)) 6%, var(--surface));
+  }
+  figcaption {
+    margin-top: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--faint);
+  }
+  @media (max-width: 640px) {
+    .flow-arrow {
+      transform: rotate(90deg);
+    }
+  }
+</style>
