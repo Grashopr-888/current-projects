@@ -1,12 +1,12 @@
-# Product Lifecycle Showcase
+# Current Projects
 
 A public record of **how** two creative-technology products — **Windchime** and
-**Lichtspiel** — were built: discovery, decisions, roadmap, releases, incidents, and
+**Lichtspiel** — are being built: discovery, decisions, roadmap, releases, incidents, and
 iteration. It exists to show technical-product-management and product-engineering practice
 **without exposing the products' private source code**.
 
-The site treats process as the artifact. It is a living document, extended as the work ships
-and as new projects join.
+The site treats process as the artifact, and it is a **living site**: the project records
+are updated as the work progresses, and new projects will be added here as they start.
 
 > **Live site:** `https://grashopr-888.github.io/current-projects/`
 > (Set your host in [`astro.config.mjs`](astro.config.mjs).)
