@@ -1,0 +1,189 @@
+---
+import { NAV, SITE } from '../config';
+import { url, isActive } from '../lib/url';
+import Mark from './Mark.astro';
+
+const here = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="wordmark plain" href={url('/')} aria-label={`${SITE.wordmark}, home`}>
+      <Mark size={17} />
+      <span class="wordmark-text">{SITE.wordmark}</span>
+    </a>
+
+    <div class="nav">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+        <span>Menu</span>
+      </button>
+      <nav class="nav-list" id="primary-nav" aria-label="Primary">
+        {
+          NAV.map((item) => (
+            <a
+              class="nav-link plain"
+              data-accent={item.accent}
+              href={url(item.href)}
+              aria-current={isActive(here, item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in oklab, var(--bg) 86%, transparent);
+    backdrop-filter: blur(10px) saturate(1.2);
+    border-bottom: var(--hair) solid var(--hairline);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    height: 3.7rem;
+  }
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-right: auto;
+    font-family: var(--font-display);
+    font-weight: 760;
+    font-stretch: var(--display-stretch);
+    text-transform: uppercase;
+    font-size: 0.94rem;
+    letter-spacing: 0.015em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .wordmark :global(.mark) {
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .wordmark:hover :global(.mark) {
+    transform: rotate(8deg);
+  }
+
+  .nav {
+    display: contents;
+  }
+  .nav-toggle {
+    display: none;
+  }
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
+  }
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.42rem 0.62rem;
+    border-radius: var(--radius);
+    transition:
+      color 0.15s ease,
+      background 0.15s ease;
+  }
+  .nav-link:hover {
+    color: var(--ink);
+    background: var(--surface-2);
+  }
+  .nav-link[aria-current='page'] {
+    color: var(--ink);
+    box-shadow: inset 0 -2px 0 var(--brand);
+  }
+  /* Project tabs carry their project hue (data-accent binds --accent globally). */
+  .nav-link[data-accent] {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .nav-link[data-accent]:hover {
+    color: color-mix(in oklab, var(--accent) 65%, #fff);
+    background: color-mix(in oklab, var(--accent) 12%, transparent);
+  }
+  .nav-link[data-accent][aria-current='page'] {
+    color: color-mix(in oklab, var(--accent) 70%, #fff);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  /* mobile: collapse nav into a disclosure panel (no runtime JS needed) */
+  @media (max-width: 800px) {
+    .nav {
+      display: block;
+      position: relative;
+    }
+    .nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      padding: 0.4rem 0.7rem;
+      border: var(--hair) solid var(--hairline-strong);
+      border-radius: 100px;
+    }
+    .nav-toggle-bars,
+    .nav-toggle-bars::before,
+    .nav-toggle-bars::after {
+      content: '';
+      display: block;
+      width: 14px;
+      height: 1.5px;
+      background: currentColor;
+      position: relative;
+    }
+    .nav-toggle-bars::before {
+      position: absolute;
+      top: -4.5px;
+    }
+    .nav-toggle-bars::after {
+      position: absolute;
+      top: 3px;
+    }
+    .nav-list {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.6rem);
+      flex-direction: column;
+      align-items: stretch;
+      min-width: 13rem;
+      padding: 0.4rem;
+      background: var(--surface);
+      border: var(--hair) solid var(--hairline);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+    .nav.nav-open .nav-list {
+      display: flex;
+    }
+    .nav-link {
+      padding: 0.6rem 0.7rem;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector('.nav');
+  const toggle = document.querySelector('.nav-toggle');
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('nav-open') ?? false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

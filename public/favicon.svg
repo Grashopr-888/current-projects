@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#1b1a17" />
+  <!-- filament / chime line -->
+  <line x1="16" y1="6.5" x2="16" y2="20" stroke="#bf4a2e" stroke-width="2.3" stroke-linecap="round" />
+  <!-- pendulum weight (amber = light) -->
+  <circle cx="16" cy="24" r="2.6" fill="#e0a54a" />
+  <!-- two chimes (teal = sound/air) -->
+  <circle cx="9.5" cy="11.5" r="1.7" fill="#37b6b0" />
+  <circle cx="22.5" cy="11.5" r="1.7" fill="#37b6b0" />
+</svg>

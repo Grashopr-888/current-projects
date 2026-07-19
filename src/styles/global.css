@@ -1,0 +1,444 @@
+/* =============================================================================
+   CURRENT PROJECTS — design system. Dark-only (#121214), electric-blue accent
+   (#0033ff). Display type is Archivo in its expanded width, set in uppercase
+   for headlines: an industrial, extended-grotesque register in the spirit of
+   Native Instruments' wordmarks. Inter carries body text.
+   Token and class names are preserved so every component re-skins automatically.
+   ========================================================================== */
+
+/* ---- design tokens: dark only -------------------------------------------- */
+:root {
+  /* type */
+  --font-display: 'Archivo Variable', 'Inter Variable', -apple-system, system-ui, sans-serif;
+  --font-body: 'Inter Variable', -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* Archivo's variable width axis: full extension for headline set */
+  --display-stretch: 125%;
+
+  /* fluid type scale */
+  --step--1: clamp(0.79rem, 0.77rem + 0.09vw, 0.84rem);
+  --step-0: clamp(0.95rem, 0.92rem + 0.15vw, 1.03rem);
+  --step-1: clamp(1.14rem, 1.08rem + 0.28vw, 1.3rem);
+  --step-2: clamp(1.37rem, 1.28rem + 0.45vw, 1.63rem);
+  --step-3: clamp(1.64rem, 1.5rem + 0.68vw, 2.05rem);
+  --step-4: clamp(1.96rem, 1.75rem + 1.04vw, 2.6rem);
+  --step-5: clamp(2.36rem, 2.05rem + 1.55vw, 3.35rem);
+  --step-6: clamp(2.83rem, 2.35rem + 2.4vw, 4.4rem);
+
+  /* spacing */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4.5rem;
+  --sp-9: 7rem;
+
+  /* structure */
+  --measure: 68ch;
+  --container: 74rem;
+  --container-wide: 84rem;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --hair: 1px;
+
+  /* ---- palette: DARK (gray-90 base) ---- */
+  --bg: #121214;
+  --bg-tint: #1b1b1d;
+  --surface: #1b1b1d;
+  --surface-2: #232426;
+  --ink: #ffffff;
+  --ink-soft: #e5e5e8;
+  --muted: #a6a8ad;
+  --faint: #86888f;
+  --hairline: #2b2c30;
+  --hairline-strong: #3d3f45;
+
+  --brand: #5a8bff; /* readable blue for text/links/marks on dark */
+  --brand-solid: #0033ff; /* electric blue, solid fills */
+  --brand-solid-hover: #1e4bff;
+  --brand-soft: #17223d;
+  --wc: #5a8bff; /* Windchime — the flagship blue */
+  --wc-soft: #17223d;
+  --ls: #ff8a4c; /* Lichtspiel — warm contrast */
+  --ls-soft: #2e1c10;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 8px 28px -12px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 28px 70px -30px rgba(0, 0, 0, 0.8);
+
+  /* status tones */
+  --t-positive: #4ecb84;
+  --t-warn: #e0a54a;
+  --t-danger: #ff7a5c;
+  --t-info: #5a8bff;
+
+  color-scheme: dark;
+}
+
+/* ---- reset-ish ----------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* ---- typography ---------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+/* NI-style headline set: uppercase, extended width, heavy weight */
+h1,
+h2 {
+  text-transform: uppercase;
+  font-stretch: var(--display-stretch);
+  line-height: 1.02;
+}
+h1 {
+  font-size: var(--step-5);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+h2 {
+  font-size: var(--step-3);
+  font-weight: 750;
+  letter-spacing: -0.008em;
+}
+h3 {
+  font-size: var(--step-2);
+  font-stretch: 110%;
+}
+h4 {
+  font-size: var(--step-1);
+  font-stretch: 110%;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:not(.plain) {
+  color: var(--brand);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  text-decoration-color: color-mix(in oklab, var(--brand) 40%, transparent);
+  transition: text-decoration-color 0.15s ease;
+}
+a:not(.plain):hover {
+  text-decoration-color: var(--brand);
+}
+
+strong {
+  font-weight: 650;
+  color: var(--ink);
+}
+small {
+  font-size: var(--step--1);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+:not(pre) > code {
+  background: var(--surface-2);
+  border: var(--hair) solid var(--hairline);
+  border-radius: 4px;
+  padding: 0.1em 0.36em;
+  font-size: 0.84em;
+}
+
+hr {
+  border: none;
+  border-top: var(--hair) solid var(--hairline);
+  margin: var(--sp-6) 0;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--brand) 28%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ---- reusable motifs ----------------------------------------------------- */
+
+/* eyebrow / section label — bright, bold, NI-flavoured uppercase */
+.label {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 740;
+  font-stretch: 112%;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+.label .idx {
+  color: var(--brand);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* hairline rule with a brand tick */
+.rule {
+  position: relative;
+  border-top: var(--hair) solid var(--hairline);
+  margin: var(--sp-6) 0;
+}
+.rule::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--brand);
+}
+
+/* chips / tags — pill */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+  padding: 0.22em 0.66em;
+  border: var(--hair) solid var(--hairline-strong);
+  border-radius: 100px;
+  color: var(--muted);
+  background: var(--surface);
+  white-space: nowrap;
+}
+.chip[data-product='windchime'] {
+  color: var(--wc);
+  border-color: color-mix(in oklab, var(--wc) 45%, var(--hairline));
+  background: color-mix(in oklab, var(--wc-soft) 55%, var(--surface));
+}
+.chip[data-product='lichtspiel'] {
+  color: var(--ls);
+  border-color: color-mix(in oklab, var(--ls) 45%, var(--hairline));
+  background: color-mix(in oklab, var(--ls-soft) 55%, var(--surface));
+}
+
+/* per-project accent binding */
+[data-accent='windchime'] {
+  --accent: var(--wc);
+  --accent-soft: var(--wc-soft);
+}
+[data-accent='lichtspiel'] {
+  --accent: var(--ls);
+  --accent-soft: var(--ls-soft);
+}
+[data-accent='shared'],
+[data-accent='brand'] {
+  --accent: var(--brand);
+  --accent-soft: var(--brand-soft);
+}
+
+/* ---- buttons (pill controls) --------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-display);
+  font-weight: 740;
+  font-stretch: 112%;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.82rem;
+  line-height: 1;
+  padding: 0.78rem 1.4rem;
+  border-radius: 100px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--muted);
+}
+.btn-primary {
+  background: var(--brand-solid);
+  border-color: var(--brand-solid);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--brand-solid-hover);
+  border-color: var(--brand-solid-hover);
+  box-shadow: 0 10px 26px -10px color-mix(in oklab, var(--brand-solid) 70%, transparent);
+}
+
+/* ---- layout helpers ------------------------------------------------------ */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--sp-5);
+}
+.container-wide {
+  max-width: var(--container-wide);
+}
+.measure {
+  max-width: var(--measure);
+}
+.stack > * + * {
+  margin-top: var(--flow, var(--sp-4));
+}
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  align-items: center;
+}
+.grid-auto {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute;
+  left: var(--sp-4);
+  top: -3rem;
+  z-index: 100;
+  background: var(--brand-solid);
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius);
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: var(--sp-4);
+}
+.card {
+  background: var(--surface);
+  border: var(--hair) solid var(--hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---- prose --------------------------------------------------------------- */
+.prose {
+  max-width: var(--measure);
+  color: var(--ink-soft);
+}
+.prose > * + * {
+  margin-top: var(--sp-4);
+}
+.prose h2 {
+  margin-top: var(--sp-7);
+  font-size: var(--step-2);
+}
+.prose h3 {
+  margin-top: var(--sp-6);
+  font-size: var(--step-1);
+}
+.prose h2 + *,
+.prose h3 + * {
+  margin-top: var(--sp-3);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.2rem;
+}
+.prose li + li {
+  margin-top: 0.35rem;
+}
+.prose li::marker {
+  color: var(--brand);
+}
+.prose blockquote {
+  border-left: 3px solid var(--brand);
+  padding: 0.2rem 0 0.2rem var(--sp-4);
+  color: var(--muted);
+}
+.prose blockquote p {
+  margin: 0;
+}
+.prose strong {
+  color: var(--ink);
+}
+.prose pre {
+  background: var(--surface-2);
+  border: var(--hair) solid var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--sp-4);
+  overflow-x: auto;
+  font-size: 0.84em;
+  line-height: 1.5;
+}
