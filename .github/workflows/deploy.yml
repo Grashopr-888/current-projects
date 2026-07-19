@@ -20,7 +20,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Installs deps, runs `astro build`, and uploads the Pages artifact.
       # `site` / `base` come from astro.config.mjs — no need to pass them here.
       - uses: withastro/action@v3
