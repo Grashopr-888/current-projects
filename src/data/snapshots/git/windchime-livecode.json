@@ -22,15 +22,11 @@
     },
     "2026-05-19": {
       "count": 1,
-      "subjects": [
-        "docs: DEMO_QUICKSTART.md - three terminals, one click, you're live"
-      ]
+      "subjects": ["docs: DEMO_QUICKSTART.md - three terminals, one click, you're live"]
     },
     "2026-05-20": {
       "count": 1,
-      "subjects": [
-        "v0.1.4: eval-app integration + remote /stop endpoint"
-      ]
+      "subjects": ["v0.1.4: eval-app integration + remote /stop endpoint"]
     },
     "2026-05-23": {
       "count": 9,
@@ -43,9 +39,7 @@
     },
     "2026-05-24": {
       "count": 1,
-      "subjects": [
-        "compiler: add `field` to KNOWN_STEM_TYPES"
-      ]
+      "subjects": ["compiler: add `field` to KNOWN_STEM_TYPES"]
     }
   },
   "tags": []

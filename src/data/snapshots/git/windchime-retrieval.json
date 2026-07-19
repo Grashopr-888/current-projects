@@ -38,27 +38,19 @@
     },
     "2026-05-20": {
       "count": 1,
-      "subjects": [
-        "runtime: optional event-emission to a windchime-eval app"
-      ]
+      "subjects": ["runtime: optional event-emission to a windchime-eval app"]
     },
     "2026-05-24": {
       "count": 1,
-      "subjects": [
-        "Add corpus-ingest helper + `field` category"
-      ]
+      "subjects": ["Add corpus-ingest helper + `field` category"]
     },
     "2026-06-24": {
       "count": 1,
-      "subjects": [
-        "Add classify_bundle.py - sort a stem drop into master_stems/<category>/"
-      ]
+      "subjects": ["Add classify_bundle.py - sort a stem drop into master_stems/<category>/"]
     },
     "2026-06-28": {
       "count": 1,
-      "subjects": [
-        "feat: pluggable retrieval backbones (Stage 0/1)"
-      ]
+      "subjects": ["feat: pluggable retrieval backbones (Stage 0/1)"]
     },
     "2026-06-29": {
       "count": 4,
@@ -77,15 +69,11 @@
     },
     "2026-07-11": {
       "count": 1,
-      "subjects": [
-        "feat(audit): phase-a-v3 prompt set - stage-1 coverage expansion (80 bal…"
-      ]
+      "subjects": ["feat(audit): phase-a-v3 prompt set - stage-1 coverage expansion (80 bal…"]
     },
     "2026-07-12": {
       "count": 1,
-      "subjects": [
-        "stems_712 corpus batch mapping (292→330, epochs 4+5)"
-      ]
+      "subjects": ["stems_712 corpus batch mapping (292→330, epochs 4+5)"]
     },
     "2026-07-17": {
       "count": 3,

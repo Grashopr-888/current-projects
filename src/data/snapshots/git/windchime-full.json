@@ -48,9 +48,7 @@
     },
     "2026-06-04": {
       "count": 1,
-      "subjects": [
-        "chore: bump animation pin → a8d207d (monome prefix-robust + self-healin…"
-      ]
+      "subjects": ["chore: bump animation pin → a8d207d (monome prefix-robust + self-healin…"]
     },
     "2026-06-17": {
       "count": 2,
@@ -95,9 +93,7 @@
     },
     "2026-06-28": {
       "count": 1,
-      "subjects": [
-        "Phase 11: pluggable retrieval backbones - dev-UI model toggle + submodu…"
-      ]
+      "subjects": ["Phase 11: pluggable retrieval backbones - dev-UI model toggle + submodu…"]
     },
     "2026-06-29": {
       "count": 5,
@@ -160,9 +156,7 @@
     },
     "2026-07-17": {
       "count": 2,
-      "subjects": [
-        "pin: bump animation + livecode submodules"
-      ]
+      "subjects": ["pin: bump animation + livecode submodules"]
     }
   },
   "tags": [

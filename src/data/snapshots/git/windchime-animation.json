@@ -28,9 +28,7 @@
     },
     "2026-05-23": {
       "count": 1,
-      "subjects": [
-        "v0.1.4 - two new idioms: pasHalloweenV3 + parquetDeformation"
-      ]
+      "subjects": ["v0.1.4 - two new idioms: pasHalloweenV3 + parquetDeformation"]
     }
   },
   "tags": []
