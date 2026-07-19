@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
+);
+---
+
+<BaseLayout
+  title="Projects"
+  description="Windchime and Lichtspiel: two creative-technology products, shown as full-lifecycle process evidence."
+>
+  <section class="container wrap">
+    <p class="label"><span class="idx">§</span> Projects</p>
+    <h1>Two products, one way of working.</h1>
+    <p class="lead measure">
+      Each project below is presented as evidence of the whole lifecycle: the problem, the
+      trade-offs, what shipped, what broke, and what it taught.
+    </p>
+    <div class="pgrid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .wrap {
+    padding-block: var(--sp-8);
+  }
+  h1 {
+    margin-top: var(--sp-4);
+  }
+  .lead {
+    margin-top: var(--sp-4);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+  .pgrid {
+    margin-top: var(--sp-7);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+    gap: var(--sp-5);
+  }
+</style>

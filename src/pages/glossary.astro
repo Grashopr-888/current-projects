@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const terms = (await getCollection('glossary')).sort((a, b) =>
+  a.data.term.localeCompare(b.data.term)
+);
+---
+
+<BaseLayout
+  title="Glossary"
+  description="Plain-language definitions of the terms used across Windchime and Lichtspiel."
+>
+  <section class="container wrap">
+    <p class="label"><span class="idx">§</span> Glossary</p>
+    <h1>Field terms, in plain language.</h1>
+    <p class="lead measure">
+      A few terms that recur across the projects, defined for readers who don't live in audio ML or
+      live-performance tooling.
+    </p>
+
+    <dl class="glossary">
+      {
+        terms.map((t) => (
+          <div class="gterm">
+            <dt>
+              {t.data.term}
+              {t.data.product && t.data.product !== 'shared' && (
+                <span class="gprod" data-product={t.data.product}>
+                  {t.data.product}
+                </span>
+              )}
+            </dt>
+            <dd>{t.data.definition}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</BaseLayout>
+
+<style>
+  .wrap {
+    padding-block: var(--sp-8) var(--sp-9);
+  }
+  h1 {
+    margin-top: var(--sp-4);
+  }
+  .lead {
+    margin-top: var(--sp-4);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+  .glossary {
+    margin-top: var(--sp-7);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
+    gap: 0;
+  }
+  .gterm {
+    padding: var(--sp-5) 0;
+    border-top: var(--hair) solid var(--hairline);
+  }
+  dt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 520;
+    color: var(--ink);
+  }
+  .gprod {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .gprod[data-product='windchime'] {
+    color: var(--wc);
+  }
+  .gprod[data-product='lichtspiel'] {
+    color: var(--ls);
+  }
+  dd {
+    margin: 0.5rem 0 0;
+    max-width: 52ch;
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+  @media (min-width: 52rem) {
+    .glossary {
+      column-gap: var(--sp-7);
+    }
+  }
+</style>

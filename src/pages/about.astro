@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE, SHOW_EMAIL } from '../config';
+import { url } from '../lib/url';
+---
+
+<BaseLayout
+  title="About"
+  description="Why this site exists, who's behind it, and how private work is turned into public process evidence."
+>
+  <section class="container about">
+    <p class="label"><span class="idx">◆</span> About</p>
+    <h1>About this work.</h1>
+
+    <div class="about-lede prose">
+      <p>
+        I'm {SITE.author}, a technical product manager and product engineer working in creative
+        technology, where interfaces, live performance, audio, and machine learning meet. I work the
+        way an early-stage product and engineering lead does. I stay close to the user, make the
+        roadmap calls, design and ship, then own what happens after release.
+      </p>
+      <p>
+        This site is a running, public view of my current projects. It documents the product work in
+        depth: how a problem gets framed, how trade-offs get made, how something ships in small
+        validated steps, and how a bug becomes a postmortem and then a better system.
+        <a href={url('/projects/windchime')}>Windchime</a> and
+        <a href={url('/projects/lichtspiel')}>Lichtspiel</a> are the current projects.
+      </p>
+    </div>
+
+    <div class="about-disclaimer">
+      <span class="label">On the source code</span>
+      <p>
+        This site documents process in depth (decisions, releases, incidents, and research method)
+        while the implementation and the audio corpus stay private. Where a detail is sensitive, it
+        is described at a higher level rather than shown.
+      </p>
+    </div>
+
+    <div class="about-guide">
+      <span class="label">How to read this site</span>
+      <div class="guide-grid">
+        <a class="guide-item" href={url('/projects/windchime')}>
+          <span class="guide-k">Start with a project</span>
+          <span class="guide-v">The full picture of one product, top to bottom.</span>
+        </a>
+        <a class="guide-item" href={url('/how-i-work')}>
+          <span class="guide-k">See how I work</span>
+          <span class="guide-v">The repeatable loop and the templates behind both.</span>
+        </a>
+        <a class="guide-item" href={url('/incidents')}>
+          <span class="guide-k">Judge the reliability</span>
+          <span class="guide-v">The postmortems say more than the feature lists do.</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="about-contact">
+      <span class="label">Contact</span>
+      <div class="contact-row">
+        <a class="btn" href={SITE.githubUrl} target="_blank" rel="me noopener">GitHub</a>
+        {
+          SHOW_EMAIL && (
+            <a class="btn" href={`mailto:${SITE.email}`}>
+              Email
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-block: var(--sp-8) var(--sp-9);
+  }
+  h1 {
+    margin-top: var(--sp-4);
+    max-width: 18ch;
+  }
+  .about-lede {
+    margin-top: var(--sp-5);
+    font-size: var(--step-1);
+  }
+  .about-cols {
+    margin-top: var(--sp-7);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4);
+  }
+  .about-card {
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .about-card-muted {
+    background: var(--surface-2);
+  }
+  .about-card ul {
+    margin-top: var(--sp-3);
+    padding-left: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .about-card li::marker {
+    color: var(--brand);
+  }
+
+  .about-philosophy {
+    margin-top: var(--sp-7);
+    padding-left: var(--sp-5);
+    border-left: 2px solid var(--brand);
+  }
+  .about-rule {
+    margin-top: var(--sp-3);
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 420;
+    font-variation-settings: 'opsz' 40;
+    color: var(--ink);
+    max-width: 50ch;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  .about-guide {
+    margin-top: var(--sp-7);
+  }
+  .guide-grid {
+    margin-top: var(--sp-3);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .guide-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease;
+  }
+  .guide-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--hairline-strong);
+  }
+  .guide-k {
+    font-weight: 580;
+    color: var(--ink);
+  }
+  .guide-v {
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .about-contact {
+    margin-top: var(--sp-7);
+  }
+  .contact-row {
+    margin-top: var(--sp-3);
+    display: flex;
+    gap: var(--sp-3);
+  }
+  .about-todo {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3) var(--sp-4);
+    border: var(--hair) dashed var(--hairline-strong);
+    border-radius: var(--radius);
+    background: color-mix(in oklab, var(--brand) 5%, var(--surface));
+    color: var(--muted);
+    font-size: var(--step--1);
+    max-width: 52ch;
+  }
+
+  @media (max-width: 640px) {
+    .about-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

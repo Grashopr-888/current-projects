@@ -1,0 +1,529 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/url';
+
+// Each mapping ties a line from the Splice TPM (Remote US) posting to evidence on this site.
+type Link = { label: string; href: string };
+type Row = { jd: string; proof: string; links: Link[]; star?: boolean };
+
+const responsibilities: Row[] = [
+  {
+    jd: 'Turn fuzzy product opportunities into crisp hypotheses, prototypes, specs, eval plans, and shipped experiments.',
+    proof:
+      'Windchime ran exactly that arc: a hypothesis (retrieval is a more honest interface than generation), a working prototype, decision records as specs, an evaluation harness and a user study as the eval plan, and a shipped, unattended installation.',
+    links: [
+      { label: 'The decision', href: '/projects/windchime#rec-wc-retrieval-as-variable' },
+      { label: 'Research method', href: '/research' },
+      { label: 'What shipped', href: '/releases' },
+    ],
+  },
+  {
+    jd: 'Partner with engineering on the underlying system: prompts, tools, APIs, search, personalization, model behavior, latency, cost, and quality.',
+    proof:
+      'I build the system, so those tradeoffs are the work: prompts as validated schemas, retrieval as search over audio embeddings, audited audio-language models for model behavior, and a three-tier failover that holds latency, cost, and reliability together.',
+    links: [
+      { label: 'Guarded planner', href: '/projects/windchime#rec-wc-guarded-livecoding' },
+      { label: 'ALM audit', href: '/projects/windchime#res-wc-alm-audit' },
+      { label: 'Failover / safety', href: '/projects/windchime#rel-wc-audio-safety' },
+    ],
+  },
+  {
+    jd: 'Define what "good" means for AI behavior: when the system should ask, act, suggest, search, generate, or stay out of the way.',
+    proof:
+      'Both projects are largely about drawing that line. Windchime’s guarded planner governs how the model may act at all; Lichtspiel’s runtime purity keeps generation off the live path; validation gates decide when a generation is good enough to play.',
+    links: [
+      { label: 'Guarded planner', href: '/projects/windchime#rec-wc-guarded-livecoding' },
+      { label: 'Runtime purity', href: '/projects/lichtspiel#rec-ls-runtime-purity' },
+      { label: 'The gate that was too lax', href: '/projects/lichtspiel#inc-ls-grid-coverage' },
+    ],
+  },
+  {
+    jd: 'Work closely with design to make agentic experiences feel native to the creator workflow, not bolted on.',
+    proof:
+      'Lichtspiel was scoped explicitly as “not another VJ plugin”: session-aware and native to Ableton. Windchime’s install mode makes a voice-driven AI legible to a stranger in seconds.',
+    links: [
+      { label: 'Finding the wedge', href: '/projects/lichtspiel#res-ls-not-another-vj' },
+      { label: 'Install lifecycle', href: '/releases' },
+    ],
+  },
+  {
+    jd: 'Run lightweight discovery with creators: usability sessions, dogfood loops, session reviews, and direct feedback.',
+    proof:
+      'Windchime’s experience is studied with standardized instruments and interviews, and hardened through session reviews: a 6-hour, 879-visitor soak that fed one real fix straight back in.',
+    links: [
+      { label: 'Research', href: '/research' },
+      { label: 'Soak postmortem', href: '/projects/windchime#inc-wc-soak-negative-radius' },
+    ],
+  },
+  {
+    jd: 'Build or prototype directly when that is the fastest way to learn.',
+    proof:
+      'Lichtspiel was built in a hackathon weekend; Windchime went from a voice-retrieval prototype to a running installation. Making it real quickly is the default, not the exception.',
+    links: [
+      { label: 'Lichtspiel', href: '/projects/lichtspiel' },
+      { label: 'How I work', href: '/how-i-work' },
+    ],
+  },
+  {
+    jd: 'Use modern AI tools daily, and help develop the operating playbook for how Splice builds agentic music products.',
+    proof:
+      'This site is that playbook (a documented discover → decide → ship → learn loop with lift-able templates), and it, like the projects, was built with agentic AI tooling in the loop.',
+    links: [{ label: 'The operating playbook', href: '/how-i-work' }],
+  },
+];
+
+const requirements: Row[] = [
+  {
+    star: true,
+    jd: 'Hands-on experience with agentic systems: you have tuned prompts, built evals, worked with LLM APIs, or debugged agent behavior in production.',
+    proof:
+      'All four, on the record: prompts as guarded schemas; an audit harness plus validation gates as evals; a hosted model with a local fallback behind one interface; and three separate postmortems where I diagnosed and fixed generative-system behavior in a live system.',
+    links: [
+      { label: 'Prompts → schema', href: '/projects/windchime#rec-wc-guarded-livecoding' },
+      { label: 'Evals / audit harness', href: '/projects/windchime#res-wc-alm-audit' },
+      { label: 'Debugged in production', href: '/projects/windchime#inc-wc-audio-runaway' },
+      { label: 'Restored the gates', href: '/projects/lichtspiel#inc-ls-validation-regression' },
+    ],
+  },
+  {
+    jd: 'Technical fluency: read code, understand architecture, and have sharp conversations with engineers about tradeoffs.',
+    proof:
+      'The decision records are those tradeoff conversations, written down: options weighed honestly, the call made, the consequences owned.',
+    links: [
+      {
+        label: 'A safety-vs-expressiveness call',
+        href: '/projects/windchime#rec-wc-guarded-livecoding',
+      },
+      {
+        label: 'A merge-the-forks judgment call',
+        href: '/projects/lichtspiel#rec-ls-consolidation',
+      },
+    ],
+  },
+  {
+    jd: 'Experience with product analytics, user research, or quality evaluation for AI systems.',
+    proof:
+      'A user-study instrument suite (standardized scales, per-trial ratings, interviews) and a quality-evaluation harness that audits audio-language model configurations on distributional metrics: model quality treated as a controlled variable.',
+    links: [
+      { label: 'User research', href: '/research' },
+      { label: 'Quality audit', href: '/projects/windchime#res-wc-alm-audit' },
+    ],
+  },
+  {
+    jd: 'Strong bias toward making things real quickly. You do not wait for a perfect spec to start learning.',
+    proof:
+      'A hackathon-born live instrument and a rapid voice-retrieval prototype. The roadmap shows the same cadence: small, validated steps toward the next thing to learn.',
+    links: [
+      { label: 'Lichtspiel', href: '/projects/lichtspiel' },
+      { label: 'Roadmap', href: '/roadmap' },
+    ],
+  },
+  {
+    jd: 'Strong written communication: turn messy observations into crisp product direction.',
+    proof:
+      'Every surface here (decision records, blameless postmortems, release notes framed by customer value) is messy reality turned into direction. This page is a sample of it.',
+    links: [
+      { label: 'Incidents', href: '/incidents' },
+      { label: 'Releases', href: '/releases' },
+    ],
+  },
+  {
+    jd: 'A genuine feel for user experience. You care how the product feels, not just that it works.',
+    proof:
+      'One-shot legibility for a gallery stranger, an instrument that adapts to whatever hardware is plugged in, and the care in this site’s own build. How it feels is the point.',
+    links: [
+      { label: 'Windchime', href: '/projects/windchime' },
+      { label: 'About', href: '/about' },
+    ],
+  },
+];
+
+const niceToHaves: Row[] = [
+  {
+    jd: 'Experience making music or working in a DAW.',
+    proof:
+      'Lichtspiel is built inside Ableton Live + Max for Live; Windchime’s corpus is my own studio stems. I make music.',
+    links: [{ label: 'Lichtspiel', href: '/projects/lichtspiel' }],
+  },
+  {
+    jd: 'Familiarity with music technology, audio products, or creator tools.',
+    proof:
+      'Both projects are creator tools end to end: retrieval over a sample library, live-coded music, and DAW-native visuals.',
+    links: [{ label: 'Projects', href: '/projects' }],
+  },
+  {
+    jd: 'LLM-as-judge frameworks, golden datasets, or structured quality benchmarking.',
+    proof:
+      'The ALM audit runs a balanced, versioned prompt set through every configuration and scores distributional quality; generation is fenced by structured validation gates with a bounded self-repair loop.',
+    links: [
+      { label: 'Structured benchmarking', href: '/projects/windchime#res-wc-alm-audit' },
+      { label: 'Validation gates', href: '/projects/lichtspiel#inc-ls-grid-coverage' },
+    ],
+  },
+  {
+    jd: 'A portfolio of scrappy, self-directed projects that show how you think and build.',
+    proof:
+      'You’re reading it. Two self-directed projects, documented end to end. The exact artifact this line asks for.',
+    links: [
+      { label: 'Start at the overview', href: '/' },
+      { label: 'Both projects', href: '/projects' },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="For Splice"
+  description="How Windchime and Lichtspiel map to Splice's Technical Product Manager (Remote US) role. Every claim linked to evidence."
+  accent="brand"
+>
+  <section class="container hero">
+    <p class="label">
+      <span class="idx">◆</span> Application · Technical Product Manager (Remote US)
+    </p>
+    <h1>Built for building agentic music products.</h1>
+    <p class="hero-sub measure">
+      This page maps the work shown across this site to Splice’s Technical Product Manager role.
+      It’s one candidate’s case for fit, and every point links to the evidence behind it.
+    </p>
+    <div class="match">
+      <p>
+        <strong>The match in one line:</strong> Windchime and Lichtspiel are agentic music-creation products,
+        AI inside a creator surface, with prompts, evals, user studies, latency and quality tradeoffs,
+        and shipped workflows. That is the job.
+      </p>
+    </div>
+  </section>
+
+  <section class="container block">
+    <p class="label"><span class="idx">01</span> · What you’ll do</p>
+    <h2>The role, mapped to shipped work.</h2>
+    <div class="rows">
+      {
+        responsibilities.map((r) => (
+          <div class:list={['row', { star: r.star }]}>
+            <div class="jd">
+              <p>{r.jd}</p>
+            </div>
+            <div class="proof">
+              <p>{r.proof}</p>
+              <div class="ev-links">
+                {r.links.map((l) => (
+                  <a class="ev plain" href={url(l.href)}>
+                    {l.label} <span aria-hidden="true">→</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container block">
+    <p class="label"><span class="idx">02</span> · What you’re looking for</p>
+    <h2>The requirements, with receipts.</h2>
+    <div class="rows">
+      {
+        requirements.map((r) => (
+          <div class:list={['row', { star: r.star }]}>
+            <div class="jd">
+              {r.star && <span class="jd-tag">Core requirement</span>}
+              <p>{r.jd}</p>
+            </div>
+            <div class="proof">
+              <p>{r.proof}</p>
+              <div class="ev-links">
+                {r.links.map((l) => (
+                  <a class="ev plain" href={url(l.href)}>
+                    {l.label} <span aria-hidden="true">→</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container block">
+    <p class="label"><span class="idx">03</span> · Nice-to-haves</p>
+    <h2>All four, not just some.</h2>
+    <div class="nth">
+      {
+        niceToHaves.map((r) => (
+          <div class="nth-card">
+            <p class="nth-jd">{r.jd}</p>
+            <p class="nth-proof">{r.proof}</p>
+            <div class="ev-links">
+              {r.links.map((l) => (
+                <a class="ev plain" href={url(l.href)}>
+                  {l.label} <span aria-hidden="true">→</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container block">
+    <div class="qa">
+      <p class="label"><span class="idx">04</span> · Improving AI system behavior, on the record</p>
+      <p class="qa-a">Three worked examples are already written up here:</p>
+      <ul class="qa-list">
+        <li>
+          <a class="plain ev" href={url('/projects/lichtspiel#inc-ls-grid-coverage')}
+            >The gate that passed bad generations →</a
+          >. An eval that checked idioms existed but not that they <em>covered</em> the controller.
+        </li>
+        <li>
+          <a class="plain ev" href={url('/projects/lichtspiel#inc-ls-validation-regression')}
+            >The stubbed validator, restored →</a
+          >. Rebuilt real gates + a bounded self-repair loop, proven on the first generation.
+        </li>
+        <li>
+          <a class="plain ev" href={url('/projects/windchime#inc-wc-audio-runaway')}
+            >The generative loop that ran away →</a
+          >. Diagnosed unbounded accumulation, fixed with limiter, clamps, and a watchdog.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="container closing">
+    <div class="closing-cta">
+      <a class="btn btn-primary" href={url('/how-i-work')}>See how I work</a>
+      <a class="btn" href={url('/projects')}>Read the projects</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--sp-8) var(--sp-6);
+  }
+  h1 {
+    margin-top: var(--sp-4);
+    max-width: 16ch;
+  }
+  .hero-sub {
+    margin-top: var(--sp-5);
+    font-size: var(--step-2);
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .match {
+    margin-top: var(--sp-6);
+    padding: var(--sp-5);
+    border: var(--hair) solid color-mix(in oklab, var(--brand) 40%, var(--hairline));
+    border-radius: var(--radius-lg);
+    background: color-mix(in oklab, var(--brand) 8%, var(--surface));
+    max-width: 60rem;
+  }
+  .match p {
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .block {
+    padding-block: var(--sp-7);
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .block h2 {
+    margin-top: var(--sp-3);
+    margin-bottom: var(--sp-6);
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: var(--sp-5);
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .row:hover {
+    background: color-mix(in oklab, var(--ink) 7%, var(--surface));
+    border-color: color-mix(in oklab, var(--brand) 40%, var(--hairline));
+  }
+  .row.star {
+    border-color: color-mix(in oklab, var(--brand) 55%, var(--hairline));
+    background: color-mix(in oklab, var(--brand) 7%, var(--surface));
+  }
+  .jd-tag,
+  .proof-tag {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+  }
+  .row.star .jd-tag {
+    color: var(--brand);
+  }
+  .jd p {
+    margin-top: var(--sp-2);
+    color: var(--muted);
+    font-size: var(--step-0);
+    line-height: 1.5;
+  }
+  .proof {
+    border-left: 2px solid var(--brand);
+    padding-left: var(--sp-4);
+  }
+  .proof p {
+    margin-top: var(--sp-2);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .ev-links {
+    margin-top: var(--sp-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .ev {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--brand);
+    padding: 0.25rem 0.6rem;
+    border: var(--hair) solid color-mix(in oklab, var(--brand) 35%, var(--hairline));
+    border-radius: 100px;
+    background: color-mix(in oklab, var(--brand) 6%, transparent);
+    transition:
+      background 0.15s ease,
+      transform 0.15s ease;
+  }
+  .ev:hover {
+    background: color-mix(in oklab, var(--brand) 16%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .nth {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .nth-card {
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .nth-card:hover {
+    background: color-mix(in oklab, var(--ink) 7%, var(--surface));
+    border-color: color-mix(in oklab, var(--brand) 40%, var(--hairline));
+  }
+  .nth-jd {
+    font-weight: 650;
+    color: var(--ink);
+    font-size: var(--step-0);
+  }
+  .nth-proof {
+    margin-top: var(--sp-2);
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .nth-card .ev-links {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+  }
+
+  .qa {
+    padding: var(--sp-6);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--bg-tint);
+  }
+  .qa-q {
+    margin-top: var(--sp-3);
+    border-left: 3px solid var(--brand);
+    padding-left: var(--sp-4);
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.35;
+    max-width: 46ch;
+  }
+  .qa-a {
+    margin-top: var(--sp-5);
+    color: var(--ink-soft);
+  }
+  .qa-list {
+    margin-top: var(--sp-3);
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .qa-list li {
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .qa-list .ev {
+    display: inline;
+    border: none;
+    background: none;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: inherit;
+    font-weight: 600;
+  }
+
+  .closing {
+    padding-block: var(--sp-8);
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .closing-line {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+  .closing-cta {
+    margin-top: var(--sp-5);
+    display: flex;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 760px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: var(--sp-4);
+    }
+    .proof {
+      border-left: none;
+      padding-left: 0;
+      border-top: var(--hair) solid var(--hairline);
+      padding-top: var(--sp-4);
+    }
+  }
+</style>

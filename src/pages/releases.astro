@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RecordCard from '../components/RecordCard.astro';
+import { allReleases } from '../lib/content';
+import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
+
+const releases = await allReleases();
+const shipped = releases.filter((r) => r.data.status === 'shipped').length;
+---
+
+<BaseLayout
+  title="Releases"
+  description="What shipped across Windchime and Lichtspiel, when, and why it mattered."
+>
+  <section class="container wrap">
+    <p class="label"><span class="idx">§</span> Releases</p>
+    <h1>What shipped, and why it mattered.</h1>
+    <p class="lead measure">
+      A reverse-chronological changelog across both products. Each entry is framed by the value it
+      delivered and the risk it carried, not the diff behind it.
+    </p>
+
+    <div class="toolbar">
+      <div class="filterbar" role="group" aria-label="Filter by product">
+        <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+        <button class="filter-btn" data-filter="windchime" aria-pressed="false">Windchime</button>
+        <button class="filter-btn" data-filter="lichtspiel" aria-pressed="false">Lichtspiel</button>
+      </div>
+      <span class="count">{shipped} shipped · {releases.length} total</span>
+    </div>
+
+    <div class="list" id="release-list" data-active="all">
+      {
+        releases.map((r) => (
+          <RecordCard
+            tone={STATUS_TONE[r.data.status] ?? 'neutral'}
+            badge={lbl(r.data.status)}
+            title={r.data.title}
+            date={r.data.date}
+            product={r.data.product}
+            anchor={`rel-${r.id}`}
+            meta={r.data.version_or_label}
+          >
+            <p>{r.data.summary}</p>
+            <p>
+              <strong>Customer value.</strong> {r.data.customer_value}
+            </p>
+            {r.data.included_work.length > 0 && (
+              <>
+                <p class="rec-sub">Included</p>
+                <ul>
+                  {r.data.included_work.map((w) => (
+                    <li>{w}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {r.data.notable_risks.length > 0 && (
+              <>
+                <p class="rec-sub">Notable risks</p>
+                <ul>
+                  {r.data.notable_risks.map((w) => (
+                    <li>{w}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </RecordCard>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .wrap {
+    padding-block: var(--sp-8) var(--sp-9);
+  }
+  h1 {
+    margin-top: var(--sp-4);
+  }
+  .lead {
+    margin-top: var(--sp-4);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+  .toolbar {
+    margin-top: var(--sp-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+  }
+  .filterbar {
+    display: flex;
+    gap: 0.3rem;
+  }
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    border: var(--hair) solid var(--hairline-strong);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-btn[aria-pressed='true'] {
+    color: var(--bg);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--faint);
+  }
+  .list {
+    margin-top: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .list[data-active='windchime'] :global(.rec[data-product='lichtspiel']),
+  .list[data-active='lichtspiel'] :global(.rec[data-product='windchime']) {
+    display: none;
+  }
+  .rec-sub {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+</style>
+
+<script>
+  const bar = document.querySelector('.filterbar');
+  const list = document.getElementById('release-list');
+  bar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-filter]');
+    if (!btn || !list) return;
+    list.dataset.active = btn.dataset.filter;
+    bar
+      .querySelectorAll<HTMLElement>('[data-filter]')
+      .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+  });
+</script>

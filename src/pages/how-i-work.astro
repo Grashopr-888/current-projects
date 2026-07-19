@@ -1,0 +1,707 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FlowDiagram from '../components/FlowDiagram.astro';
+import CommitGrid from '../components/CommitGrid.astro';
+import { url } from '../lib/url';
+import { fmtMonth } from '../lib/format';
+import { gitSignals } from '../lib/signals';
+
+const sig = gitSignals();
+const span =
+  sig.firstDate && sig.lastDate
+    ? `${fmtMonth(new Date(sig.firstDate))} to ${fmtMonth(new Date(sig.lastDate))}`
+    : 'n/a';
+
+type ArtifactLink = { label: string; href: string };
+const loop: Array<{ step: string; line: string; artifacts: ArtifactLink[] }> = [
+  {
+    step: 'Discover',
+    line: 'Get close to the real problem. Talk to the user, scan the alternatives, and name what the thing is not.',
+    artifacts: [{ label: 'Research notes', href: '/research' }],
+  },
+  {
+    step: 'Decide',
+    line: 'Weigh options in the open and write the trade-off down, so the reasoning survives the decision.',
+    artifacts: [
+      { label: 'Windchime ADRs', href: '/projects/windchime#decisions' },
+      { label: 'Lichtspiel ADRs', href: '/projects/lichtspiel#decisions' },
+    ],
+  },
+  {
+    step: 'Ship',
+    line: 'Small, validated releases against a checklist. Done means running in the room, not merged.',
+    artifacts: [{ label: 'Releases', href: '/releases' }],
+  },
+  {
+    step: 'Learn',
+    line: 'Soak it, let it break, write the blameless postmortem, and fold the fix back into the system.',
+    artifacts: [{ label: 'Postmortems', href: '/incidents' }],
+  },
+];
+
+/** The end-to-end pipeline, each stage anchored by a real artifact from the projects. */
+const pipeline = [
+  {
+    stage: 'Signal',
+    what: 'A problem observed in the room or in the data, not invented at a desk.',
+    example: 'Poetic prompts retrieved loosely; visitors read the drift as play.',
+  },
+  {
+    stage: 'Frame',
+    what: 'A one-page PRD-lite: problem, goal, non-goals, and a success metric stated up front.',
+    example: 'Install mode framed as "survives a full day with no operator."',
+  },
+  {
+    stage: 'Decide',
+    what: 'Options weighed in the open and captured as a decision record.',
+    example: 'Retrieval over generation on the audio path, written as an ADR.',
+  },
+  {
+    stage: 'Prototype',
+    what: 'The smallest real version that can prove the idea wrong.',
+    example: 'Voice-to-stem retrieval running end to end before any polish.',
+  },
+  {
+    stage: 'Gate',
+    what: 'Nothing ships on trust: typed schemas, validation chains, redaction checks, soak runs.',
+    example: 'A 6-hour, 879-visitor synthetic soak before the gallery gets it.',
+  },
+  {
+    stage: 'Ship & learn',
+    what: 'Releases framed by customer value; failures become blameless postmortems that feed the roadmap.',
+    example: 'The audio-runaway postmortem became a three-layer safety fix.',
+  },
+];
+
+const templates = [
+  {
+    name: 'PRD-lite',
+    purpose: 'One page before building anything non-trivial.',
+    body: `# <feature>: PRD-lite
+
+**Problem**: what's broken, for whom, and why now.
+**Users / context**: who hits this, how often, in what situation.
+**Goal**: the one outcome that means success.
+**Non-goals**: what we are deliberately NOT doing.
+**Approach**: the shape of the solution (a level up from implementation).
+**Success metric**: how we'll know, stated before we build.
+**Risks / unknowns**: what could make this wrong.
+**Rollout**: how it ships, and how it rolls back.`,
+  },
+  {
+    name: 'Decision record (ADR)',
+    purpose: 'Capture a judgment call so the reasoning outlives it.',
+    body: `# <decision>: ADR
+
+**Status**: proposed | accepted | superseded
+**Context**: the forces in play; what makes this a real choice.
+**Options considered**: each with its honest trade-offs.
+**Decision**: what we chose.
+**Rationale**: why this beat the alternatives.
+**Consequences**: what this makes easy, and what it costs.`,
+  },
+  {
+    name: 'Experiment note',
+    purpose: 'Keep discovery honest. Hypothesis first.',
+    body: `# <experiment>: note
+
+**Hypothesis**: we believe X will cause Y, because Z.
+**Method**: what we ran, on whom/what, how controlled.
+**Measured**: the metric(s), defined up front.
+**Result**: what actually happened (including "nothing").
+**Decision**: ship / iterate / drop, and why.`,
+  },
+  {
+    name: 'Release checklist',
+    purpose: 'Pre-flight before anything ships.',
+    body: `# Release: <label>
+
+- [ ] Tests + typecheck green
+- [ ] \`redact:check\` clean (no secrets/hosts leaked)
+- [ ] Customer value written (not just the diff)
+- [ ] Known risks noted
+- [ ] Rollback path exists and is understood
+- [ ] Changelog / release note updated
+- [ ] Verified in the real environment, not just locally`,
+  },
+  {
+    name: 'Bug report',
+    purpose: 'Enough to reproduce and prioritize.',
+    body: `# <bug>
+
+**Summary**: one sentence.
+**Repro**: the shortest reliable steps.
+**Expected vs actual**: what should happen; what does.
+**Impact / severity**: who's affected, how badly.
+**Environment**: where it shows up.`,
+  },
+  {
+    name: 'Postmortem',
+    purpose: 'Turn an incident into institutional learning, blamelessly.',
+    body: `# <incident>: postmortem
+
+**Impact**: what users/experience felt.
+**Detection**: how we found out.
+**Response**: what we did, in order.
+**Root cause**: the real mechanism, not the symptom.
+**Fix**: what changed, and how we verified it.
+**Follow-up actions**: owner + status for each.
+**Blameless note**: the systemic lesson, not the culprit.`,
+  },
+];
+
+/** How agentic coding tools are actually used on these projects. */
+const agentPractices = [
+  {
+    name: 'Context before code',
+    body: 'Every repo carries a context document an agent must read before touching anything: architecture, invariants, privacy hard-stops, and known hazards. Sessions start oriented instead of re-deriving the system from scratch.',
+  },
+  {
+    name: 'Persistent memory, curated',
+    body: 'Durable memory notes record mission state, decisions, and gotchas across sessions, and get pruned when they go stale. A wrong memory is worse than no memory, so facts are verified against the code before they are acted on.',
+  },
+  {
+    name: 'One mission per session',
+    body: 'Each chat owns one scoped mission with an explicit spin-down: commit-ready state, memory updated, a handoff note written for the next session. Context windows are a budget, not a landfill.',
+  },
+  {
+    name: 'Subagents for fan-out',
+    body: 'Research work is delegated to parallel subagents with narrow briefs and the privacy rules restated in every prompt: one mines git history, another audits terminology, while the main thread keeps building.',
+  },
+  {
+    name: 'Gates decide "done", not the agent',
+    body: 'Agent work only counts when the gates say so: typecheck, build, regression harness, and a redaction scan that blocks secrets, hostnames, and private material from ever shipping. Green gates are the definition of finished.',
+  },
+  {
+    name: 'Human-gated commits',
+    body: 'Nothing lands without the owner directing it: diffs are reviewed and commit structure is curated deliberately, with agent assistance credited in the trailer, because the history itself is a product artifact.',
+  },
+  {
+    name: 'Verification over trust',
+    body: 'Visual work gets a browser pass with screenshots before it counts; reliability claims get a soak harness, not a vibe check. The 6-hour, 879-visitor run exists because "the agent says it works" is not evidence.',
+  },
+  {
+    name: 'Review loops on agent code',
+    body: 'Agent-written diffs get adversarial review passes (simplification, correctness, security) before they land, the same way a human teammate would be reviewed. Postmortems apply to agent-introduced bugs too.',
+  },
+];
+
+const practices = [
+  'A PRD-lite with a success metric exists before anything non-trivial gets built.',
+  'Judgment calls are captured as decision records at the moment they are made.',
+  'Typed content and validated schemas everywhere. A broken cross-link fails the build.',
+  'A redaction gate (redact:check) runs before anything private-derived ships.',
+  'Releases are written as customer value, not diffs, against a pre-flight checklist.',
+  'Incidents get blameless postmortems with tracked follow-up actions.',
+  'CI installs, type-checks, and builds every change; deploys are automated.',
+  'Issue/PR templates, CODEOWNERS, and Dependabot keep the repo itself honest.',
+];
+---
+
+<BaseLayout
+  title="How I Work"
+  description="The repeatable operating system behind both products: the loop, the pipeline, the shipping cadence, and the templates."
+>
+  <section class="container wrap">
+    <p class="label"><span class="idx">§</span> How I work</p>
+    <h1>How I build, start to finish.</h1>
+    <p class="lead measure">
+      Both products came out of the same loop and the same templates. This page is the operating
+      system itself: the cadence behind the work, and the artifacts you can lift and use.
+    </p>
+
+    <div class="loop">
+      {
+        loop.map((l, i) => (
+          <div class="loop-step">
+            <span class="loop-idx">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="loop-name">{l.step}</h3>
+            <p class="loop-line">{l.line}</p>
+            <span class="loop-artifacts">
+              {l.artifacts.map((a) => (
+                <a class="loop-artifact plain" href={url(a.href)}>
+                  → {a.label}
+                </a>
+              ))}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="pipe">
+      <p class="label"><span class="idx">◇</span> From signal to shipped</p>
+      <p class="pipe-lead measure">
+        The same pipeline runs under both projects, from a raw observation to a shipped, soaked
+        release. Every stage leaves an artifact, and each card names a real one.
+      </p>
+      <FlowDiagram
+        stages={[
+          { label: 'Signal', note: 'observed, not invented' },
+          { label: 'Frame', note: 'PRD-lite + metric' },
+          { label: 'Decide', note: 'ADR' },
+          { label: 'Prototype', note: 'smallest real thing' },
+        ]}
+        outputs={[
+          { label: 'Gate', note: 'schemas · redaction · soak' },
+          { label: 'Ship', note: 'release + customer value' },
+          { label: 'Learn', note: 'blameless postmortem' },
+        ]}
+        caption="Discovery converges to one decision, then fans out into gated delivery and learning."
+      />
+      <div class="stages">
+        {
+          pipeline.map((p, i) => (
+            <div class="stage">
+              <span class="stage-idx">{String(i + 1).padStart(2, '0')}</span>
+              <h4 class="stage-name">{p.stage}</h4>
+              <p class="stage-what">{p.what}</p>
+              <p class="stage-ex">{p.example}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    {
+      sig.available && (
+        <div class="signal">
+          <div class="signal-head">
+            <p class="label">
+              <span class="idx">◆</span> Shipping cadence
+            </p>
+            <p class="signal-note">
+              Ingested from {sig.repoCount} private repos: day-level counts plus redacted, truncated
+              subject lines, everything passed through the redaction gate. See the{' '}
+              <a href={url('/about')}>note on the source code</a>.
+            </p>
+          </div>
+          <div class="signal-stats">
+            <div class="sstat">
+              <span class="sstat-v">{sig.totalCommits}</span>
+              <span class="sstat-l">commits</span>
+            </div>
+            <div class="sstat">
+              <span class="sstat-v">{sig.repoCount}</span>
+              <span class="sstat-l">repositories</span>
+            </div>
+            <div class="sstat">
+              <span class="sstat-v">{span}</span>
+              <span class="sstat-l">active span</span>
+            </div>
+            <div class="sstat">
+              <span class="sstat-v">
+                <span class="chip" data-product="windchime">
+                  Windchime {sig.byProduct.windchime}
+                </span>
+                <span class="chip" data-product="lichtspiel">
+                  Lichtspiel {sig.byProduct.lichtspiel}
+                </span>
+              </span>
+              <span class="sstat-l">commits by project</span>
+            </div>
+          </div>
+          {sig.firstDate && sig.lastDate && (
+            <div class="grids">
+              <CommitGrid
+                label="Windchime"
+                accent="windchime"
+                days={sig.daysByProduct.windchime}
+                first={sig.firstDate}
+                last={sig.lastDate}
+              />
+              <CommitGrid
+                label="Lichtspiel"
+                accent="lichtspiel"
+                days={sig.daysByProduct.lichtspiel}
+                first={sig.firstDate}
+                last={sig.lastDate}
+              />
+            </div>
+          )}
+          <p class="grids-hint">Hover a day for its commit detail.</p>
+        </div>
+      )
+    }
+
+    <div class="templates">
+      <p class="label"><span class="idx">◈</span> Public templates</p>
+      <p class="templates-lead measure">
+        The same lightweight templates I use at each stage. Click one to open it, take any of them.
+      </p>
+      <div class="tgrid">
+        {
+          templates.map((t) => (
+            <details class="tpl">
+              <summary>
+                <span class="tpl-head">
+                  <span class="tpl-name">{t.name}</span>
+                  <span class="tpl-chevron" aria-hidden="true">
+                    +
+                  </span>
+                </span>
+                <span class="tpl-purpose">{t.purpose}</span>
+              </summary>
+              <pre class="tpl-body">{t.body}</pre>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="agents">
+      <p class="label"><span class="idx">⌘</span> Building with agents</p>
+      <p class="agents-lead measure">
+        Both projects and this site are built with agentic coding tools in the loop. The practices
+        below are what make that fast without making it careless.
+      </p>
+      <div class="agrid">
+        {
+          agentPractices.map((p) => (
+            <div class="acard">
+              <h4 class="acard-name">{p.name}</h4>
+              <p class="acard-body">{p.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="disc">
+      <p class="label"><span class="idx">↳</span> Product &amp; engineering practices</p>
+      <ul class="disc-list">
+        {practices.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .wrap {
+    padding-block: var(--sp-8) var(--sp-9);
+  }
+  h1 {
+    margin-top: var(--sp-4);
+  }
+  .lead {
+    margin-top: var(--sp-4);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  .loop {
+    margin-top: var(--sp-7);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .loop-step {
+    padding: var(--sp-5);
+    border-left: var(--hair) solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .loop-step:first-child {
+    border-left: none;
+  }
+  .loop-idx {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--brand);
+  }
+  .loop-name {
+    font-size: var(--step-2);
+  }
+  .loop-line {
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .loop-artifacts {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .loop-artifact {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--brand);
+    border-radius: var(--radius);
+    padding: 0.15rem 0.3rem;
+    margin-left: -0.3rem;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+  .loop-artifact:hover {
+    background: color-mix(in oklab, var(--brand) 12%, transparent);
+    color: var(--ink);
+  }
+
+  .pipe {
+    margin-top: var(--sp-8);
+  }
+  .pipe-lead {
+    margin-top: var(--sp-2);
+    margin-bottom: var(--sp-5);
+    color: var(--muted);
+  }
+  .stages {
+    margin-top: var(--sp-4);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .stage {
+    padding: var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-top: 3px solid var(--brand);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .stage:hover {
+    background: color-mix(in oklab, var(--ink) 7%, var(--surface));
+    border-color: color-mix(in oklab, var(--brand) 40%, var(--hairline));
+  }
+  .stage-idx {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--brand);
+  }
+  .stage-name {
+    font-size: var(--step-0);
+  }
+  .stage-what {
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .stage-ex {
+    margin-top: auto;
+    padding-top: var(--sp-2);
+    border-top: var(--hair) dashed var(--hairline);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1.5;
+    color: var(--faint);
+  }
+
+  .signal {
+    margin-top: var(--sp-8);
+    padding: var(--sp-6);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--bg-tint);
+  }
+  .signal-note {
+    margin-top: var(--sp-2);
+    font-size: var(--step--1);
+    color: var(--muted);
+    max-width: 60ch;
+  }
+  .signal-stats {
+    margin-top: var(--sp-5);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+  .sstat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .sstat-v {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 640;
+    color: var(--ink);
+    display: flex;
+    gap: 0.4rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .sstat-l {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .grids {
+    margin-top: var(--sp-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-6);
+  }
+  .grids-hint {
+    margin-top: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--faint);
+  }
+
+  .templates {
+    margin-top: var(--sp-8);
+  }
+  .templates-lead {
+    margin-top: var(--sp-2);
+    color: var(--muted);
+  }
+  .tgrid {
+    margin-top: var(--sp-5);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .tpl {
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    overflow: hidden;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease,
+      transform 0.15s ease;
+  }
+  .tpl:hover {
+    border-color: color-mix(in oklab, var(--brand) 45%, var(--hairline));
+    background: color-mix(in oklab, var(--brand) 5%, var(--surface));
+    transform: translateY(-2px);
+  }
+  .tpl summary {
+    padding: var(--sp-4);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .tpl summary::-webkit-details-marker {
+    display: none;
+  }
+  .tpl-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+  .tpl-name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .tpl-chevron {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--brand);
+    transition: transform 0.2s ease;
+  }
+  .tpl[open] .tpl-chevron {
+    transform: rotate(45deg);
+  }
+  .tpl-purpose {
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .tpl-body {
+    margin: 0;
+    padding: var(--sp-4);
+    border-top: var(--hair) solid var(--hairline);
+    background: var(--surface-2);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: var(--ink-soft);
+  }
+
+  .agents {
+    margin-top: var(--sp-8);
+    padding-top: var(--sp-6);
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .agents-lead {
+    margin-top: var(--sp-2);
+    color: var(--muted);
+  }
+  .agrid {
+    margin-top: var(--sp-5);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .acard {
+    padding: var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-left: 3px solid var(--brand);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .acard:hover {
+    background: color-mix(in oklab, var(--ink) 7%, var(--surface));
+    border-color: color-mix(in oklab, var(--brand) 40%, var(--hairline));
+  }
+  .acard-name {
+    font-size: var(--step-0);
+  }
+  .acard-body {
+    margin-top: 0.35rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+
+  .disc {
+    margin-top: var(--sp-8);
+    padding-top: var(--sp-6);
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .disc-list {
+    margin-top: var(--sp-4);
+    padding-left: 1.15rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+    gap: 0.5rem var(--sp-6);
+    color: var(--ink-soft);
+  }
+  .disc-list li::marker {
+    color: var(--brand);
+  }
+
+  @media (max-width: 820px) {
+    .loop {
+      grid-template-columns: 1fr 1fr;
+    }
+    .loop-step:nth-child(3) {
+      border-left: none;
+    }
+    .loop-step:nth-child(n + 3) {
+      border-top: var(--hair) solid var(--hairline);
+    }
+  }
+  @media (max-width: 480px) {
+    .loop {
+      grid-template-columns: 1fr;
+    }
+    .loop-step {
+      border-left: none;
+      border-top: var(--hair) solid var(--hairline);
+    }
+    .loop-step:first-child {
+      border-top: none;
+    }
+  }
+</style>

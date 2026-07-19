@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Badge from '../components/Badge.astro';
+import { allResearch } from '../lib/content';
+import { label as lbl } from '../lib/taxonomy';
+import { fmtDate } from '../lib/format';
+
+const notes = await allResearch();
+---
+
+<BaseLayout
+  title="Research"
+  description="How the thinking is tested: discovery, market scans, and the research process behind the work."
+>
+  <section class="container wrap">
+    <p class="label"><span class="idx">§</span> Research</p>
+    <h1>How the thinking is tested.</h1>
+    <p class="lead measure">
+      A sanitized archive of discovery, market scans, and experiments, including how product work
+      turns into academic contribution. Where results are still under review, the method is shown
+      and the findings are held back.
+    </p>
+
+    <div class="grid">
+      {
+        notes.map((n) => (
+          <article class="rnote" data-accent={n.data.product}>
+            <header class="rnote-head">
+              <Badge tone="info">{lbl(n.data.source_type)}</Badge>
+              {n.data.product !== 'shared' && (
+                <span class="rnote-prod" data-product={n.data.product}>
+                  {n.data.product}
+                </span>
+              )}
+              <time class="rnote-date">{fmtDate(n.data.date)}</time>
+            </header>
+            <h3 class="rnote-title">{n.data.title}</h3>
+            <p class="rnote-summary">{n.data.summary}</p>
+            {n.data.insights.length > 0 && (
+              <ul class="rnote-insights">
+                {n.data.insights.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ul>
+            )}
+            {n.data.redaction_status !== 'clean' && (
+              <p class="rnote-note">Process only. Results held back while under review.</p>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .wrap {
+    padding-block: var(--sp-8) var(--sp-9);
+  }
+  h1 {
+    margin-top: var(--sp-4);
+  }
+  .lead {
+    margin-top: var(--sp-4);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+  .grid {
+    margin-top: var(--sp-7);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+  .rnote {
+    position: relative;
+    padding: var(--sp-5);
+    padding-left: calc(var(--sp-5) + 3px);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .rnote::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0.8;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  }
+  .rnote-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .rnote-prod {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+  .rnote-date {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .rnote-title {
+    margin-top: var(--sp-3);
+    font-size: var(--step-1);
+  }
+  .rnote-summary {
+    margin-top: var(--sp-2);
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+  .rnote-insights {
+    margin-top: var(--sp-3);
+    padding-left: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .rnote-insights li::marker {
+    color: var(--accent);
+  }
+  .rnote-note {
+    margin-top: var(--sp-4);
+    padding-top: var(--sp-3);
+    border-top: var(--hair) dashed var(--hairline-strong);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--faint);
+  }
+</style>
