@@ -1,0 +1,234 @@
+---
+/**
+ * A faithful, static rendering of the projects' monome digital twin, generated
+ * from the same drawing rules as the real twin component: a 16×8 varibright
+ * grid on the incandescent amber LED ramp with per-cell level readouts, and
+ * two arc encoders drawn as brushed-aluminum knobs inside a dark 64-LED ring,
+ * rings above the grid. Deterministic frame, no images, no JS.
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+
+const COLS = 16;
+const ROWS = 8;
+const CELL = 30;
+const GAP = 6;
+const PAD = 16;
+const RING_R = 30;
+const RING_BEZEL = RING_R + 10;
+const RING_SPACING = RING_BEZEL * 2 + 16;
+const RING_LEDS = 64;
+
+/* The twin's LED color ramps, verbatim from the source. */
+const ledColor = (level: number): string => {
+  const t = Math.max(0, Math.min(15, level)) / 15;
+  return `rgb(${Math.round(38 + t * 217)},${Math.round(33 + t * 146)},${Math.round(28 + t * 79)})`;
+};
+const arcLedColor = (level: number): string => {
+  const t = Math.max(0, Math.min(1, level / 15));
+  return `rgb(${Math.round(44 + t * 211)},${Math.round(45 + t * 147)},${Math.round(47 + t * 75)})`;
+};
+
+/** A deterministic performance-feedback-style frame: a soft wave plus a bright
+ *  scene-position column, the shape the twin idles in between gestures. */
+function gridLevel(x: number, y: number): number {
+  const wave = Math.sin(x * 0.5 + y * 0.75) * Math.cos(x * 0.18 - y * 0.4);
+  let v = Math.round(3.5 + wave * 3.5);
+  if (x === 5) v = Math.max(v, y === 2 ? 15 : 11); // scene-position marker column
+  if (x === 11 && y === 5) v = 15; // a held gesture highlight
+  return Math.max(0, Math.min(15, v));
+}
+const cells: Array<{ x: number; y: number; level: number }> = [];
+for (let y = 0; y < ROWS; y++)
+  for (let x = 0; x < COLS; x++) cells.push({ x, y, level: gridLevel(x, y) });
+
+/* Arc ring LED levels, using the twin's own test/marker patterns:
+   ring 0 = fill with a bright head (an encoder mid-sweep), ring 1 = position
+   marker with dim octant ticks. */
+function arcLevel(ring: number, i: number): number {
+  if (ring === 0) {
+    const head = 40;
+    if (i === head) return 15;
+    return i <= head ? 9 : 0;
+  }
+  const pos = 12;
+  const dist = Math.min((i - pos + RING_LEDS) % RING_LEDS, (pos - i + RING_LEDS) % RING_LEDS);
+  if (dist === 0) return 15;
+  if (dist === 1) return 9;
+  return i % 8 === 0 ? 4 : 0;
+}
+
+/* Layout, mirroring the twin's rebuild(): rings above, grid below. */
+const arcCy = PAD + RING_BEZEL;
+const gridOy = PAD + RING_BEZEL * 2 + PAD;
+const gridOx = PAD;
+const W = COLS * (CELL + GAP) - GAP + PAD * 2;
+const H = gridOy + ROWS * (CELL + GAP) - GAP + PAD;
+const ringCx = (e: number): number => gridOx + RING_BEZEL + e * RING_SPACING;
+
+interface Tick {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  color: string;
+  w: number;
+}
+const ticks: Tick[][] = [0, 1].map((e) =>
+  Array.from({ length: RING_LEDS }, (_, i) => {
+    const level = arcLevel(e, i);
+    const a = (i / RING_LEDS) * Math.PI * 2 - Math.PI / 2;
+    const cx = ringCx(e);
+    return {
+      x1: cx + Math.cos(a) * (RING_R - 7),
+      y1: arcCy + Math.sin(a) * (RING_R - 7),
+      x2: cx + Math.cos(a) * (RING_R + 7),
+      y2: arcCy + Math.sin(a) * (RING_R + 7),
+      color: arcLedColor(level),
+      w: level >= 15 ? 3.5 : 2,
+    };
+  })
+);
+---
+
+<figure class="mt">
+  <p class="mt-label">Digital twin: grid 128 (16×8, varibright) + arc 2 · performance</p>
+  <p class="mt-caps">
+    <span>grid ● hardware: 16×8 (128) · 2 quads · varibright 0-15 · tilt ✓</span>
+    <span>arc ● hardware: 2 enc × 64 LED (varibright) · push per-enc</span>
+  </p>
+  <div class="mt-frame">
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      role="img"
+      aria-label="Digital twin of the monome: a 16 by 8 varibright grid below two arc encoder rings, mirroring the live LED frame"
+    >
+      <defs>
+        <linearGradient id="mt-knob" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f5f6f7"></stop>
+          <stop offset="0.46" stop-color="#d3d6d9"></stop>
+          <stop offset="0.54" stop-color="#b7bbbf"></stop>
+          <stop offset="1" stop-color="#cdd0d3"></stop>
+        </linearGradient>
+      </defs>
+
+      {/* arc encoders: aluminum knob, dark LED track, bezel edge, 64 tick LEDs */}
+      {
+        [0, 1].map((e) => (
+          <g>
+            <circle cx={ringCx(e)} cy={arcCy} r={RING_R - 12} fill="url(#mt-knob)" />
+            <circle
+              cx={ringCx(e)}
+              cy={arcCy}
+              r={RING_R}
+              fill="none"
+              stroke="#17181a"
+              stroke-width="18"
+            />
+            <circle
+              cx={ringCx(e)}
+              cy={arcCy}
+              r={RING_BEZEL}
+              fill="none"
+              stroke="#9b9382"
+              stroke-width="1.5"
+            />
+            {ticks[e]!.map((t) => (
+              <line
+                x1={t.x1.toFixed(1)}
+                y1={t.y1.toFixed(1)}
+                x2={t.x2.toFixed(1)}
+                y2={t.y2.toFixed(1)}
+                stroke={t.color}
+                stroke-width={t.w}
+              />
+            ))}
+            <text x={ringCx(e)} y={arcCy} class="mt-enc">
+              enc {e}
+            </text>
+          </g>
+        ))
+      }
+
+      {/* the varibright grid, incandescent ramp + level readouts (as drawn by the twin) */}
+      {
+        cells.map((c) => {
+          const px = gridOx + c.x * (CELL + GAP);
+          const py = gridOy + c.y * (CELL + GAP);
+          return (
+            <g>
+              <rect x={px} y={py} width={CELL} height={CELL} rx="5" fill={ledColor(c.level)} />
+              <text
+                x={px + CELL / 2}
+                y={py + CELL / 2}
+                class="mt-lvl"
+                fill={c.level > 8 ? 'rgba(46,28,10,0.55)' : 'rgba(255,228,196,0.3)'}
+              >
+                {c.level}
+              </text>
+            </g>
+          );
+        })
+      }
+    </svg>
+  </div>
+  {caption && <figcaption class="mt-caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .mt {
+    margin: 0;
+  }
+  .mt-label {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .mt-caps {
+    margin-top: 0.25rem;
+    margin-bottom: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    line-height: 1.6;
+    color: var(--faint);
+  }
+  .mt-caps span {
+    display: block;
+  }
+  .mt-frame {
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: var(--radius-lg);
+    background: #101012;
+    padding: var(--sp-3);
+    max-width: 42rem;
+  }
+  .mt-frame svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .mt-enc {
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    fill: rgba(38, 40, 43, 0.8);
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .mt-lvl {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .mt-caption {
+    margin-top: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: var(--faint);
+    max-width: 70ch;
+  }
+</style>

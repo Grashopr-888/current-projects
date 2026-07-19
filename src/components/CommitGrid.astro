@@ -1,0 +1,280 @@
+---
+/**
+ * GitHub-style contribution grid for one project: weeks as columns, weekdays as
+ * rows, cell intensity by commit count. Hovering a day shows date, count, and
+ * the sanitized subject lines for that day (native title tooltip, no JS).
+ */
+import type { DayActivity } from '../lib/signals';
+
+interface Props {
+  label: string;
+  accent: 'windchime' | 'lichtspiel';
+  days: Record<string, DayActivity>;
+  /** ISO dates bounding the shared time axis so multiple grids align. */
+  first: string;
+  last: string;
+}
+const { label, accent, days, first, last } = Astro.props;
+
+const DAY_MS = 86_400_000;
+const toUTC = (iso: string) => new Date(`${iso}T00:00:00Z`);
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+
+/* Align the axis to the Sunday on/before `first` so week columns are calendar weeks. */
+const start = toUTC(first);
+start.setUTCDate(start.getUTCDate() - start.getUTCDay());
+const end = toUTC(last);
+
+interface Cell {
+  date: string;
+  inRange: boolean;
+  count: number;
+  title: string;
+  level: number;
+}
+const weeks: Cell[][] = [];
+const monthLabels: Array<{ index: number; label: string }> = [];
+const fmt = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short',
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+const monthFmt = new Intl.DateTimeFormat('en-US', { month: 'short', timeZone: 'UTC' });
+
+let cursor = new Date(start);
+let lastMonth = '';
+while (cursor.getTime() <= end.getTime() || cursor.getUTCDay() !== 0) {
+  if (cursor.getUTCDay() === 0) {
+    weeks.push([]);
+    const m = monthFmt.format(cursor);
+    if (m !== lastMonth) {
+      monthLabels.push({ index: weeks.length - 1, label: m });
+      lastMonth = m;
+    }
+  }
+  const date = iso(cursor);
+  const inRange = cursor.getTime() >= toUTC(first).getTime() && cursor.getTime() <= end.getTime();
+  const activity = days[date];
+  const count = inRange ? (activity?.count ?? 0) : 0;
+  const level = count === 0 ? 0 : count <= 2 ? 1 : count <= 5 ? 2 : count <= 9 ? 3 : 4;
+  let title = `${fmt.format(cursor)} · ${count} commit${count === 1 ? '' : 's'}`;
+  if (activity?.subjects.length) {
+    title += '\n' + activity.subjects.map((s) => `• ${s}`).join('\n');
+    const more = activity.count - activity.subjects.length;
+    if (more > 0) title += `\n… and ${more} more`;
+  }
+  weeks.at(-1)!.push({ date, inRange, count, title, level });
+  cursor = new Date(cursor.getTime() + DAY_MS);
+  if (weeks.length > 120) break; // safety: never render an unbounded grid
+}
+---
+
+<div class="cg" data-accent={accent}>
+  <div class="cg-head">
+    <span class="cg-dot" aria-hidden="true"></span>
+    <span class="cg-label">{label}</span>
+  </div>
+  <div class="cg-scroll">
+    <div class="cg-months" style={`--weeks: ${weeks.length}`}>
+      {monthLabels.map((m) => <span style={`grid-column: ${m.index + 1}`}>{m.label}</span>)}
+    </div>
+    <div class="cg-grid" role="img" aria-label={`Daily commit activity for ${label}`}>
+      {
+        weeks.map((week) => (
+          <div class="cg-week">
+            {week.map((c) =>
+              c.inRange ? (
+                <span class="cg-cell" data-level={c.level} data-tip={c.title} tabindex="0" />
+              ) : (
+                <span class="cg-cell cg-pad" />
+              )
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="cg-scale">
+    <span>Less</span>
+    {[0, 1, 2, 3, 4].map((l) => <span class="cg-cell" data-level={l} />)}
+    <span>More</span>
+  </div>
+</div>
+
+<style>
+  .cg {
+    --cell: 13px;
+    --gap: 3px;
+  }
+  .cg[data-accent='windchime'] {
+    --cg-c: var(--wc);
+  }
+  .cg[data-accent='lichtspiel'] {
+    --cg-c: var(--ls);
+  }
+  .cg-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: var(--sp-3);
+  }
+  .cg-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 100px;
+    background: var(--cg-c);
+  }
+  .cg-label {
+    font-family: var(--font-display);
+    font-weight: 740;
+    font-stretch: 112%;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.82rem;
+    color: var(--ink);
+  }
+  .cg-scroll {
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+  }
+  .cg-months {
+    display: grid;
+    grid-template-columns: repeat(var(--weeks), calc(var(--cell) + var(--gap)));
+    margin-bottom: 0.35rem;
+  }
+  .cg-months span {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--faint);
+    white-space: nowrap;
+  }
+  .cg-grid {
+    display: flex;
+    gap: var(--gap);
+    width: max-content;
+  }
+  .cg-week {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+  }
+  .cg-cell {
+    width: var(--cell);
+    height: var(--cell);
+    border-radius: 3px;
+    background: color-mix(in oklab, var(--ink) 6%, var(--surface));
+    outline-offset: 1px;
+  }
+  .cg-cell[data-level='1'] {
+    background: color-mix(in oklab, var(--cg-c) 28%, var(--surface));
+  }
+  .cg-cell[data-level='2'] {
+    background: color-mix(in oklab, var(--cg-c) 50%, var(--surface));
+  }
+  .cg-cell[data-level='3'] {
+    background: color-mix(in oklab, var(--cg-c) 74%, var(--surface));
+  }
+  .cg-cell[data-level='4'] {
+    background: var(--cg-c);
+  }
+  .cg-cell[data-level]:hover {
+    outline: 1px solid var(--ink-soft);
+  }
+  .cg-pad {
+    background: transparent;
+  }
+  .cg-scale {
+    margin-top: var(--sp-3);
+    display: flex;
+    align-items: center;
+    gap: var(--gap);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: var(--faint);
+  }
+  .cg-scale span:first-child {
+    margin-right: 0.3rem;
+  }
+  .cg-scale span:last-child {
+    margin-left: 0.3rem;
+  }
+</style>
+
+<style is:global>
+  /* Shared instant tooltip for commit-grid day cells (created by the script). */
+  .cg-tooltip {
+    position: fixed;
+    z-index: 200;
+    max-width: 30rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius);
+    background: color-mix(in oklab, var(--surface-2) 92%, #000);
+    box-shadow: var(--shadow);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    white-space: pre-line;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+  .cg-tooltip.on {
+    opacity: 1;
+  }
+  .cg-tooltip .cg-tip-head {
+    font-weight: 700;
+    color: var(--ink);
+  }
+</style>
+
+<script>
+  /* One shared, instant tooltip for every commit-grid cell on the page.
+     Native title tooltips need a long hover delay and vary by OS; this shows
+     the day's commit detail immediately on hover or keyboard focus. */
+  const W = window as unknown as { __cgTip?: boolean };
+  if (!W.__cgTip) {
+    W.__cgTip = true;
+    const tip = document.createElement('div');
+    tip.className = 'cg-tooltip';
+    const head = document.createElement('div');
+    head.className = 'cg-tip-head';
+    const body = document.createElement('div');
+    tip.append(head, body);
+    document.body.appendChild(tip);
+
+    const show = (cell: HTMLElement): void => {
+      const raw = cell.dataset.tip ?? '';
+      const nl = raw.indexOf('\n');
+      head.textContent = nl === -1 ? raw : raw.slice(0, nl);
+      body.textContent = nl === -1 ? '' : raw.slice(nl + 1);
+      tip.classList.add('on');
+      const r = cell.getBoundingClientRect();
+      const tr = tip.getBoundingClientRect();
+      const left = Math.max(
+        8,
+        Math.min(r.left + r.width / 2 - tr.width / 2, innerWidth - tr.width - 8)
+      );
+      let top = r.top - tr.height - 10;
+      if (top < 8) top = r.bottom + 10;
+      tip.style.left = `${left}px`;
+      tip.style.top = `${top}px`;
+    };
+    const hide = (): void => tip.classList.remove('on');
+
+    document.addEventListener('mouseover', (e) => {
+      const cell = (e.target as HTMLElement | null)?.closest?.('.cg-cell[data-tip]');
+      if (cell instanceof HTMLElement) show(cell);
+      else hide();
+    });
+    document.addEventListener('focusin', (e) => {
+      const cell = (e.target as HTMLElement | null)?.closest?.('.cg-cell[data-tip]');
+      if (cell instanceof HTMLElement) show(cell);
+      else hide();
+    });
+    document.addEventListener('scroll', hide, { passive: true });
+  }
+</script>

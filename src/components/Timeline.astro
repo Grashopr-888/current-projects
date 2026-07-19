@@ -1,0 +1,126 @@
+---
+import { fmtDate, isoDate } from '../lib/format';
+import { url } from '../lib/url';
+import type { TimelineEvent } from '../lib/content';
+
+interface Props {
+  events: TimelineEvent[];
+}
+const { events } = Astro.props;
+---
+
+<ol class="tl">
+  {
+    events.map((e) => (
+      <li class="tl-item">
+        <time class="tl-date" datetime={isoDate(e.date)}>
+          {fmtDate(e.date)}
+        </time>
+        <div class="tl-card" data-tone={e.tone ?? 'neutral'}>
+          <span class="tl-kindrow">
+            <span class="tl-node" aria-hidden="true" />
+            <span class="tl-kind">{e.kind}</span>
+          </span>
+          <span class="tl-title">{e.href ? <a href={url(e.href)}>{e.title}</a> : e.title}</span>
+          {e.summary && <p class="tl-summary">{e.summary}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .tl {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: var(--sp-4);
+    align-items: start;
+  }
+  .tl-date {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-align: right;
+    white-space: nowrap;
+    padding-top: var(--sp-4);
+  }
+
+  .tl-card {
+    --tone-c: var(--muted);
+    position: relative;
+    border: var(--hair) solid var(--hairline);
+    border-left: 3px solid var(--tone-c);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    padding: var(--sp-4);
+  }
+  .tl-card[data-tone='positive'] {
+    --tone-c: var(--t-positive);
+  }
+  .tl-card[data-tone='warn'] {
+    --tone-c: var(--t-warn);
+  }
+  .tl-card[data-tone='danger'] {
+    --tone-c: var(--t-danger);
+  }
+  .tl-card[data-tone='info'] {
+    --tone-c: var(--t-info);
+  }
+
+  .tl-kindrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .tl-node {
+    width: 9px;
+    height: 9px;
+    border-radius: 100px;
+    background: var(--tone-c);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--tone-c) 18%, transparent);
+    flex-shrink: 0;
+  }
+  .tl-kind {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--tone-c);
+  }
+  .tl-title {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--step-1);
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .tl-summary {
+    margin-top: 0.35rem;
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+
+  @media (max-width: 560px) {
+    .tl-item {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+    .tl-date {
+      text-align: left;
+      padding-top: 0;
+    }
+  }
+</style>

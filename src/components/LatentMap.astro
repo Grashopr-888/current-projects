@@ -1,0 +1,337 @@
+---
+/**
+ * An interactive 3D rendering of retrieval in the joint text-audio embedding
+ * space, in the manner of the installation's corpus-map rail (a rotatable 3D
+ * projection of stem embeddings with the prompt placed among its retrievals).
+ * Drag to rotate; it slowly auto-rotates when idle. Points are deterministic
+ * synthetic clusters (seeded LCG), so no real corpus geometry ships. All text
+ * lives outside the plot so nothing overlaps the embeddings.
+ */
+const ROLES = [
+  { name: 'drums', c: '#e0a54a', cx: -0.55, cy: 0.4, cz: -0.2, n: 11, spread: 0.28 },
+  { name: 'bass', c: '#4ecb84', cx: -0.62, cy: -0.42, cz: 0.3, n: 9, spread: 0.24 },
+  { name: 'keys', c: '#b48bff', cx: 0.1, cy: 0.58, cz: 0.45, n: 10, spread: 0.26 },
+  { name: 'texture', c: '#5a8bff', cx: 0.55, cy: -0.08, cz: -0.4, n: 12, spread: 0.32 },
+  { name: 'field', c: '#5ad0c0', cx: -0.05, cy: -0.55, cz: -0.5, n: 10, spread: 0.28 },
+  { name: 'vocals', c: '#ff7a5c', cx: 0.66, cy: 0.5, cz: 0.15, n: 8, spread: 0.22 },
+];
+
+/** Deterministic LCG so the layout is identical on every build. */
+let seed = 42;
+function rnd(): number {
+  seed = (seed * 1664525 + 1013904223) % 4294967296;
+  return seed / 4294967296;
+}
+
+interface Pt {
+  x: number;
+  y: number;
+  z: number;
+  c: string;
+  role: string;
+}
+const points: Pt[] = [];
+for (const r of ROLES) {
+  for (let i = 0; i < r.n; i++) {
+    points.push({
+      x: r.cx + (rnd() + rnd() - 1) * r.spread,
+      y: r.cy + (rnd() + rnd() - 1) * r.spread,
+      z: r.cz + (rnd() + rnd() - 1) * r.spread,
+      c: r.c,
+      role: r.name,
+    });
+  }
+}
+const query = { x: 0.06, y: 0.04, z: -0.02 };
+const dist = (p: Pt): number => Math.hypot(p.x - query.x, p.y - query.y, p.z - query.z);
+const nearestPerRole = new Map<string, number>();
+points.forEach((p, i) => {
+  const cur = nearestPerRole.get(p.role);
+  if (cur === undefined || dist(p) < dist(points[cur]!)) nearestPerRole.set(p.role, i);
+});
+const selected = [...nearestPerRole.values()]
+  .sort((a, b) => dist(points[a]!) - dist(points[b]!))
+  .slice(0, 4);
+
+const DATA = { points, query, selected };
+---
+
+<figure class="lm">
+  <div class="lm-head">
+    <span class="lm-hint"
+      >Drag to rotate · 3D projection of the joint text-audio embedding space</span
+    >
+    <span class="lm-readout" data-readout>synthetic points, not the private corpus</span>
+  </div>
+  <div class="lm-frame" data-lm>
+    <canvas
+      class="lm-canvas"
+      aria-label="Rotatable 3D scatter of stem embeddings by instrument role, with an embedded spoken prompt linked to its one-per-role retrievals"
+    ></canvas>
+  </div>
+  <div class="lm-legend">
+    {
+      ROLES.map((r) => (
+        <span class="lm-key">
+          <span class="lm-swatch" style={`background:${r.c}`} />
+          {r.name}
+        </span>
+      ))
+    }
+    <span class="lm-key">
+      <span class="lm-swatch lm-swatch-q"></span>
+      spoken prompt, embedded
+    </span>
+    <span class="lm-key">
+      <span class="lm-swatch lm-swatch-sel"></span>
+      selected (one per role)
+    </span>
+  </div>
+  <figcaption class="lm-caption">
+    How retrieval works underneath: contrastive audio-language pretraining gives text and audio a
+    shared embedding space, so a transcribed prompt and every stem are just L2-normalized vectors.
+    Cosine similarity over a FAISS exact index ranks the neighbourhood, and the one-per-role
+    selection policy keeps at most one stem per instrument role for timbral variety. In the
+    installation, the corpus map rail shows the real projection (UMAP, PCA, or t-SNE) of the live
+    index.
+  </figcaption>
+</figure>
+
+<script is:inline define:vars={{ DATA }}>
+  (() => {
+    const frame = document.querySelector('[data-lm]');
+    const canvas = frame?.querySelector('canvas');
+    const readout = document.querySelector('[data-readout]');
+    if (!frame || !canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const pts = DATA.points;
+    const query = DATA.query;
+    const selected = new Set(DATA.selected);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let theta = 0.7;
+    let phi = 0.3;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    let lastInteract = 0;
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = frame.clientWidth;
+      h = Math.max(260, Math.round(w * 0.58));
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+
+    function project(p) {
+      const cT = Math.cos(theta);
+      const sT = Math.sin(theta);
+      const cP = Math.cos(phi);
+      const sP = Math.sin(phi);
+      const x1 = p.x * cT + p.z * sT;
+      const z1 = -p.x * sT + p.z * cT;
+      const y1 = p.y * cP - z1 * sP;
+      const z2 = p.y * sP + z1 * cP;
+      const persp = 2.8 / (2.8 - z2);
+      const scale = Math.min(w, h) * 0.36;
+      return { sx: w / 2 + x1 * persp * scale, sy: h / 2 - y1 * persp * scale, z: z2, persp };
+    }
+
+    let projected = [];
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      const q = project(query);
+      projected = pts.map((p, i) => ({ ...project(p), i }));
+
+      // links from the prompt to the one-per-role selection (behind the points)
+      ctx.lineWidth = 1;
+      for (const pr of projected) {
+        if (!selected.has(pr.i)) continue;
+        ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+        ctx.beginPath();
+        ctx.moveTo(q.sx, q.sy);
+        ctx.lineTo(pr.sx, pr.sy);
+        ctx.stroke();
+      }
+
+      // depth-sorted points (far first), size and alpha attenuated by depth
+      const order = [...projected].sort((a, b) => a.z - b.z);
+      for (const pr of order) {
+        const p = pts[pr.i];
+        const r = 3.2 * pr.persp;
+        const alpha = 0.35 + 0.55 * ((pr.z + 1) / 2);
+        ctx.globalAlpha = Math.max(0.2, Math.min(1, alpha));
+        ctx.fillStyle = p.c;
+        ctx.beginPath();
+        ctx.arc(pr.sx, pr.sy, r, 0, Math.PI * 2);
+        ctx.fill();
+        if (selected.has(pr.i)) {
+          ctx.globalAlpha = 1;
+          ctx.strokeStyle = p.c;
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.arc(pr.sx, pr.sy, r + 4, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      // the embedded prompt: accent core + white halo, always on top
+      const accent =
+        getComputedStyle(frame).getPropertyValue('--accent').trim() ||
+        getComputedStyle(document.documentElement).getPropertyValue('--brand').trim();
+      ctx.fillStyle = accent;
+      ctx.beginPath();
+      ctx.arc(q.sx, q.sy, 7 * q.persp, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.arc(q.sx, q.sy, 11 * q.persp, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    function tick(now) {
+      if (!dragging && !reduced && now - lastInteract > 2500) {
+        theta += 0.0035;
+        draw();
+      }
+      requestAnimationFrame(tick);
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      canvas.setPointerCapture(e.pointerId);
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (dragging) {
+        theta += (e.clientX - lastX) * 0.006;
+        phi = Math.max(-1.2, Math.min(1.2, phi + (e.clientY - lastY) * 0.004));
+        lastX = e.clientX;
+        lastY = e.clientY;
+        lastInteract = performance.now();
+        draw();
+        return;
+      }
+      // hover readout: name the nearest stem under the cursor (no in-plot text)
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      let best = null;
+      let bestD = 12;
+      for (const pr of projected) {
+        const d = Math.hypot(pr.sx - mx, pr.sy - my);
+        if (d < bestD) {
+          bestD = d;
+          best = pr.i;
+        }
+      }
+      if (readout) {
+        readout.textContent =
+          best === null
+            ? 'synthetic points, not the private corpus'
+            : (selected.has(best) ? 'selected · ' : '') + pts[best].role + ' stem';
+      }
+    });
+    const end = () => {
+      dragging = false;
+      lastInteract = performance.now();
+    };
+    canvas.addEventListener('pointerup', end);
+    canvas.addEventListener('pointercancel', end);
+
+    new ResizeObserver(resize).observe(frame);
+    resize();
+    requestAnimationFrame(tick);
+  })();
+</script>
+
+<style>
+  .lm {
+    margin: 0;
+  }
+  .lm-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-3);
+  }
+  .lm-hint {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .lm-readout {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--faint);
+  }
+  .lm-frame {
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: radial-gradient(
+      80% 90% at 50% 40%,
+      color-mix(in oklab, var(--accent, var(--brand)) 7%, #0e0e10),
+      #0e0e10 75%
+    );
+    overflow: hidden;
+  }
+  .lm-canvas {
+    display: block;
+    width: 100%;
+    cursor: grab;
+    touch-action: none;
+  }
+  .lm-canvas:active {
+    cursor: grabbing;
+  }
+  .lm-legend {
+    margin-top: var(--sp-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+  }
+  .lm-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+  .lm-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 100px;
+  }
+  .lm-swatch-q {
+    background: var(--accent, var(--brand));
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55);
+  }
+  .lm-swatch-sel {
+    background: transparent;
+    border: 1.6px solid var(--ink-soft);
+  }
+  .lm-caption {
+    margin-top: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.6;
+    color: var(--faint);
+    max-width: 78ch;
+  }
+</style>

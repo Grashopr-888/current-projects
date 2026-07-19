@@ -1,0 +1,73 @@
+---
+import { url } from '../lib/url';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  href: string;
+  external?: boolean;
+}
+const { eyebrow, title, href, external = false } = Astro.props;
+const dest = external ? href : url(href);
+---
+
+<a class="etile" href={dest} {...external ? { target: '_blank', rel: 'noopener' } : {}}>
+  <span class="etile-eyebrow">{eyebrow}</span>
+  <span class="etile-title">{title}</span>
+  <span class="etile-body"><slot /></span>
+  <span class="etile-go" aria-hidden="true">{external ? '↗' : '→'}</span>
+</a>
+
+<style>
+  .etile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: var(--sp-5);
+    background: var(--surface);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    position: relative;
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      background 0.18s ease;
+  }
+  .etile:hover {
+    transform: translateY(-2px);
+    border-color: var(--hairline-strong);
+    background: color-mix(in oklab, var(--brand) 4%, var(--surface));
+  }
+  .etile-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--brand);
+  }
+  .etile-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 520;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .etile-body {
+    color: var(--muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .etile-go {
+    position: absolute;
+    top: var(--sp-5);
+    right: var(--sp-5);
+    color: var(--faint);
+    transition:
+      transform 0.18s ease,
+      color 0.18s ease;
+  }
+  .etile:hover .etile-go {
+    color: var(--brand);
+    transform: translateX(2px);
+  }
+</style>

@@ -1,0 +1,164 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Badge from './Badge.astro';
+import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
+
+interface Props {
+  milestones: CollectionEntry<'milestones'>[];
+  showProduct?: boolean;
+}
+const { milestones, showProduct = false } = Astro.props;
+
+const columns = [
+  { key: 'now', label: 'Now' },
+  { key: 'next', label: 'Next' },
+  { key: 'later', label: 'Later' },
+  { key: 'shipped', label: 'Shipped' },
+] as const;
+
+const inColumn = (key: string) =>
+  milestones
+    .filter((m) => m.data.horizon === key)
+    .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+---
+
+<div class="kanban" role="list" aria-label="Roadmap board">
+  {
+    columns.map((c) => (
+      <section class="kb-col" role="listitem">
+        <header class="kb-head">
+          <span class="kb-title">{c.label}</span>
+          <span class="kb-count">{inColumn(c.key).length}</span>
+        </header>
+        <div class="kb-cards">
+          {inColumn(c.key).map((m) => (
+            <article class="kb-card" data-accent={showProduct ? m.data.product : undefined}>
+              {m.data.theme && <span class="kb-theme">{m.data.theme}</span>}
+              <p class="kb-card-title">{m.data.title}</p>
+              <p class="kb-card-summary">{m.data.summary}</p>
+              <div class="kb-card-foot">
+                <Badge tone={STATUS_TONE[m.data.status] ?? 'neutral'} dot={false}>
+                  {lbl(m.data.status)}
+                </Badge>
+                {m.data.confidence && <span class="kb-conf">confidence: {m.data.confidence}</span>}
+                {showProduct && (
+                  <span class="kb-prod" data-product={m.data.product}>
+                    {m.data.product}
+                  </span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .kanban {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-3);
+  }
+  .kb-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-3);
+    border-radius: var(--radius-lg);
+    background: var(--bg-tint);
+    border: var(--hair) solid var(--hairline);
+    min-width: 0;
+  }
+  .kb-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.15rem 0.3rem;
+  }
+  .kb-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .kb-count {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--faint);
+    background: var(--surface);
+    border: var(--hair) solid var(--hairline);
+    border-radius: 100px;
+    padding: 0.05rem 0.5rem;
+  }
+  .kb-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .kb-card {
+    padding: var(--sp-3);
+    padding-left: calc(var(--sp-3) + 2px);
+    border: var(--hair) solid var(--hairline);
+    border-left: 3px solid var(--accent, var(--brand));
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: border-color 0.15s ease;
+  }
+  .kb-card:hover {
+    border-color: color-mix(in oklab, var(--accent, var(--brand)) 40%, var(--hairline));
+    border-left-color: var(--accent, var(--brand));
+  }
+  .kb-theme {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+  .kb-card-title {
+    margin-top: 0.2rem;
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .kb-card-summary {
+    margin-top: 0.3rem;
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .kb-card-foot {
+    margin-top: var(--sp-2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .kb-conf {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+  }
+  .kb-prod {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: var(--accent, var(--muted));
+  }
+  @media (max-width: 720px) {
+    .kanban {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 420px) {
+    .kanban {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

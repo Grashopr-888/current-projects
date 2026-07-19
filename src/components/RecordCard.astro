@@ -1,0 +1,147 @@
+---
+import Badge from './Badge.astro';
+import type { Tone } from '../lib/taxonomy';
+import { fmtDate } from '../lib/format';
+
+interface Props {
+  tone: Tone;
+  badge: string;
+  title: string;
+  date: Date;
+  product?: string;
+  anchor?: string;
+  meta?: string;
+}
+const { tone, badge, title, date, product, anchor, meta } = Astro.props;
+---
+
+<details class="rec" id={anchor} data-product={product}>
+  <summary>
+    <span class="rec-lead">
+      <Badge tone={tone}>{badge}</Badge>
+      {
+        product && product !== 'shared' && (
+          <span class="rec-prod" data-product={product}>
+            {product}
+          </span>
+        )
+      }
+    </span>
+    <span class="rec-title">{title}</span>
+    <span class="rec-meta">
+      {meta && <span class="rec-metatext">{meta}</span>}
+      <time class="rec-date">{fmtDate(date)}</time>
+      <span class="rec-chevron" aria-hidden="true">+</span>
+    </span>
+  </summary>
+  <div class="rec-body"><slot /></div>
+</details>
+
+<style>
+  .rec {
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    overflow: hidden;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+  .rec:hover {
+    border-color: color-mix(in oklab, var(--brand) 50%, var(--hairline));
+    background: color-mix(in oklab, var(--ink) 8%, var(--surface));
+  }
+  .rec-chevron {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--brand);
+    transition: transform 0.2s ease;
+  }
+  .rec[open] .rec-chevron {
+    transform: rotate(45deg);
+  }
+  .rec summary {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    cursor: pointer;
+    list-style: none;
+  }
+  .rec summary::-webkit-details-marker {
+    display: none;
+  }
+  .rec-lead {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: none;
+  }
+  .rec-prod {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .rec-prod[data-product='windchime'] {
+    color: var(--wc);
+  }
+  .rec-prod[data-product='lichtspiel'] {
+    color: var(--ls);
+  }
+  .rec-title {
+    flex: 1;
+    font-weight: 560;
+    color: var(--ink);
+    font-size: var(--step-0);
+    min-width: 0;
+  }
+  .rec-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    flex: none;
+  }
+  .rec-metatext {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--faint);
+  }
+  .rec-date {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .rec[open] summary {
+    border-bottom: var(--hair) solid var(--hairline);
+  }
+  .rec-body {
+    padding: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+  .rec-body :global(ul) {
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .rec-body :global(li)::marker {
+    color: var(--brand);
+  }
+
+  @media (max-width: 600px) {
+    .rec summary {
+      flex-wrap: wrap;
+    }
+    .rec-title {
+      flex-basis: 100%;
+      order: 3;
+    }
+  }
+</style>

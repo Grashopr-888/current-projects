@@ -1,0 +1,136 @@
+---
+interface Row {
+  dimension: string;
+  windchime: string;
+  lichtspiel: string;
+}
+interface Props {
+  rows: Row[];
+}
+const { rows } = Astro.props;
+---
+
+<div class="cmp" role="table" aria-label="Windchime and Lichtspiel compared">
+  <div class="cmp-row cmp-head" role="row">
+    <span class="cmp-dim" role="columnheader"></span>
+    <span class="cmp-name" data-accent="windchime" role="columnheader">
+      <span class="cmp-dot" aria-hidden="true"></span>Windchime
+    </span>
+    <span class="cmp-name" data-accent="lichtspiel" role="columnheader">
+      <span class="cmp-dot" aria-hidden="true"></span>Lichtspiel
+    </span>
+  </div>
+  {
+    rows.map((r) => (
+      <div class="cmp-row" role="row">
+        <span class="cmp-dim" role="rowheader">
+          {r.dimension}
+        </span>
+        <span class="cmp-cell" data-accent="windchime" role="cell">
+          <span class="cmp-tag" aria-hidden="true">
+            WC
+          </span>
+          {r.windchime}
+        </span>
+        <span class="cmp-cell" data-accent="lichtspiel" role="cell">
+          <span class="cmp-tag" aria-hidden="true">
+            LS
+          </span>
+          {r.lichtspiel}
+        </span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .cmp {
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .cmp-row {
+    display: grid;
+    grid-template-columns: minmax(6rem, 8rem) 1fr 1fr;
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .cmp-row:first-child {
+    border-top: none;
+  }
+  .cmp-head {
+    background: var(--surface-2);
+  }
+  .cmp-name {
+    padding: var(--sp-3) var(--sp-4);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cmp-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 100px;
+    background: var(--accent);
+  }
+  .cmp-dim {
+    padding: var(--sp-4);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    background: color-mix(in oklab, var(--surface-2) 55%, var(--surface));
+    display: flex;
+    align-items: center;
+  }
+  .cmp-cell {
+    padding: var(--sp-4);
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.55;
+    border-left: var(--hair) solid var(--hairline);
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+    box-shadow: inset 3px 0 0 -1px color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+  .cmp-tag {
+    display: none;
+  }
+
+  @media (max-width: 680px) {
+    .cmp-head {
+      display: none;
+    }
+    .cmp-row {
+      grid-template-columns: 1fr;
+    }
+    .cmp-dim {
+      background: var(--surface-2);
+      border-bottom: var(--hair) solid var(--hairline);
+    }
+    .cmp-cell {
+      border-left: none;
+      display: grid;
+      grid-template-columns: 2.2rem 1fr;
+      gap: var(--sp-3);
+      align-items: baseline;
+    }
+    .cmp-cell + .cmp-cell {
+      border-top: var(--hair) solid var(--hairline);
+    }
+    .cmp-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+  }
+</style>
