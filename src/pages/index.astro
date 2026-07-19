@@ -1,0 +1,368 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { url } from '../lib/url';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
+);
+
+const comparison = [
+  {
+    dimension: 'Type',
+    windchime: 'Voice-driven installation, runs unattended.',
+    lichtspiel: 'Live instrument, played on stage.',
+  },
+  {
+    dimension: 'Origin',
+    windchime: 'Grew out of Live Muse. Shown at Gray Area, SF.',
+    lichtspiel: 'Built at a Berklee hackathon in Boston, 2026.',
+  },
+  {
+    dimension: 'AI approach',
+    windchime: 'Retrieval. Reflects recorded sound back.',
+    lichtspiel: 'Generation. Authors new visual scenes.',
+  },
+  {
+    dimension: 'AI at runtime',
+    windchime: 'In the loop, guarded and failover backed.',
+    lichtspiel: 'Never on the render path. Authoring time only.',
+  },
+  {
+    dimension: 'Coupling',
+    windchime: 'Self-contained: a browser and a monome.',
+    lichtspiel: 'Runs inside Ableton Live and Max for Live.',
+  },
+  {
+    dimension: 'Success looks like',
+    windchime: 'A full exhibition day with no crashes.',
+    lichtspiel: 'A clean three to four minute set.',
+  },
+];
+
+const inherits = [
+  "Lichtspiel reuses Windchime's p5.js instance-mode host loop and render pipeline.",
+  'The same serialosc monome bridge and LED event protocol drive both.',
+  'Both fence the model behind validation. Neither trusts raw model output.',
+  'Both map musical meaning to output, not just amplitude.',
+  'Both track decisions, releases, and incidents the same way.',
+];
+
+const loop = [
+  { step: 'Discover', line: 'Talk to the user, find the real problem, name what it is not.' },
+  { step: 'Decide', line: 'Weigh the options in the open. Write the trade-off down as a record.' },
+  { step: 'Ship', line: 'Small, validated releases. Done means running in the room.' },
+  { step: 'Learn', line: 'Soak it, let it break, write the postmortem, fold it back in.' },
+];
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container hero-inner">
+      <h1 class="hero-title reveal" style="--d: 1">What I'm building right now.</h1>
+      <p class="hero-sub reveal measure" style="--d: 2">
+        An in-depth, public view of current work where ML audio research meets interactive AV
+        prototyping: recorded music combined with custom-built interactive systems whose ML
+        components draw on state-of-the-art audio research.
+        <strong>Windchime</strong> is a voice-conditioned audiovisual installation.
+        <strong>Lichtspiel</strong> is a live AV assistant for Ableton.
+      </p>
+      <div class="hero-cta reveal" style="--d: 3">
+        <a class="btn btn-primary" href={url('/projects/windchime')}>Windchime</a>
+        <a class="btn btn-primary" href={url('/projects/lichtspiel')}>Lichtspiel</a>
+        <a class="btn" href={url('/how-i-work')}>How I work</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container block" id="projects">
+    <header class="block-head">
+      <p class="label"><span class="idx">01</span> · The projects</p>
+      <h2>Two applications, shared architecture.</h2>
+    </header>
+    <div class="pgrid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="container block band-work">
+    <header class="block-head">
+      <p class="label"><span class="idx">02</span> · How I work</p>
+      <h2>The loop behind both projects.</h2>
+      <p class="block-lead measure">
+        Both projects came out of the same four-step loop. Each step produces an artifact you can
+        read on this site.
+      </p>
+    </header>
+    <div class="loop">
+      {
+        loop.map((l, i) => (
+          <a class="loop-step" href={url('/how-i-work')}>
+            <span class="loop-idx">{String(i + 1).padStart(2, '0')}</span>
+            <span class="loop-step-name">{l.step}</span>
+            <span class="loop-line">{l.line}</span>
+          </a>
+        ))
+      }
+    </div>
+    <a class="loop-more plain" href={url('/how-i-work')}>
+      See the full operating system, with templates &nbsp;&rarr;
+    </a>
+  </section>
+
+  <section class="container block">
+    <header class="block-head">
+      <p class="label"><span class="idx">03</span> · How they relate</p>
+      <h2>Shared lineage, different problems.</h2>
+      <p class="block-lead measure">
+        Lichtspiel started from Windchime's visual runtime. It reuses the same p5.js host loop, the
+        serialosc monome bridge, and the LED event protocol, then points them at live performance in
+        Ableton instead of an unattended installation.
+      </p>
+    </header>
+    <ComparisonTable rows={comparison} />
+    <div class="overlaps">
+      <p class="label"><span class="idx">◈</span> What Lichtspiel inherits</p>
+      <ul class="overlap-list">
+        {inherits.map((o) => <li>{o}</li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---- reveal (one orchestrated page-load) ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation-delay: calc(var(--d, 0) * 90ms);
+  }
+  @keyframes reveal {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+
+  /* ---- hero ---- */
+  .hero {
+    position: relative;
+    padding-block: var(--sp-9) var(--sp-8);
+    overflow: hidden;
+    border-bottom: var(--hair) solid var(--hairline);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(
+        46% 70% at 8% 0%,
+        color-mix(in oklab, var(--wc) 12%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        46% 70% at 96% 8%,
+        color-mix(in oklab, var(--ls) 12%, transparent),
+        transparent 60%
+      );
+  }
+  .hero-eyebrow {
+    color: var(--muted);
+  }
+  .hero-title {
+    margin-top: var(--sp-4);
+    font-size: var(--step-6);
+    letter-spacing: -0.02em;
+  }
+  .hero-sub {
+    margin-top: var(--sp-5);
+    font-size: var(--step-2);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 58ch;
+  }
+  .hero-cta {
+    margin-top: var(--sp-6);
+    display: flex;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+  }
+  .hero-note {
+    margin-top: var(--sp-5);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--faint);
+  }
+
+  /* ---- operating loop ---- */
+  .band {
+    padding-block: var(--sp-6);
+  }
+  .loop {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .loop-step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: var(--sp-5);
+    border-left: var(--hair) solid var(--hairline);
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .loop-step:first-child {
+    border-left: none;
+  }
+  .loop-step:hover {
+    background: color-mix(in oklab, var(--brand) 4%, var(--surface));
+  }
+  .loop-idx {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--brand);
+  }
+  .loop-step-name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 520;
+    color: var(--ink);
+  }
+  .loop-line {
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ---- blocks ---- */
+  .block {
+    padding-block: var(--sp-8);
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .block:first-of-type {
+    border-top: none;
+  }
+  .block-head {
+    margin-bottom: var(--sp-6);
+  }
+  .block-head h2 {
+    margin-top: var(--sp-3);
+    font-size: var(--step-4);
+  }
+  .block-lead {
+    margin-top: var(--sp-4);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+  .pgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+    gap: var(--sp-5);
+  }
+  .overlaps {
+    margin-top: var(--sp-6);
+    padding: var(--sp-5);
+    border: var(--hair) dashed var(--hairline-strong);
+    border-radius: var(--radius-lg);
+    background: color-mix(in oklab, var(--brand) 3%, var(--surface));
+  }
+  .overlap-list {
+    margin-top: var(--sp-4);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--sp-3);
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+  }
+  .overlap-list li {
+    position: relative;
+    padding-left: 1.4rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .overlap-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: linear-gradient(135deg, var(--wc), var(--ls));
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+
+  /* ---- closing ---- */
+  .closing {
+    padding-block: var(--sp-8);
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .closing-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-5);
+  }
+  .closing-note {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 600;
+    color: var(--ink);
+    max-width: 26ch;
+  }
+  .band-work {
+    background: var(--bg-tint);
+  }
+  .loop-more {
+    display: inline-block;
+    margin-top: var(--sp-4);
+    font-weight: 600;
+    color: var(--brand);
+  }
+
+  @media (max-width: 760px) {
+    .loop {
+      grid-template-columns: 1fr 1fr;
+    }
+    .loop-step:nth-child(3) {
+      border-left: none;
+    }
+    .loop-step:nth-child(n + 3) {
+      border-top: var(--hair) solid var(--hairline);
+    }
+  }
+  @media (max-width: 460px) {
+    .loop {
+      grid-template-columns: 1fr;
+    }
+    .loop-step {
+      border-left: none;
+      border-top: var(--hair) solid var(--hairline);
+    }
+    .loop-step:first-child {
+      border-top: none;
+    }
+  }
+</style>
