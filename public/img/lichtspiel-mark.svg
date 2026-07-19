@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" fill="none" stroke="#3ec6dd" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Lichtspiel mark — wireframe light-prism: rays fan from the left vertex,
+       faceting the right face of the triangle. -->
+  <path d="M62 6 L8 88 L98 78 Z" />
+  <path d="M8 88 L74 22 M8 88 L83 36 M8 88 L90 50 M8 88 L94 63" />
+  <path d="M62 6 L74 22 L60 30 L83 36 L70 48 L90 50 L80 62 L94 63 L86 74 L98 78" />
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 214">
+  <!-- Windchime mark — a dimensional wind chime: a perspective suspension ring,
+       cylindrical shaded chime tubes at front/back depth, and a glossy clapper
+       sphere. Amber (brand). The demo overlay uses windchime-mark-demo.svg
+       (same form, magenta) for the demo mode. -->
+  <defs>
+    <linearGradient id="wcTube" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8f5314"/>
+      <stop offset=".30" stop-color="#ffcf85"/>
+      <stop offset=".50" stop-color="#ffb547"/>
+      <stop offset=".72" stop-color="#cf882a"/>
+      <stop offset="1" stop-color="#6e430e"/>
+    </linearGradient>
+    <radialGradient id="wcBall" cx=".36" cy=".30" r=".85">
+      <stop offset="0" stop-color="#ffe7b8"/>
+      <stop offset=".45" stop-color="#ffb547"/>
+      <stop offset="1" stop-color="#774710"/>
+    </radialGradient>
+    <linearGradient id="wcRing" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd791"/>
+      <stop offset="1" stop-color="#9a6418"/>
+    </linearGradient>
+    <radialGradient id="wcCap" cx=".5" cy=".42" r=".72">
+      <stop offset="0" stop-color="#ffe6b2"/>
+      <stop offset="1" stop-color="#df982e"/>
+    </radialGradient>
+  </defs>
+  <path d="M100 14 q-5 13 0 20" fill="none" stroke="url(#wcRing)" stroke-width="5" stroke-linecap="round"/>
+  <ellipse cx="100" cy="46" rx="47" ry="14" fill="none" stroke="url(#wcRing)" stroke-width="9"/>
+  <g opacity="0.8">
+    <rect x="62" y="50" width="12" height="52" rx="6" fill="url(#wcTube)"/><ellipse cx="68" cy="50" rx="6" ry="2.2" fill="url(#wcCap)"/>
+    <rect x="126" y="50" width="12" height="52" rx="6" fill="url(#wcTube)"/><ellipse cx="132" cy="50" rx="6" ry="2.2" fill="url(#wcCap)"/>
+  </g>
+  <rect x="78" y="55" width="15" height="74" rx="7.5" fill="url(#wcTube)"/><ellipse cx="85.5" cy="55" rx="7.5" ry="2.8" fill="url(#wcCap)"/>
+  <rect x="107" y="55" width="15" height="74" rx="7.5" fill="url(#wcTube)"/><ellipse cx="114.5" cy="55" rx="7.5" ry="2.8" fill="url(#wcCap)"/>
+  <path d="M100 58 V150" stroke="#9a6418" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+  <rect x="90" y="58" width="20" height="94" rx="10" fill="url(#wcTube)"/><ellipse cx="100" cy="58" rx="10" ry="3.6" fill="url(#wcCap)"/>
+  <circle cx="100" cy="168" r="17" fill="url(#wcBall)"/><ellipse cx="94" cy="161" rx="5" ry="3.5" fill="#fff" opacity="0.5"/>
+</svg>
