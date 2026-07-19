@@ -1,0 +1,41 @@
+{
+  "name": "current-projects",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A public product-lifecycle showcase for Lichtspiel and Windchime — process evidence without private source code.",
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "sync": "astro sync",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "ingest:git": "tsx scripts/ingest-git.ts",
+    "ingest:github": "tsx scripts/ingest-github.ts",
+    "ingest:research": "tsx scripts/ingest-research.ts",
+    "ingest": "npm run ingest:git && npm run ingest:github",
+    "redact:check": "tsx scripts/redact.ts"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.2.0",
+    "@astrojs/sitemap": "^3.2.1",
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "astro": "^5.7.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/node": "^22.13.0",
+    "prettier": "^3.5.0",
+    "prettier-plugin-astro": "^0.14.1",
+    "tsx": "^4.23.1",
+    "typescript": "^5.7.0"
+  }
+}

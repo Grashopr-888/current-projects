@@ -1,0 +1,34 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# os / editor cruft
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# env & secrets — never commit
+.env
+.env.*
+!.env.example
+
+# ── redaction firewall ──────────────────────────────────────────────
+# Raw, unsanitized pulls from private repos land here and must NEVER be
+# committed. Only reviewed, sanitized content is promoted into src/content.
+.private/
+scripts/.cache/
+src/data/snapshots/**/raw/
+*.raw.json
+*.unsanitized.*
+
+# local-only handoff notes and dev logs (not part of the published site)
+HANDOFF.md
+dev.log
+
+# private planning documents and local agent/session config — never publish
+Product Lifecycle Showcase Spec for Lichtspiel and Windchime.md
+.claude/
