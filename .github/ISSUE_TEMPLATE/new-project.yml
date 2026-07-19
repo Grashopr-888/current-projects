@@ -1,0 +1,31 @@
+name: New project
+description: Add a third (or later) project to the showcase.
+labels: [content, new-project]
+body:
+  - type: input
+    id: slug
+    attributes:
+      label: Project slug
+      description: kebab-case; becomes the URL and the value added to PRODUCTS in content.config.ts.
+      placeholder: my-new-project
+    validations:
+      required: true
+  - type: textarea
+    id: thesis
+    attributes:
+      label: Thesis & problem
+      description: One line each — the bet, and the problem it addresses.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence available
+      description: Which decisions, releases, incidents, and research can be shown as process?
+  - type: checkboxes
+    id: sanitization
+    attributes:
+      label: Sanitization
+      options:
+        - label: Source stays private; only process artifacts will be published
+          required: true

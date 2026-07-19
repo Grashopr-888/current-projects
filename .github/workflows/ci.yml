@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: typecheck · format · build · redact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Type-check (astro check)
+        run: npm run check
+
+      - name: Format check (prettier)
+        run: npm run format:check
+
+      - name: Build
+        run: npm run build
+
+      - name: Redaction gate (no secrets in published content)
+        run: npm run redact:check

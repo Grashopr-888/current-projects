@@ -1,0 +1,8 @@
+# Everything is owned and reviewed by the site owner.
+# Content changes especially require a review pass for sanitization before merge.
+*                   @Grashopr-888
+
+# Sensitive surfaces — never merge without an explicit sanitization review.
+/src/content/       @Grashopr-888
+/scripts/           @Grashopr-888
+/src/data/          @Grashopr-888

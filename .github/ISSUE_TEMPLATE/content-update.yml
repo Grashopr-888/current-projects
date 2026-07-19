@@ -1,0 +1,35 @@
+name: Content update
+description: Add or revise a project, decision, release, incident, research note, or milestone.
+labels: [content]
+body:
+  - type: dropdown
+    id: collection
+    attributes:
+      label: Collection
+      options:
+        - projects
+        - decisions
+        - releases
+        - incidents
+        - research
+        - milestones
+        - changelog
+        - glossary
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What should change
+      description: Describe the entry to add or edit. Link the source of truth if there is one.
+    validations:
+      required: true
+  - type: checkboxes
+    id: sanitization
+    attributes:
+      label: Sanitization
+      options:
+        - label: This exposes no private source, secrets, corpus, or in-progress paper results
+          required: true
+        - label: No collaborator is identified without consent
+          required: true
