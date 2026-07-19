@@ -1,0 +1,24 @@
+{
+  "note": "Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.",
+  "label": "windchime-eval",
+  "product": "windchime",
+  "dir": "windchime-eval",
+  "commitCount": 3,
+  "firstDate": "2026-05-20",
+  "lastDate": "2026-05-20",
+  "authors": 1,
+  "months": {
+    "2026-05": 3
+  },
+  "days": {
+    "2026-05-20": {
+      "count": 3,
+      "subjects": [
+        "v0.1.1: test sessions, phase push, /dev view, vendored deps, full-stack…",
+        "Restyle UI to match windchime-livecode aesthetic; add references.md; qu…",
+        "v0.1 scaffold: study protocol, UEQ-S + custom instruments, auto-logging…"
+      ]
+    }
+  },
+  "tags": []
+}

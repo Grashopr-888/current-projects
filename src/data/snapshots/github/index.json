@@ -1,0 +1,13 @@
+{
+  "note": "Per-repo sanitized GitHub metadata index.",
+  "repos": [
+    {
+      "repo": "Grashopr-888/windchime",
+      "product": "windchime"
+    },
+    {
+      "repo": "Grashopr-888/lichtspiel",
+      "product": "lichtspiel"
+    }
+  ]
+}

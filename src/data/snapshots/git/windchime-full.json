@@ -1,0 +1,182 @@
+{
+  "note": "Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.",
+  "label": "windchime (umbrella)",
+  "product": "windchime",
+  "dir": "windchime-full",
+  "commitCount": 85,
+  "firstDate": "2026-05-23",
+  "lastDate": "2026-07-17",
+  "authors": 1,
+  "months": {
+    "2026-05": 31,
+    "2026-06": 35,
+    "2026-07": 19
+  },
+  "days": {
+    "2026-05-23": {
+      "count": 18,
+      "subjects": [
+        "fix: bump livecode pin for eval-integration _post_event URL fix",
+        "docs: TESTING_GUIDE.md - exercise every shipped capability",
+        "feat(p7.1): autoSwitch off/random/idiom + livecode logging + pin bumps",
+        "fix(p7): grid collapse - main was flowing into auto track when manual-b…"
+      ]
+    },
+    "2026-05-24": {
+      "count": 8,
+      "subjects": [
+        "fix: cross-origin audio bug - verify resume + add prominent unlock bann…",
+        "fix: bump livecode pin for audio-race fix (post-hush settle)",
+        "fix: audio stops between trials (ctx-suspend trap) + apple-music note",
+        "fix: no-audio in participant mode - eager-load Strudel + unlock bridge"
+      ]
+    },
+    "2026-05-27": {
+      "count": 3,
+      "subjects": [
+        "feat(p7.3.1): same-origin dev UI + 2-stage consent + participant polish",
+        "fix(p7.3): don't ask for audio twice + auto-recover stuck mic state",
+        "feat(p7.3): participant onboarding flow + UX polish + waiting state"
+      ]
+    },
+    "2026-05-28": {
+      "count": 2,
+      "subjects": [
+        "feat(participant): live audio-activity meter + reset volume on session …",
+        "feat(p7.3.2): master volume + transcript panel + 6 prompts + eval-sessi…"
+      ]
+    },
+    "2026-06-04": {
+      "count": 1,
+      "subjects": [
+        "chore: bump animation pin → a8d207d (monome prefix-robust + self-healin…"
+      ]
+    },
+    "2026-06-17": {
+      "count": 2,
+      "subjects": [
+        "chore: migrate submodule remotes Codeberg → GitHub (Grashopr-888)",
+        "feat(dev-ui): warm-amber instrument reskin + bump siblings (Phase 0/0c)"
+      ]
+    },
+    "2026-06-22": {
+      "count": 6,
+      "subjects": [
+        "chore: bump animation submodule -> Phase 5 Batch A (c2742d5)",
+        "chore: bump animation submodule -> Phase 5 pasArcgrid port (15f72ff)",
+        "chore: bump animation submodule -> Phase 4 param-model bridge (75ec58e)",
+        "docs: param-bridge + takeover reference (diagrams + proposal)"
+      ]
+    },
+    "2026-06-23": {
+      "count": 12,
+      "subjects": [
+        "feat(dev-ui): Demo mode operator controls + presentation; pin animation…",
+        "feat(dev-ui): Demo mode (D1) - ✦ Demo toggle; pin animation; plan doc",
+        "chore(phase7): A5 + C shipped - Phase 7 complete; pin animation+eval; d…",
+        "chore(phase7): B part-2 shipped - pin animation+livecode; update handof…"
+      ]
+    },
+    "2026-06-24": {
+      "count": 6,
+      "subjects": [
+        "dev-UI demo-audio menu; docs; bump anim/livecode pins",
+        "dev-UI: ⏏ End recap button; bump anim/livecode pins",
+        "dev-UI: Sound mode selector + tutorial in participant; bump pins",
+        "feat(demo): demo set picker + outro rail-collapse; sound-modes plan; pi…"
+      ]
+    },
+    "2026-06-25": {
+      "count": 2,
+      "subjects": [
+        "Bump retrieval submodule pin → ee2926d (classify_bundle.py util)",
+        "Demo polish: dev-ui theme swap + keep playback during kiosk recording; …"
+      ]
+    },
+    "2026-06-28": {
+      "count": 1,
+      "subjects": [
+        "Phase 11: pluggable retrieval backbones - dev-UI model toggle + submodu…"
+      ]
+    },
+    "2026-06-29": {
+      "count": 5,
+      "subjects": [
+        "chore: bump retrieval pin -> audit notebook",
+        "chore: bump retrieval pin -> aadec93 (Phase-A audit harness)",
+        "feat: CLaMP 3 retrieval backend (Stage 2) - submodule pin + launcher + …",
+        "bump livecode pin: prompts-latent mixed-dim fix"
+      ]
+    },
+    "2026-07-03": {
+      "count": 4,
+      "subjects": [
+        "feat(dev-ui): wild-mode toggle; docs: confirmed audio diagnosis + fixes…",
+        "chore: bump animation -> 67e5bb2, livecode -> 347d00a (resolving-led ar…",
+        "docs: audio feedback/death investigation handoff",
+        "feat(dev-ui): SEQ menu + thinking-sequence controls + audio-unlock hard…"
+      ]
+    },
+    "2026-07-05": {
+      "count": 2,
+      "subjects": [
+        "feat(dev-ui): INSTALL mode shell - button, session gating, visitor volu…",
+        "fix(dev): pin the launcher to Apple's python3 - stops recurring mic TCC…"
+      ]
+    },
+    "2026-07-06": {
+      "count": 2,
+      "subjects": [
+        "docs: audio-immediacy plan - silent-lead-in stems + the \"Immediate\" sou…",
+        "chore(soak): bump animation + livecode submodules"
+      ]
+    },
+    "2026-07-07": {
+      "count": 2,
+      "subjects": [
+        "docs: Stage-3 re-embed executed + index-epoch provenance + retrieval pin",
+        "audio immediacy: dev-ui (6 sound modes, backbone-in-install, SEQ defaul…"
+      ]
+    },
+    "2026-07-11": {
+      "count": 2,
+      "subjects": [
+        "retrieval pin: phase-a-v3 prompt set (ea91f9e)",
+        "eval participant flow: condition capture + backend-aware recap; dev-ui …"
+      ]
+    },
+    "2026-07-12": {
+      "count": 4,
+      "subjects": [
+        "pins: animation 2bdb071 - Stage B (truly-3D variant staging + saved var…",
+        "dev-ui: visual-runtime boot selector + Three.js stage pins",
+        "audio-corpus session: stems_712 (292→330) + the install audio map; pins",
+        "install features: mic VU meter, tour narration relay, llm selector, com…"
+      ]
+    },
+    "2026-07-16": {
+      "count": 1,
+      "subjects": []
+    },
+    "2026-07-17": {
+      "count": 2,
+      "subjects": [
+        "pin: bump animation + livecode submodules"
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "v0.1",
+      "date": "2026-05-23"
+    },
+    {
+      "name": "soundstate-feedback-v1",
+      "date": "2026-07-03"
+    },
+    {
+      "name": "install-mode-v1",
+      "date": "2026-07-05"
+    }
+  ]
+}

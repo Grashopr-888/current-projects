@@ -1,0 +1,23 @@
+{
+  "note": "Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.",
+  "label": "windchime-soak",
+  "product": "windchime",
+  "dir": "windchime-soak",
+  "commitCount": 2,
+  "firstDate": "2026-07-06",
+  "lastDate": "2026-07-06",
+  "authors": 1,
+  "months": {
+    "2026-07": 2
+  },
+  "days": {
+    "2026-07-06": {
+      "count": 2,
+      "subjects": [
+        "docs: source changes committed + pushed (arc fix + isolation seams land…",
+        "Install-mode reliability soak harness + 6h run results"
+      ]
+    }
+  },
+  "tags": []
+}
