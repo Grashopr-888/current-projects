@@ -1,41 +1,74 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { url } from '../lib/url';
 
-const terms = (await getCollection('glossary')).sort((a, b) =>
+const all = (await getCollection('glossary')).sort((a, b) =>
   a.data.term.localeCompare(b.data.term)
 );
+
+// term name lookup for "see also" links (related[] holds entry slugs)
+const nameBySlug = new Map(all.map((t) => [t.id, t.data.term]));
+
+type Group = { key: 'windchime' | 'lichtspiel' | 'shared'; label: string; blurb: string };
+const GROUPS: Group[] = [
+  { key: 'windchime', label: 'Windchime', blurb: 'Voice, retrieval, and the audio corpus.' },
+  { key: 'lichtspiel', label: 'Lichtspiel', blurb: 'Live performance, generation, and the set.' },
+  { key: 'shared', label: 'Shared', blurb: 'Hardware, reliability, and process.' },
+];
+const grouped = GROUPS.map((g) => ({
+  ...g,
+  terms: all.filter((t) => (t.data.product ?? 'shared') === g.key),
+}));
 ---
 
 <BaseLayout
   title="Glossary"
-  description="Plain-language definitions of the terms used across Windchime and Lichtspiel."
+  description="Plain-language definitions of the terms used across Windchime and Lichtspiel: audio-language models, retrieval, the monome, validation gates, and more."
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Glossary</p>
     <h1>Field terms, in plain language.</h1>
     <p class="lead measure">
-      A few terms that recur across the projects, defined for readers who don't live in audio ML or
-      live-performance tooling.
+      The vocabulary that recurs across the projects, defined for readers who don't live in audio ML
+      or live-performance tooling. Grouped by where each term shows up; cross-links point to related
+      terms.
     </p>
 
-    <dl class="glossary">
-      {
-        terms.map((t) => (
-          <div class="gterm">
-            <dt>
-              {t.data.term}
-              {t.data.product && t.data.product !== 'shared' && (
-                <span class="gprod" data-product={t.data.product}>
-                  {t.data.product}
-                </span>
-              )}
-            </dt>
-            <dd>{t.data.definition}</dd>
-          </div>
-        ))
-      }
-    </dl>
+    {
+      grouped.map((g) => (
+        <div class="gsection">
+          <header class="gsection-head" data-accent={g.key}>
+            <h2 class="gsection-title">{g.label}</h2>
+            <span class="gsection-meta">
+              {g.blurb} · {g.terms.length} terms
+            </span>
+          </header>
+          <dl class="glossary">
+            {g.terms.map((t) => (
+              <div class="gterm" id={t.id} data-accent={g.key}>
+                <dt>{t.data.term}</dt>
+                <dd>
+                  <p class="gdef">{t.data.definition}</p>
+                  {t.data.related.filter((s) => nameBySlug.has(s)).length > 0 && (
+                    <p class="gsee">
+                      <span class="gsee-label">See also</span>
+                      {t.data.related
+                        .filter((s) => nameBySlug.has(s))
+                        .map((s) => (
+                          <a class="gsee-link plain" href={url(`/glossary#${s}`)}>
+                            {nameBySlug.get(s)}
+                          </a>
+                        ))}
+                    </p>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))
+    }
   </section>
 </BaseLayout>
 
@@ -51,47 +84,87 @@ const terms = (await getCollection('glossary')).sort((a, b) =>
     font-size: var(--step-1);
     color: var(--ink-soft);
   }
+
+  .gsection {
+    margin-top: var(--sp-8);
+  }
+  .gsection-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+    padding-bottom: var(--sp-3);
+    border-bottom: 2px solid var(--accent);
+  }
+  .gsection-title {
+    font-size: var(--step-3);
+    color: var(--accent);
+  }
+  .gsection-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
   .glossary {
-    margin-top: var(--sp-7);
+    margin: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
-    gap: 0;
+    gap: 0 var(--sp-7);
   }
   .gterm {
     padding: var(--sp-5) 0;
     border-top: var(--hair) solid var(--hairline);
+    scroll-margin-top: 5rem;
+  }
+  .gterm:target {
+    background: color-mix(in oklab, var(--accent) 7%, transparent);
+    box-shadow:
+      -0.75rem 0 0 color-mix(in oklab, var(--accent) 7%, transparent),
+      0.75rem 0 0 color-mix(in oklab, var(--accent) 7%, transparent);
   }
   dt {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
     font-family: var(--font-display);
     font-size: var(--step-1);
-    font-weight: 520;
+    font-weight: 700;
+    font-stretch: 108%;
     color: var(--ink);
   }
-  .gprod {
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .gprod[data-product='windchime'] {
-    color: var(--wc);
-  }
-  .gprod[data-product='lichtspiel'] {
-    color: var(--ls);
-  }
-  dd {
+  .gdef {
     margin: 0.5rem 0 0;
-    max-width: 52ch;
+    max-width: 54ch;
     color: var(--muted);
     font-size: var(--step--1);
     line-height: 1.6;
   }
-  @media (min-width: 52rem) {
-    .glossary {
-      column-gap: var(--sp-7);
-    }
+  .gsee {
+    margin: var(--sp-3) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.5rem;
+  }
+  .gsee-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+  }
+  .gsee-link {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--accent);
+    padding: 0.1rem 0.5rem;
+    border: var(--hair) solid color-mix(in oklab, var(--accent) 35%, var(--hairline));
+    border-radius: 100px;
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .gsee-link:hover {
+    background: color-mix(in oklab, var(--accent) 16%, transparent);
+    border-color: var(--accent);
   }
 </style>
