@@ -78,6 +78,17 @@ const notes = await allResearch();
     border: var(--hair) solid var(--hairline);
     border-radius: var(--radius-lg);
     background: var(--surface);
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease,
+      background 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .rnote:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--accent) 50%, var(--hairline));
+    background: color-mix(in oklab, var(--accent) 5%, var(--surface));
+    box-shadow: var(--shadow);
   }
   .rnote::before {
     content: '';
