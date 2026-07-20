@@ -1,181 +1,235 @@
 ---
 /**
- * A faithful, static rendering of the projects' monome digital twin, generated
- * from the same drawing rules as the real twin component: a 16×8 varibright
- * grid on the incandescent amber LED ramp with per-cell level readouts, and
- * two arc encoders drawn as brushed-aluminum knobs inside a dark 64-LED ring,
- * rings above the grid. Deterministic frame, no images, no JS.
+ * A LIVE digital twin of the projects' monome, animated in the spirit of the
+ * runtime's LISTEN (auto-perform) mode: the 16×8 varibright grid breathes and
+ * pulses on a beat with accent flashes, and the two arc encoders turn with their
+ * 64-LED rings tracking. Rendering matches the real twin component
+ * (lichtspiel_github_trent/apps/p5-runtime/src/ui/monomeTwin.ts): the same
+ * incandescent amber LED ramp, per-cell level digits, and brushed-aluminum arc
+ * knobs on a dark LED track. Canvas + requestAnimationFrame; a static
+ * representative frame is drawn immediately, and reduced-motion holds that frame.
  */
 interface Props {
   caption?: string;
 }
 const { caption } = Astro.props;
-
-const COLS = 16;
-const ROWS = 8;
-const CELL = 30;
-const GAP = 6;
-const PAD = 16;
-const RING_R = 30;
-const RING_BEZEL = RING_R + 10;
-const RING_SPACING = RING_BEZEL * 2 + 16;
-const RING_LEDS = 64;
-
-/* The twin's LED color ramps, verbatim from the source. */
-const ledColor = (level: number): string => {
-  const t = Math.max(0, Math.min(15, level)) / 15;
-  return `rgb(${Math.round(38 + t * 217)},${Math.round(33 + t * 146)},${Math.round(28 + t * 79)})`;
-};
-const arcLedColor = (level: number): string => {
-  const t = Math.max(0, Math.min(1, level / 15));
-  return `rgb(${Math.round(44 + t * 211)},${Math.round(45 + t * 147)},${Math.round(47 + t * 75)})`;
-};
-
-/** A deterministic performance-feedback-style frame: a soft wave plus a bright
- *  scene-position column, the shape the twin idles in between gestures. */
-function gridLevel(x: number, y: number): number {
-  const wave = Math.sin(x * 0.5 + y * 0.75) * Math.cos(x * 0.18 - y * 0.4);
-  let v = Math.round(3.5 + wave * 3.5);
-  if (x === 5) v = Math.max(v, y === 2 ? 15 : 11); // scene-position marker column
-  if (x === 11 && y === 5) v = 15; // a held gesture highlight
-  return Math.max(0, Math.min(15, v));
-}
-const cells: Array<{ x: number; y: number; level: number }> = [];
-for (let y = 0; y < ROWS; y++)
-  for (let x = 0; x < COLS; x++) cells.push({ x, y, level: gridLevel(x, y) });
-
-/* Arc ring LED levels, using the twin's own test/marker patterns:
-   ring 0 = fill with a bright head (an encoder mid-sweep), ring 1 = position
-   marker with dim octant ticks. */
-function arcLevel(ring: number, i: number): number {
-  if (ring === 0) {
-    const head = 40;
-    if (i === head) return 15;
-    return i <= head ? 9 : 0;
-  }
-  const pos = 12;
-  const dist = Math.min((i - pos + RING_LEDS) % RING_LEDS, (pos - i + RING_LEDS) % RING_LEDS);
-  if (dist === 0) return 15;
-  if (dist === 1) return 9;
-  return i % 8 === 0 ? 4 : 0;
-}
-
-/* Layout, mirroring the twin's rebuild(): rings above, grid below. */
-const arcCy = PAD + RING_BEZEL;
-const gridOy = PAD + RING_BEZEL * 2 + PAD;
-const gridOx = PAD;
-const W = COLS * (CELL + GAP) - GAP + PAD * 2;
-const H = gridOy + ROWS * (CELL + GAP) - GAP + PAD;
-const ringCx = (e: number): number => gridOx + RING_BEZEL + e * RING_SPACING;
-
-interface Tick {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-  color: string;
-  w: number;
-}
-const ticks: Tick[][] = [0, 1].map((e) =>
-  Array.from({ length: RING_LEDS }, (_, i) => {
-    const level = arcLevel(e, i);
-    const a = (i / RING_LEDS) * Math.PI * 2 - Math.PI / 2;
-    const cx = ringCx(e);
-    return {
-      x1: cx + Math.cos(a) * (RING_R - 7),
-      y1: arcCy + Math.sin(a) * (RING_R - 7),
-      x2: cx + Math.cos(a) * (RING_R + 7),
-      y2: arcCy + Math.sin(a) * (RING_R + 7),
-      color: arcLedColor(level),
-      w: level >= 15 ? 3.5 : 2,
-    };
-  })
-);
 ---
 
-<figure class="mt">
-  <p class="mt-label">Digital twin: grid 128 (16×8, varibright) + arc 2 · performance</p>
+<figure class="mt" data-mt>
+  <p class="mt-label">
+    Digital twin: grid 128 (16×8, varibright) + arc 2 · <span class="mt-mode">♪ LISTEN</span>
+  </p>
   <p class="mt-caps">
-    <span>grid ● hardware: 16×8 (128) · 2 quads · varibright 0-15 · tilt ✓</span>
+    <span>grid ● hardware: 16×8 (128) · 2 quads · varibright 0–15 · tilt ✓</span>
     <span>arc ● hardware: 2 enc × 64 LED (varibright) · push per-enc</span>
   </p>
   <div class="mt-frame">
-    <svg
-      viewBox={`0 0 ${W} ${H}`}
-      role="img"
-      aria-label="Digital twin of the monome: a 16 by 8 varibright grid below two arc encoder rings, mirroring the live LED frame"
-    >
-      <defs>
-        <linearGradient id="mt-knob" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#f5f6f7"></stop>
-          <stop offset="0.46" stop-color="#d3d6d9"></stop>
-          <stop offset="0.54" stop-color="#b7bbbf"></stop>
-          <stop offset="1" stop-color="#cdd0d3"></stop>
-        </linearGradient>
-      </defs>
-
-      {/* arc encoders: aluminum knob, dark LED track, bezel edge, 64 tick LEDs */}
-      {
-        [0, 1].map((e) => (
-          <g>
-            <circle cx={ringCx(e)} cy={arcCy} r={RING_R - 12} fill="url(#mt-knob)" />
-            <circle
-              cx={ringCx(e)}
-              cy={arcCy}
-              r={RING_R}
-              fill="none"
-              stroke="#17181a"
-              stroke-width="18"
-            />
-            <circle
-              cx={ringCx(e)}
-              cy={arcCy}
-              r={RING_BEZEL}
-              fill="none"
-              stroke="#9b9382"
-              stroke-width="1.5"
-            />
-            {ticks[e]!.map((t) => (
-              <line
-                x1={t.x1.toFixed(1)}
-                y1={t.y1.toFixed(1)}
-                x2={t.x2.toFixed(1)}
-                y2={t.y2.toFixed(1)}
-                stroke={t.color}
-                stroke-width={t.w}
-              />
-            ))}
-            <text x={ringCx(e)} y={arcCy} class="mt-enc">
-              enc {e}
-            </text>
-          </g>
-        ))
-      }
-
-      {/* the varibright grid, incandescent ramp + level readouts (as drawn by the twin) */}
-      {
-        cells.map((c) => {
-          const px = gridOx + c.x * (CELL + GAP);
-          const py = gridOy + c.y * (CELL + GAP);
-          return (
-            <g>
-              <rect x={px} y={py} width={CELL} height={CELL} rx="5" fill={ledColor(c.level)} />
-              <text
-                x={px + CELL / 2}
-                y={py + CELL / 2}
-                class="mt-lvl"
-                fill={c.level > 8 ? 'rgba(46,28,10,0.55)' : 'rgba(255,228,196,0.3)'}
-              >
-                {c.level}
-              </text>
-            </g>
-          );
-        })
-      }
-    </svg>
+    <canvas
+      class="mt-canvas"
+      aria-label="Live digital twin of the monome: a 16 by 8 varibright grid animating below two turning arc encoder rings, in auto-perform mode"
+    ></canvas>
   </div>
   {caption && <figcaption class="mt-caption">{caption}</figcaption>}
 </figure>
+
+<script is:inline>
+  (() => {
+    const root = document.querySelector('[data-mt]');
+    if (!root) return;
+    const canvas = root.querySelector('.mt-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // ── layout (mirrors the real twin's rebuild(): rings above, grid below) ──
+    const COLS = 16;
+    const ROWS = 8;
+    const CELL = 30;
+    const GAP = 6;
+    const PAD = 16;
+    const RING_R = 30;
+    const RING_BEZEL = RING_R + 10;
+    const RING_SPACING = RING_BEZEL * 2 + 16;
+    const RING_LEDS = 64;
+    const arcCy = PAD + RING_BEZEL;
+    const gridOy = PAD + RING_BEZEL * 2 + PAD;
+    const gridOx = PAD;
+    const W = COLS * (CELL + GAP) - GAP + PAD * 2;
+    const H = gridOy + ROWS * (CELL + GAP) - GAP + PAD;
+    const ringCx = (e) => gridOx + RING_BEZEL + e * RING_SPACING;
+
+    const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
+    // Incandescent amber ramp, verbatim from the twin source.
+    const ledColor = (level) => {
+      const t = clamp(level, 0, 15) / 15;
+      return `rgb(${Math.round(38 + t * 217)},${Math.round(33 + t * 146)},${Math.round(28 + t * 79)})`;
+    };
+    const arcLedColor = (level) => {
+      const t = clamp(level / 15, 0, 1);
+      return `rgb(${Math.round(44 + t * 211)},${Math.round(45 + t * 147)},${Math.round(47 + t * 75)})`;
+    };
+
+    const BPM = 120;
+    const beatsPerSec = BPM / 60;
+
+    // Accent flashes: cells that jump bright on a beat and decay (the "accents"
+    // LISTEN mode fires). Deterministic-ish, seeded by beat index.
+    function accentAt(x, y, t) {
+      const beat = Math.floor(t * beatsPerSec);
+      // one or two accent cells per beat, chosen by a cheap hash of the beat
+      const h = (beat * 2654435761) >>> 0;
+      const ax = h % COLS;
+      const ay = (h >> 5) % ROWS;
+      const bx = (h >> 11) % COLS;
+      const by = (h >> 17) % ROWS;
+      const phase = (t * beatsPerSec) % 1; // 0 at the beat, →1 before next
+      const decay = Math.max(0, 1 - phase * 1.6);
+      if ((x === ax && y === ay) || (x === bx && y === by)) return decay * 15;
+      return 0;
+    }
+
+    function gridLevel(x, y, t) {
+      // slow morphing base field
+      const base = Math.sin(x * 0.5 + y * 0.72 + t * 0.6) * Math.cos(x * 0.22 - y * 0.4 - t * 0.32);
+      // beat sweep: a soft bright band moving left→right, re-triggered each beat
+      const phase = (t * beatsPerSec) % 1;
+      const sweepCol = phase * (COLS + 4) - 2;
+      const beat = Math.max(0, 1 - Math.abs(x - sweepCol) * 0.85) * (1 - phase * 0.7);
+      // scene-position column that steps every 4 beats (a "section" marker)
+      const sceneCol = (Math.floor(t * beatsPerSec * 0.25) * 5) % COLS;
+      const scene = x === sceneCol ? (y === ROWS - 1 - (Math.floor(t) % ROWS) ? 15 : 9) : 0;
+      let v = 3 + base * 4 + beat * 12;
+      v = Math.max(v, scene);
+      v = Math.max(v, accentAt(x, y, t));
+      return clamp(Math.round(v), 0, 15);
+    }
+
+    // Arc: encoders turn; ring 0 fills to a moving head, ring 1 is a position
+    // marker with octant ticks. Positions advance with time (the dials moving).
+    function arcPos(e, t) {
+      const rate = e === 0 ? 7 : -4.5; // LEDs/sec, opposite directions
+      return (((t * rate) % RING_LEDS) + RING_LEDS) % RING_LEDS;
+    }
+    function arcLevel(e, i, t) {
+      const pos = arcPos(e, t);
+      if (e === 0) {
+        // fill from top to the head, head brightest
+        const head = Math.round(pos);
+        if (i === head) return 15;
+        return i <= head ? 9 : 0;
+      }
+      const d = Math.min((i - pos + RING_LEDS) % RING_LEDS, (pos - i + RING_LEDS) % RING_LEDS);
+      if (d < 1) return 15;
+      if (d < 2) return 9;
+      return i % 8 === 0 ? 4 : 0;
+    }
+
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cssW = Math.min(root.querySelector('.mt-frame').clientWidth - 2 * 12, 640);
+      const scale = cssW / W;
+      w = W;
+      h = H;
+      canvas.width = Math.round(W * dpr * scale);
+      canvas.height = Math.round(H * dpr * scale);
+      canvas.style.width = cssW + 'px';
+      canvas.style.height = Math.round(H * scale) + 'px';
+      ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+    }
+
+    function roundRect(x, y, ww, hh, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + ww, y, x + ww, y + hh, r);
+      ctx.arcTo(x + ww, y + hh, x, y + hh, r);
+      ctx.arcTo(x, y + hh, x, y, r);
+      ctx.arcTo(x, y, x + ww, y, r);
+      ctx.closePath();
+    }
+
+    function draw(t) {
+      ctx.clearRect(0, 0, w, h);
+
+      // arc encoders: aluminum knob, dark LED track, bezel, 64 tick LEDs
+      for (let e = 0; e < 2; e++) {
+        const cx = ringCx(e);
+        const knobR = RING_R - 12;
+        const sheen = ctx.createLinearGradient(cx, arcCy - knobR, cx, arcCy + knobR);
+        sheen.addColorStop(0, '#f5f6f7');
+        sheen.addColorStop(0.46, '#d3d6d9');
+        sheen.addColorStop(0.54, '#b7bbbf');
+        sheen.addColorStop(1, '#cdd0d3');
+        ctx.beginPath();
+        ctx.arc(cx, arcCy, knobR, 0, Math.PI * 2);
+        ctx.fillStyle = sheen;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(cx, arcCy, RING_R, 0, Math.PI * 2);
+        ctx.strokeStyle = '#17181a';
+        ctx.lineWidth = 18;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(cx, arcCy, RING_BEZEL, 0, Math.PI * 2);
+        ctx.strokeStyle = '#9b9382';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        for (let i = 0; i < RING_LEDS; i++) {
+          const level = arcLevel(e, i, t);
+          const a = (i / RING_LEDS) * Math.PI * 2 - Math.PI / 2;
+          const inner = RING_R - 7;
+          const outer = RING_R + 7;
+          ctx.strokeStyle = arcLedColor(level);
+          ctx.lineWidth = level >= 15 ? 3.5 : 2;
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(a) * inner, arcCy + Math.sin(a) * inner);
+          ctx.lineTo(cx + Math.cos(a) * outer, arcCy + Math.sin(a) * outer);
+          ctx.stroke();
+        }
+        ctx.fillStyle = 'rgba(38,40,43,0.8)';
+        ctx.font = '10px ui-monospace, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`enc ${e}`, cx, arcCy);
+      }
+
+      // grid: varibright cells with level digits (as the twin draws them)
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+          const level = gridLevel(x, y, t);
+          const px = gridOx + x * (CELL + GAP);
+          const py = gridOy + y * (CELL + GAP);
+          ctx.fillStyle = ledColor(level);
+          roundRect(px, py, CELL, CELL, 5);
+          ctx.fill();
+          ctx.fillStyle = level > 8 ? 'rgba(46,28,10,0.55)' : 'rgba(255,228,196,0.3)';
+          ctx.font = '11px ui-monospace, monospace';
+          ctx.fillText(String(level), px + CELL / 2, py + CELL / 2);
+        }
+      }
+    }
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let start = 0;
+    function frame(now) {
+      if (!start) start = now;
+      draw((now - start) / 1000);
+      requestAnimationFrame(frame);
+    }
+
+    resize();
+    draw(2.1); // a rich representative frame drawn immediately
+    if (!reduced) requestAnimationFrame(frame);
+    window.addEventListener('resize', () => {
+      resize();
+      draw(reduced ? 2.1 : (performance.now() - start) / 1000);
+    });
+  })();
+</script>
 
 <style>
   .mt {
@@ -186,6 +240,10 @@ const ticks: Tick[][] = [0, 1].map((e) =>
     font-size: 0.74rem;
     font-weight: 700;
     color: var(--ink-soft);
+  }
+  .mt-mode {
+    color: var(--ls);
+    letter-spacing: 0.02em;
   }
   .mt-caps {
     margin-top: 0.25rem;
@@ -202,26 +260,11 @@ const ticks: Tick[][] = [0, 1].map((e) =>
     border: var(--hair) solid var(--hairline-strong);
     border-radius: var(--radius-lg);
     background: #101012;
-    padding: var(--sp-3);
+    padding: 12px;
     max-width: 42rem;
   }
-  .mt-frame svg {
+  .mt-canvas {
     display: block;
-    width: 100%;
-    height: auto;
-  }
-  .mt-enc {
-    font-family: ui-monospace, monospace;
-    font-size: 10px;
-    fill: rgba(38, 40, 43, 0.8);
-    text-anchor: middle;
-    dominant-baseline: middle;
-  }
-  .mt-lvl {
-    font-family: ui-monospace, monospace;
-    font-size: 11px;
-    text-anchor: middle;
-    dominant-baseline: middle;
   }
   .mt-caption {
     margin-top: var(--sp-3);
