@@ -165,7 +165,9 @@ a {
   color: inherit;
   text-decoration: none;
 }
-a:not(.plain) {
+/* Buttons (.btn) are excluded so their own solid colors win — otherwise this
+   link rule (higher specificity than .btn-primary) tints button text blue. */
+a:not(.plain):not(.btn) {
   color: var(--brand);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -173,7 +175,7 @@ a:not(.plain) {
   text-decoration-color: color-mix(in oklab, var(--brand) 40%, transparent);
   transition: text-decoration-color 0.15s ease;
 }
-a:not(.plain):hover {
+a:not(.plain):not(.btn):hover {
   text-decoration-color: var(--brand);
 }
 
