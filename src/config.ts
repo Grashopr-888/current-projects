@@ -51,5 +51,8 @@ export const PROJECT_META = {
     logo: '/img/lichtspiel-mark.svg',
     art: '/img/lichtspiel-hero.jpg',
     artAlt: 'Lichtspiel prism mark over a dark low-poly landscape',
+    // Hackathon demo. Privacy-enhanced (nocookie) embed of youtu.be/wW3QNNuzD9M.
+    demoVideoId: 'wW3QNNuzD9M',
+    demoVideoTitle: 'Lichtspiel hackathon demo',
   },
 } as const;
