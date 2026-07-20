@@ -238,6 +238,12 @@ hr {
   font-family: var(--font-mono);
   font-weight: 500;
 }
+/* On project pages the numbered sub-section labels take the project accent
+   (blue on Windchime, orange on Lichtspiel). [data-accent] wraps the article. */
+[data-accent] .section-head .label,
+[data-accent] .section-head .label .idx {
+  color: var(--accent);
+}
 
 /* hairline rule with a brand tick */
 .rule {
