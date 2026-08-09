@@ -36,7 +36,7 @@ src/
   components/  layouts/  pages/  styles/  lib/
 scripts/                # ingestion + redaction pipeline (see scripts/README.md)
 docs/                   # content model, redaction policy, editorial guidelines, admin
-.github/                # CI, Pages deploy, issue/PR templates, CODEOWNERS, dependabot
+.github/                # CI, Pages deploy, issue/PR templates, CODEOWNERS
 ```
 
 ## Local development
