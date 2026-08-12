@@ -4,8 +4,8 @@ product: windchime
 date: 2026-05-24
 severity: sev2
 summary: >-
-  Unplugging and replugging a monome controller during a session left it detached and
-  unresponsive, recoverable only by restarting the hardware bridge.
+  Replugging a controller mid-session left it detached, recoverable only by restarting the
+  bridge.
 impact: >-
   In a live setting a bumped or reseated cable would drop the controller for the rest
   of the show unless someone restarted the bridge, which is not acceptable for an

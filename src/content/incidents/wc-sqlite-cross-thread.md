@@ -4,9 +4,8 @@ product: windchime
 date: 2026-05-16
 severity: sev3
 summary: >-
-  The first retrieval query in the pipeline worked, then every request after it
-  failed. The corpus database connection was created on one thread and then reused on
-  the server's other worker threads.
+  The first retrieval worked and every one after failed: one database connection reused across
+  threads.
 impact: >-
   During bring-up the end-to-end pipeline was unusable past a single query, which
   blocked browser testing of the whole voice-to-audio path.

@@ -5,11 +5,8 @@ version_or_label: retrieval-backends
 date: 2026-06-28
 status: shipped
 summary: >-
-  Retrieval moved behind a single embedding-backend interface over a
-  model-independent corpus database, with several audio-language model
-  configurations selectable at runtime, a multilingual configuration added, and an
-  offline harness that measures how each one behaves over a fixed corpus and
-  prompt set.
+  Retrieval moved behind one embedding interface, configurations selectable at runtime, plus
+  an audit harness.
 customer_value: >-
   The installation can run identically while the audio-language model is changed as
   a controlled variable, which keeps the piece stable for visitors and makes the

@@ -4,9 +4,8 @@ product: windchime
 date: 2026-05-23
 severity: sev3
 summary: >-
-  The livecode server's state-changing endpoints had permissive cross-origin settings,
-  so a page open in the same browser could have triggered recording or generation
-  without the operator's intent.
+  State-changing endpoints allowed cross-origin calls, so another open page could have
+  triggered generation.
 impact: >-
   While the stack runs on a developer machine, a malicious page visited in the same
   browser could have started the microphone or spent model-API budget. No exploit was

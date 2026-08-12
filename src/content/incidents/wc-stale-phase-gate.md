@@ -4,9 +4,8 @@ product: windchime
 date: 2026-07-12
 severity: sev2
 summary: >-
-  If the kiosk page died or was closed during a showcase, a shared phase gate could
-  stay latched, leaving the installation's audio in the wrong state for the next
-  visitor.
+  A closed kiosk page could leave a shared phase gate latched, stranding audio in the wrong
+  state.
 impact: >-
   On an unattended kiosk this could strand the piece in a stuck phase with no operator
   present to clear it, which defeats the whole point of a self-resetting visitor

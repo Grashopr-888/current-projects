@@ -5,8 +5,7 @@ version_or_label: phase-4.5-idioms
 date: 2026-06-02
 status: shipped
 summary: >-
-  A reusable control layer (faderBank, arcMacros, stepSequencer, cellPaint) that lets a
-  scene declare its control intent once and adapt to any monome combination.
+  A control layer: declare intent once, adapt to any monome.
 customer_value: >-
   Crafted sketches keep their hand-tuned control feel on any hardware, so the performer
   never loses reach of a control when moving between a small and a large device.

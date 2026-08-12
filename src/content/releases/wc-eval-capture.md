@@ -5,10 +5,8 @@ version_or_label: eval-v0.1
 date: 2026-05-20
 status: shipped
 summary: >-
-  A standalone study-capture application shipped end to end in one day: the study
-  protocol, a standardized UX questionnaire plus custom construct-grouped
-  instruments, automatic event logging, a participant-facing survey UI, and a
-  review dashboard, with synthetic test data to prove the pipeline.
+  A study-capture app in one day: protocol, questionnaires, event logging, participant UI,
+  review dashboard.
 customer_value: >-
   Study sessions capture themselves. The runtime emits events into the capture
   app, so evidence about how visitors actually experience the piece accumulates

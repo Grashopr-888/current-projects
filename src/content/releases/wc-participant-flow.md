@@ -5,10 +5,8 @@ version_or_label: participant-flow
 date: 2026-05-28
 status: shipped
 summary: >-
-  The dev rig became something a stranger could sit down at: a dev/participant
-  mode toggle with one-click trial sessions, a two-stage consent onboarding flow,
-  stuck-microphone auto-recovery, a live audio-activity meter, a transcript panel,
-  and a six-prompt study configuration.
+  Participant mode: one-click trials, two-stage consent, stuck-mic recovery, and a transcript
+  panel.
 customer_value: >-
   The earliest release where someone other than the builder could run the piece.
   Everything a participant needs (consent, orientation, recovery from a wedged

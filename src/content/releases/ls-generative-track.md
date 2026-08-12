@@ -5,8 +5,7 @@ version_or_label: generative-track
 date: 2026-06-14
 status: shipped
 summary: >-
-  Three authoring modes that turn the live set into new visual scenes: Sync (the audio's
-  "vibe" becomes a scene), Dream (a text prompt becomes a scene), and Fuse.
+  Three authoring modes turn the live set into scenes: Sync, Dream, Fuse.
 customer_value: >-
   A performer can conjure a fresh, playable visual scene conditioned on what they're
   actually playing, without writing code and without risking a broken scene on stage.

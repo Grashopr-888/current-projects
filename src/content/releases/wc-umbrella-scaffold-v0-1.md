@@ -5,9 +5,7 @@ version_or_label: 'v0.1'
 date: 2026-05-23
 status: shipped
 summary: >-
-  The first umbrella repo binding the retrieval, livecode, animation, and eval
-  siblings as submodules behind one launcher, a shared dev UI shell, and a real
-  control bus.
+  The first umbrella binding four siblings as submodules behind one launcher and control bus.
 customer_value: >-
   One command brings the whole installation up on a laptop, so the piece can be
   built, demoed, and tested as a single system instead of four repositories wired

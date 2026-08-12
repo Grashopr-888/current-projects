@@ -4,18 +4,16 @@ product: windchime
 date: 2026-05-20
 source_type: usability
 summary: >-
-  The design of a moderated, repeatable evaluation of the installation: a short
-  standardized UX questionnaire, a set of custom items grouped by construct, brief
-  per-trial ratings, open responses, and a semi-structured interview, with
-  counterbalanced trial order and distribution-first statistics.
+  A moderated, repeatable evaluation: a standardized UX questionnaire, construct-grouped
+  custom items, per-trial ratings, and a semi-structured interview. Trial order is
+  counterbalanced and statistics are distribution-first.
 questions:
   - Does a spoken phrase feel meaningfully related to the sound the system returns?
   - Can a participant tell how their voice shaped the result, and do they feel some control?
   - How do prior musical and live-coding experience shape a participant's expectations?
 insights:
-  - Pairing a validated short UX questionnaire with custom, construct-grouped items covers both general experience and installation-specific facets without an over-long session
-  - Five short per-trial ratings capture in-the-moment reactions that a single end-of-session form would blur together
-  - A verbatim briefing, a practice trial, and counterbalanced order separate learning the interface from judging the piece
+  - Pairing a validated questionnaire with construct-grouped items covers both general and installation-specific facets
+  - Short per-trial ratings capture reactions a single end-of-session form would blur together
 implications:
   - With small expert samples, reporting distributions with bootstrap confidence intervals is more honest than significance testing
   - Describing retrieved and generated audio as one continuous sound field avoids leading participants toward a distinction they cannot reliably hear

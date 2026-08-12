@@ -5,9 +5,8 @@ version_or_label: demo-mode
 date: 2026-06-24
 status: shipped
 summary: >-
-  An operator-facing presentation layer over the runtime, with a branded overlay,
-  intro and outro visual-memory flashes, a logo reveal, per-section audio beds, and
-  a closing recap.
+  An operator presentation layer: branded overlay, intro and outro flashes, and a closing
+  recap.
 customer_value: >-
   A presenter can run the piece as a polished showcase during a talk or a visit,
   with reachable controls for sound mode, transition, and demo set, and playback

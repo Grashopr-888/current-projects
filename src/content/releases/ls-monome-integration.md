@@ -5,8 +5,7 @@ version_or_label: phase-4-monome
 date: 2026-05-31
 status: shipped
 summary: >-
-  Grid and arc control of the visuals over serialosc, with the surface detecting which
-  device is connected and adapting between a Grid 64 or 128 and an Arc 2 or 4.
+  Grid and arc control over serialosc, adapting to the connected device.
 customer_value: >-
   A performer plays the visuals on whatever monome hardware they own, and the LEDs mirror
   the performance so the controller reads as an instrument, not a remote.

@@ -5,9 +5,7 @@ date: 2026-06-12
 severity: minor
 status: monitoring
 summary: >-
-  The playability gate checks that monome control idioms are present, not that they
-  cover the surface, so a thin mapping (six faders on an eight-column grid) passes and
-  leaves dead columns and idle encoders.
+  The gate checks idioms exist, not that they cover the surface.
 impact: >-
   A generated scene can be technically valid but underwhelming to play. Part of the
   instrument sits unused. A quality gap, not a crash.

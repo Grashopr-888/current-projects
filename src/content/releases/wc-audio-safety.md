@@ -5,8 +5,8 @@ version_or_label: soundstate-feedback-v1
 date: 2026-07-03
 status: shipped
 summary: >-
-  A three-layer defence against audio runaway: an always-on master limiter, apply-time
-  safety clamps on every voice, and a 1 Hz watchdog that rescues the engine in place.
+  A three-layer defence against runaway: a master limiter, apply-time clamps, and a 1 Hz
+  watchdog.
 customer_value: >-
   The installation can no longer roar or go silent. Speakers are protected and the
   sound recovers itself without a page refresh or a new visitor gesture.

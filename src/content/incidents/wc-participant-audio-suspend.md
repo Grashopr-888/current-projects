@@ -5,9 +5,8 @@ date: 2026-05-24
 severity: sev2
 status: resolved
 summary: >-
-  Audio went silent between participant trials and never came back: the
-  AudioContext was suspended on every stop cycle and the resume ran from a server
-  event with no user gesture, so the browser silently refused it.
+  Audio went silent between trials: the context suspended on every stop, and resumed with no
+  user gesture.
 impact: >-
   Trial-blocking during the first participant tests. Every session after the
   first stop played nothing, with no error anywhere.

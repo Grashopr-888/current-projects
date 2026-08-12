@@ -5,10 +5,8 @@ version_or_label: sound-modes-reembed
 date: 2026-07-07
 status: shipped
 summary: >-
-  A family of retrieval-and-playback presets (soundscape, focused, responsive, plus
-  an immediacy set that seeks late-entry stems to where their audio actually begins)
-  landed alongside a surgical re-embed that repairs stems whose index window was
-  silent or unrepresentative, with index-epoch provenance recorded in the corpus.
+  Playback presets landed with a surgical re-embed repairing stems whose index window was
+  silent.
 customer_value: >-
   The operator can shape how the audio behaves, from an ambient wash to a tighter,
   more immediate response, and a spoken phrase now reliably reaches stems by their

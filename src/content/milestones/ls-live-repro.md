@@ -7,7 +7,6 @@ target: Ongoing
 theme: Quality
 confidence: medium
 summary: >-
-  Reproduce and confirm the concurrent-generation and source-switching mitigations on
-  real hardware before closing the open generation-quality issues.
+  Confirm the concurrent-generation and source-switching mitigations on real hardware.
 order: 1
 ---

@@ -7,7 +7,6 @@ target: Next
 theme: Quality
 confidence: high
 summary: >-
-  Extend the generation gate to require that a scene maps all grid lanes and encoders,
-  not merely that control idioms are present.
+  Require scenes to map all grid lanes and encoders, not just present idioms.
 order: 2
 ---

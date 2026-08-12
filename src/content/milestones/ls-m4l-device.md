@@ -7,7 +7,6 @@ target: Later
 theme: Distribution
 confidence: low
 summary: >-
-  Turn the instrument into a distributable Max for Live device so a performer can drop it
-  into a set without standing up the full development environment.
+  Package it as a distributable Max for Live device.
 order: 3
 ---

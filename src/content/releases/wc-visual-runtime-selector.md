@@ -5,9 +5,8 @@ version_or_label: visual-runtime-selector
 date: 2026-07-16
 status: shipped
 summary: >-
-  The visuals app now offers two selectable runtimes at boot, the current p5 system
-  and an experimental Three.js runtime behind the same host interface, and the Three
-  runtime gained the full ported family corpus plus a set of original 3D scenes.
+  Two selectable runtimes at boot, the p5 system and an experimental Three.js runtime, one
+  host interface.
 customer_value: >-
   The piece can be shown on either renderer for a direct fidelity comparison, one
   runtime per session, with no change to hardware behaviour or interaction, so the

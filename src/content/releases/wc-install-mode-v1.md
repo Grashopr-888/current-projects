@@ -5,8 +5,8 @@ version_or_label: install-mode-v1
 date: 2026-07-05
 status: shipped
 summary: >-
-  A full kiosk lifecycle for an unattended gallery: armed → narrated onboarding →
-  live session with a bounded number of spoken prompts → a recap → an idle attract screen.
+  A full kiosk lifecycle: armed, narrated onboarding, a bounded session, a recap, then an
+  attract screen.
 customer_value: >-
   The piece can run all day with no operator. A stranger walks up, is oriented in
   seconds, has a bounded turn, and the installation resets itself for the next person.

@@ -7,9 +7,7 @@ target: Later
 theme: Reliability
 confidence: low
 summary: >-
-  A dedicated full-exhibition-day endurance test of the monome Grid and Arc:
-  hot-plug recovery under real gallery conditions, behaviour on marginal USB
-  connections, and verification that the serialosc bridge's self-healing device
-  grab holds up across a day of visitor traffic.
+  A full-day endurance test of the Grid and Arc: hot-plug recovery, marginal USB, self-healing
+  device grab. One arc encoder is a confirmed fault, to repair first.
 order: 6
 ---

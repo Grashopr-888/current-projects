@@ -5,8 +5,7 @@ version_or_label: phase-3-live-api-probe
 date: 2026-05-30
 status: shipped
 summary: >-
-  A thin Max for Live device that reads the Live Set's transport, selected track, scene,
-  and clip and streams them to the runtime, with device dials moving visual parameters.
+  A Max for Live device streaming transport, track, scene, and clip state.
 customer_value: >-
   The visuals start to reflect what is actually happening in the Live Set, and a performer
   can nudge parameters from the Ableton device without leaving Live.

@@ -5,9 +5,8 @@ date: 2026-06-04
 severity: sev3
 status: resolved
 summary: >-
-  The monome hardware was completely unresponsive in Windchime whenever another
-  monome application had used the controllers first, because serialosc persists
-  the previous app's message prefix.
+  The monome was unresponsive after another app used it, because serialosc persists that app's
+  prefix.
 impact: >-
   Total controller unresponsiveness (no input, no LEDs) until the daemon was
   restarted by hand, exactly the kind of hidden state that would strand an

@@ -5,11 +5,8 @@ version_or_label: visuals-alignment
 date: 2026-06-23
 status: shipped
 summary: >-
-  A seven-phase, two-day overhaul that ported the sibling project's mature visual
-  engine into Windchime: a param-model bridge (one shared visual parameter vector
-  with layered-target smoothing), a device-adaptive on-screen hardware twin, a
-  corpus migration adding roughly 30 audio-reactive scene families, a hands-free
-  takeover auto-performer, and a latent-space corpus map.
+  A two-day port of the sibling visual engine: shared parameter vector, twin, ~30 new
+  families.
 customer_value: >-
   The visuals stopped being a fixed sketch and became a corpus: dozens of scene
   families driven by one parameter contract, playable by hand, by audio, or by

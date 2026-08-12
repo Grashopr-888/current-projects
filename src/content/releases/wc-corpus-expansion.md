@@ -5,9 +5,8 @@ version_or_label: corpus-batches
 date: 2026-07-17
 status: shipped
 summary: >-
-  The retrieval corpus grew through successive studio-stem batches, ingested with a
-  skip sentinel so re-runs are idempotent, and documented by a full multi-backend
-  re-embed runbook.
+  The corpus grew through successive studio batches, ingested idempotently, with a multi-
+  backend re-embed runbook.
 customer_value: >-
   A larger and better-labelled sound library gives every spoken phrase more and more
   varied material to reach, while the repeatable ingest keeps that growth safe to

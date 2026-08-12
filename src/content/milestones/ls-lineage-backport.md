@@ -7,9 +7,6 @@ target: Later
 theme: Platform
 confidence: low
 summary: >-
-  Lichtspiel and Windchime share one animation lineage, and Windchime's side has
-  since grown a Three.js runtime and a much larger scene corpus. This backport
-  brings the shared parameter-vector contract up to date in both directions so
-  scene families can travel across projects without bespoke adapters.
+  Update the shared parameter-vector contract both ways so scenes travel between projects.
 order: 5
 ---

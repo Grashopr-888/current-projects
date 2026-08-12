@@ -154,35 +154,35 @@ const templates = [
 const agentPractices = [
   {
     name: 'Context before code',
-    body: 'Every repo carries a context document an agent must read before touching anything: architecture, invariants, privacy hard-stops, and known hazards. Sessions start oriented instead of re-deriving the system from scratch.',
+    body: 'Every repo carries a context document an agent must read first: architecture, invariants, privacy hard-stops, known hazards.',
   },
   {
     name: 'Persistent memory, curated',
-    body: 'Durable memory notes record mission state, decisions, and gotchas across sessions, and get pruned when they go stale. A wrong memory is worse than no memory, so facts are verified against the code before they are acted on.',
+    body: 'Durable notes carry decisions and gotchas across sessions, pruned when stale, because a wrong memory is worse than none.',
   },
   {
     name: 'One mission per session',
-    body: 'Each chat owns one scoped mission with an explicit spin-down: commit-ready state, memory updated, a handoff note written for the next session. Context windows are a budget, not a landfill.',
+    body: 'Each session owns one scoped mission and ends with a handoff note, because context windows are a budget.',
   },
   {
     name: 'Subagents for fan-out',
-    body: 'Research work is delegated to parallel subagents with narrow briefs and the privacy rules restated in every prompt: one mines git history, another audits terminology, while the main thread keeps building.',
+    body: 'Research is delegated to parallel agents with narrow briefs and the privacy rules restated in every prompt.',
   },
   {
     name: 'Gates decide "done", not the agent',
-    body: 'Agent work only counts when the gates say so: typecheck, build, regression harness, and a redaction scan that blocks secrets, hostnames, and private material from ever shipping. Green gates are the definition of finished.',
+    body: 'Typecheck, build, and a redaction scan define finished; the agent claiming success does not.',
   },
   {
     name: 'Human-gated commits',
-    body: 'Nothing lands without the owner directing it: diffs are reviewed and commit structure is curated deliberately, with agent assistance credited in the trailer, because the history itself is a product artifact.',
+    body: 'Nothing lands without the owner directing it, because the history itself is a product artifact.',
   },
   {
     name: 'Verification over trust',
-    body: 'Visual work gets a browser pass with screenshots before it counts; reliability claims get a soak harness, not a vibe check. The 6-hour, 879-visitor run exists because "the agent says it works" is not evidence.',
+    body: 'Visual work gets a browser pass and reliability claims get a soak harness, never a vibe check.',
   },
   {
     name: 'Review loops on agent code',
-    body: 'Agent-written diffs get adversarial review passes (simplification, correctness, security) before they land, the same way a human teammate would be reviewed. Postmortems apply to agent-introduced bugs too.',
+    body: 'Agent-written diffs get adversarial review before landing, the same as any teammate would.',
   },
 ];
 

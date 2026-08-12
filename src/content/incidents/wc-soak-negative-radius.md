@@ -5,9 +5,8 @@ date: 2026-07-06
 severity: sev3
 status: resolved
 summary: >-
-  A purpose-built browser harness drove 879 synthetic visitors through the full session
-  lifecycle for six hours. It surfaced exactly one real bug, a rare negative-radius
-  drawing exception in the "computing" sequence.
+  Six hours and 879 synthetic visitors surfaced exactly one real bug: a rare negative-radius
+  exception.
 impact: >-
   A single-frame render exception during the retrieval wait; visible only under sustained,
   rapid cycling, never yet by a real visitor, but the kind of thing that erodes an

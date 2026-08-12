@@ -5,10 +5,8 @@ date: 2026-07-12
 severity: sev3
 status: resolved
 summary: >-
-  Deliberately ended sessions came back audibly, twice by different mechanisms:
-  first the safety watchdog "rescued" intentional silence by replaying the last
-  plan, and later long in-flight voices that stop() had only gain-masked rang
-  back when the next visitor's volume reset un-cut the master.
+  Ended sessions came back audibly, twice by different mechanisms: a watchdog rescue, then
+  gain-masked voices.
 impact: >-
   Broke the install's quiet endings: the afterglow between visitors carried
   trailing audio from the previous session, undermining the bounded-session

@@ -5,10 +5,8 @@ version_or_label: originals-o1-o4
 date: 2026-07-17
 status: shipped
 summary: >-
-  Four waves of original Three.js scenes: two abstract and kinetic sets, then two
-  waves of city scenes tied to places where the corpus's field recordings were
-  made, bringing the visual corpus to 69 families. An authoring guide now
-  codifies the interaction rules the earlier scenes taught.
+  Four waves of original Three.js scenes, including cities where field recordings were made;
+  69 families.
 customer_value: >-
   The visuals gained a body of original, place-rooted work rather than a library
   of adapted sketches, and every new scene answers to the same rules: expressive

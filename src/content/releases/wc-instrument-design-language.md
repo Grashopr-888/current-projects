@@ -5,10 +5,7 @@ version_or_label: design-tokens-v1
 date: 2026-06-17
 status: shipped
 summary: >-
-  All four applications (dev UI, visuals, live-coding UI, and the study capture
-  app) were reskinned onto a single shared set of warm-amber "instrument" design
-  tokens, and the umbrella's submodule remotes were migrated to their permanent
-  hosting.
+  All four applications reskinned onto one shared set of warm-amber instrument design tokens.
 customer_value: >-
   A visitor moving between the visitor bar, the visuals, and a survey sees one
   instrument, not four developer tools. Every later mode (demo, install) builds

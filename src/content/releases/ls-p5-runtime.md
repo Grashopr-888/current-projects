@@ -5,8 +5,7 @@ version_or_label: phase-1-p5-runtime
 date: 2026-05-30
 status: shipped
 summary: >-
-  A standalone p5.js visual engine that renders scenes in the browser with no Ableton,
-  no bridge, and no model service required.
+  A standalone p5.js engine rendering scenes with no Ableton or bridge.
 customer_value: >-
   The performer can open a page and immediately see and play visuals, so the system is
   usable and demonstrable even when nothing else in the stack is running.

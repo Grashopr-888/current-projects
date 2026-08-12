@@ -7,8 +7,7 @@ date: 2026-06-15
 target: Jun 2026
 theme: Delivery
 summary: >-
-  A working live instrument demonstrated at an Ableton hackathon (Music Hackspace, hosted at
-  Berklee College of Music, Boston, June 2026), consolidated from three forks into one build.
+  A working live instrument demonstrated at the hackathon, consolidated from three forks.
 linked_releases:
   - ls-consolidation-v1
   - ls-generative-track

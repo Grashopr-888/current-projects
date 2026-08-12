@@ -7,10 +7,7 @@ target: Next
 theme: Reliability
 confidence: medium
 summary: >-
-  Extend the synthetic-visitor soak harness to exercise the live audio path and
-  the watchdog under load: real Strudel playback, stop-and-replace cycles between
-  visitors, and forced engine faults that the watchdog must rescue in place. The
-  6-hour visitor-lifecycle soak deliberately excluded audio; this closes the top
-  remaining reliability gap.
+  Extend the synthetic-visitor soak to the live audio path and watchdog: real playback, stop-
+  and-replace between visitors, forced faults. The 6-hour run excluded audio.
 order: 3
 ---

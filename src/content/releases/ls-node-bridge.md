@@ -5,8 +5,7 @@ version_or_label: phase-2-node-bridge
 date: 2026-05-30
 status: shipped
 summary: >-
-  A Node WebSocket hub that carries validated messages between Max for Live, the p5
-  runtime, and a CLI, rejecting malformed payloads before they reach the visuals.
+  A Node hub carrying validated messages between Max for Live and the runtime.
 customer_value: >-
   The visual runtime only ever receives well-formed control messages, so a bad input
   upstream cannot corrupt or crash the performance.

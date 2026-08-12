@@ -5,10 +5,8 @@ version_or_label: soak-v1
 date: 2026-07-06
 status: shipped
 summary: >-
-  A real-browser soak harness drove 879 synthetic visitors through the full
-  install-mode lifecycle over six hours: zero wedges, zero crashes, zero render
-  exceptions, flat health metrics, and byte-identical real data stores, with all
-  synthetic traffic siloed behind environment-gated seams.
+  879 synthetic visitors through the install lifecycle over six hours: zero wedges, zero
+  crashes.
 customer_value: >-
   Reliability stopped being a claim. The exact build that faces a gallery was
   demonstrated to survive a full unattended day of visitor traffic, and the one

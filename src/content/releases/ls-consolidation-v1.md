@@ -5,8 +5,7 @@ version_or_label: consolidation-v1
 date: 2026-06-15
 status: shipped
 summary: >-
-  One coherent build reconciling three forks (the newest tree's UX with the rigorous
-  fork's validation and curation restored) delivered across 43 commits in four days.
+  One build reconciling three forks, the rigorous fork's validation restored.
 customer_value: >-
   A single instrument that is both pleasant to use and safe to play live, instead of
   three partial versions each missing something the others had.

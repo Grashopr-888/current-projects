@@ -4,17 +4,15 @@ product: windchime
 date: 2026-07-07
 source_type: experiment
 summary: >-
-  A method for repairing a retrieval index when a fixed indexing window lands on
-  silence or an unrepresentative part of a stem, together with a provenance scheme
-  that records which index epoch every measurement was computed against.
+  A method for repairing a retrieval index when a fixed indexing window lands on silence, plus
+  a provenance scheme recording which index epoch each measurement used.
 questions:
   - When a stem is indexed from a fixed window, how often does that window miss the stem's actual sound?
   - Can only the affected rows be repaired without disturbing the rest of a frozen index?
   - How do we keep every downstream measurement attributable to the exact index it ran against?
 insights:
-  - Late-entry material, meaning files that open with long silence, can yield an embedding of essentially nothing under a fixed head window
-  - Reading each stem from its most representative window, chosen via a lightweight loudness sidecar, targets the repair to only the compromised rows
-  - An append-only index history distinguishes recurring corpus-addition re-indexes from one-off surgical re-embeds
+  - Files that open with long silence embed as essentially nothing under a fixed head window
+  - Reading each stem from its most representative window targets the repair to only the compromised rows
 implications:
   - Retrieval quality depends as much on the indexing window as on the model, so the window is a first-class design choice
   - Stamping each analysis with its index epoch keeps results reproducible and prevents accidentally comparing numbers across different indexes

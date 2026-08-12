@@ -4,17 +4,15 @@ product: windchime
 date: 2026-06-28
 source_type: experiment
 summary: >-
-  The research method holds the whole installation constant and varies only the
-  audio-language model that matches a voice to sound, then measures how differently
-  each configuration behaves over the same corpus and the same prompts.
+  Hold the whole installation constant and vary only the audio-language model, then measure
+  how differently each configuration behaves over the same corpus and prompts.
 questions:
   - Does the choice of audio-language model change which stems a voice can reach?
   - Are some configurations more stable under paraphrase, or across languages?
   - How evenly does each model cover the catalogue versus concentrating on a few stems?
 insights:
-  - A single embedding interface plus a model-independent corpus DB makes "which model" a clean toggle
-  - Embedding audio offline, once per configuration, keeps the runtime light and the comparison fair
-  - Distributional metrics (catalog coverage, selection concentration, dispersion, ranking overlap) describe behaviour without needing ground-truth labels
+  - One embedding interface over a model-independent corpus makes "which model" a clean toggle
+  - Distributional metrics describe behaviour without needing ground-truth labels
 implications:
   - The same seam that enables the science also hardens the product (liveness probe, auto-revert)
   - Provenance matters. Every measurement must be attributable to the exact index epoch it ran against

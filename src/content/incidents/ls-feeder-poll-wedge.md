@@ -5,9 +5,7 @@ date: 2026-06-15
 severity: sev2
 status: resolved
 summary: >-
-  The Ableton feeder process could stall so that live state stopped reaching the bridge and no
-  scene-launch or locator-crossing triggers fired, leaving the visuals unresponsive while Live
-  was still playing.
+  The feeder stalled, so live state stopped reaching the bridge.
 impact: >-
   With the trigger path stalled, the visuals stopped following the set even though the music
   played on. For a live instrument this is a show-stopping failure of the core loop.

@@ -5,9 +5,8 @@ date: 2026-07-03
 severity: sev2
 status: resolved
 summary: >-
-  During testing the sound occasionally built up "like a feedback loop," then quit
-  entirely, recoverable only by a hard page refresh. It was not feedback but
-  unbounded voice accumulation.
+  Sound built up like a feedback loop then quit entirely. Not feedback, but unbounded voice
+  accumulation.
 impact: >-
   In a gallery this would mean a jarring loud build-up followed by dead speakers until
   someone reloaded the page, unacceptable for an unattended piece.

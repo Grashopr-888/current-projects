@@ -5,9 +5,7 @@ date: 2026-06-04
 severity: sev3
 status: resolved
 summary: >-
-  Monome encoder clicks unpredictably switched the active visual scene during
-  play, because a legacy fallback mapping bound encoder presses to template
-  navigation.
+  Encoder clicks switched the active scene, via a legacy navigation mapping.
 impact: >-
   Expressive presses doubled as navigation, so a performer leaning into an
   encoder could yank the whole visual world out from under their set.

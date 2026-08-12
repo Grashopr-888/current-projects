@@ -4,17 +4,14 @@ product: lichtspiel
 date: 2026-06-02
 source_type: field-notes
 summary: >-
-  Notes from hands-on hardware sessions on making a monome grid and arc feel like an
-  instrument for playing a visual space, rather than a bank of remote-control buttons.
+  Making a grid and arc feel like an instrument, not a remote.
 questions:
   - What makes a grid and arc read as an instrument instead of a control panel?
   - How should controls behave when the connected hardware is smaller than a sketch expects?
   - What feedback does a performer need to trust that a gesture landed?
 insights:
-  - LED feedback matters as much as input; the surface must mirror the performance to feel alive
-  - Folding grid columns felt natural, but early on the arc turns did not fold, leaving objects frozen
-  - The rule that emerged is to never leave a control unreachable on smaller hardware
-  - The controller should never switch scenes; navigation belongs to the keyboard and Ableton
+  - Expressive gestures need immediate LED acknowledgement to feel played rather than sent
+  - Navigation bound to the same surface as expression makes a performer hesitant
 implications:
   - Coupling and paging were added so every logical control stays reachable when hardware shrinks
   - A live gestural panel shows the connected device and its coupling so the mapping is legible

@@ -5,8 +5,7 @@ date: 2026-06-11
 severity: sev3
 status: resolved
 summary: >-
-  The newer fork chosen as the consolidation base had its code-generation validation
-  gates stubbed out with TODOs. Basing on it meant generated visuals could ship unchecked.
+  The consolidation base had its validation gates stubbed out with TODOs.
 impact: >-
   Without real gates, a generated scene could reach the stage without passing type,
   lint, playability, or render checks, the exact failure the rigor was meant to prevent.

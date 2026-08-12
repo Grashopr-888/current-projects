@@ -59,75 +59,31 @@ languages:
 
 ## The opportunity: not another VJ plugin
 
-VJ tools map an audio envelope; they do not know that this is the B-section or that the
-performer just launched a new scene. Lichtspiel reads the Ableton Live set itself (clips,
-scenes, locators, transport) and uses that structure to choose and shape code-native
-browser visuals, with the monome as a latent-space instrument. It was built at an Ableton
-hackathon run by **Music Hackspace**, hosted at **Berklee College of Music** (Boston, June
-2026), under a hard constraint: a repeatable few-minute performance that could not fail on
-stage.
+VJ tools map an audio envelope; they do not know this is the B-section. Lichtspiel reads the
+Ableton set itself (clips, scenes, locators, transport) and shapes code-native visuals from
+that structure, with the monome as a latent-space instrument. Built at an Ableton hackathon
+run by **Music Hackspace** at **Berklee College of Music** (June 2026), under one constraint:
+a few-minute performance that could not fail on stage.
 
 ## How it works, at the boundary
 
-Ableton talks to a thin Max for Live shell, which feeds a Node bridge that normalises and
-routes set state to a **p5.js runtime** for rendering and a **Python service** for
-retrieval and authoring-time generation. One rule governs the design (**runtime purity**):
-the performance path never calls a model or the network, and if the bridge, Ableton, or the
-model service disappears, the visuals keep running browser-only and reconnect when they
-return.
+A thin Max for Live shell feeds a Node bridge, which routes set state to a **p5.js runtime**
+for rendering and a **Python service** for authoring-time generation. One rule governs the
+design (**runtime purity**): the performance path never calls a model or the network, so the
+visuals keep running browser-only if the bridge or service disappears.
 
-## The monome as an instrument
+Scenes are single-file sketches built from reusable **idioms**: fader banks, arc macros, step
+sequencers. The hardware layer is **capability-adaptive**, folding a four-encoder sketch onto
+a two-encoder Arc, and a **digital twin** mirrors every LED so it plays with no hardware at
+all. Rehearsal produced two standing rules: nothing on the monome navigates, everything
+expresses; and a generated scene stays disposable until a deliberate Keep.
 
-Visual scenes are single-file sketches composed from reusable **idioms**: a fader bank, arc
-macros, a step sequencer, a cell-painter. The hardware layer is **capability-adaptive**: it
-detects the connected device and folds a four-encoder sketch down onto a two-encoder Arc, or
-adapts up to a larger grid. An on-screen **digital twin** mirrors every LED, so the piece is
-fully playable with no hardware at all, which is also how it survives an unreliable stage.
+## The judgment call, and how it is validated
 
-## Discovery
-
-Mapping visuals to section and scene changes makes them feel composed rather than merely
-reactive. Authoring settled into three set-conditioned modes: **Sync** (the live audio's
-character becomes a scene), **Dream** (a text prompt becomes a scene), and **Fuse**. And
-generation needs curation to matter: a generated scene stays disposable until a human keeps
-it, with a _Keep_ / _Promote_ flow moving the good ones into a committed tier.
-
-## UX choices, tested in rehearsal
-
-The instrument is designed around what a performer can afford to think about mid-set:
-nothing on the monome navigates, everything expresses. That rule came from rehearsal, where
-encoder presses left over from an early fallback mapping kept yanking the active scene out
-from under the performer; the fix removed template switching from the hardware entirely and
-became a standing design rule the idiom layer inherited. The capability-adaptive mapping
-(folding a four-encoder sketch onto a two-encoder Arc) and the on-screen digital twin exist
-for the same reason: the show must be playable on whatever hardware survives the trip, or
-none at all.
-
-Later passes added a hover-help tutorial layer over every control and an instrument-style
-visual overhaul, both responses to watching a new user freeze in front of an unlabeled
-surface. Curation got the same treatment: a generated scene stays disposable until a
-deliberate Keep, because trusting a fresh generation on stage is a risk a performer should
-opt into, not inherit.
-
-## The three-fork consolidation
-
-The most instructive part of Lichtspiel is a **judgment call**, not a feature. The
-project forked into three lines: the team's pre-AI base, a rigorous solo generator with real
-validation and curation, and a newer tree with a much better UX and a Python "vibe" pipeline
-whose validation had been stubbed out. I based the consolidation on the newest tree and
-**restored the dropped rigor** from the other fork, each restoration its own reviewable
-commit. The decision record and the incident that followed are below.
-
-## Validation
-
-Generated visuals are not trusted by default. Every one runs a **five-gate chain** (strict
-type-checking, an allow-list lint, a monome-playability marker check, and a headless render
-smoke test) inside a bounded self-repair loop that retries up to three times before giving
-up. The first scene through the rebuilt pipeline passed every gate at 60 fps.
-
-## What I'd do next
-
-- Close the **grid-coverage gap**: the playability gate checks that controls _exist_, not that
-  they _cover_ the surface, so thin mappings can pass. (Tracked as an open incident.)
-- Package the instrument as a distributable **Max for Live device**.
-- Fold more of Windchime's newer visual work back across the shared lineage.
+The most instructive part is a judgment call, not a feature. It forked three ways: the team's
+base, a rigorous solo generator, and a newer tree with better UX whose validation had been
+stubbed out. I consolidated onto the newest and restored the dropped rigor, each restoration
+its own commit. Nothing generated is trusted: every scene runs a **five-gate chain**
+(type-checking, allow-list lint, monome-playability check, headless render smoke test) inside
+a bounded self-repair loop. The first scene through the rebuilt pipeline passed every gate at
+60 fps.

@@ -5,9 +5,7 @@ date: 2026-06-12
 severity: sev3
 status: monitoring
 summary: >-
-  Capturing a Session scene and generating, then capturing an Arrangement region and
-  generating with auto-generate on, produced the same visual template instead of a new one
-  conditioned on the latest capture.
+  Session then Arrangement capture produced the same template, not a new one.
 impact: >-
   A performer expecting fresh imagery from the newest capture got a repeat, which undermines
   trust in the generate-on-capture flow during a play session.

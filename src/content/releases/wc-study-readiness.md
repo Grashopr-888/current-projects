@@ -5,10 +5,8 @@ version_or_label: study-readiness
 date: 2026-07-11
 status: shipped
 summary: >-
-  The study capture app began recording the full condition of every session
-  (interface variant, audio-language model configuration, sound mode, and layer
-  cap) with a backend-aware recap, and the audit prompt set was expanded to a
-  balanced, versioned coverage edition.
+  Every captured session now records its full condition: variant, model, sound mode, and layer
+  cap.
 customer_value: >-
   Every captured session now carries its own experimental conditions, so analysis
   never has to reconstruct what the system was doing from timestamps and logs.

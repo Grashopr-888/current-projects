@@ -7,10 +7,7 @@ target: Next
 theme: Experience
 confidence: medium
 summary: >-
-  The installation has three sound modes (Soundscape, Focused, and Responsive)
-  that trade ambient layering against loudness-verified tightness and one-shot
-  responsiveness. The open tuning decision is whether an exhibition day fixes one
-  mode or rotates them per session, and what the defaults for layer caps and
-  transition modes should be under each choice.
+  Sound modes now run as a per-prompt sequence. Two decisions remain: which preset an
+  exhibition runs, and whether visitors hear the planner or the bypass.
 order: 4
 ---

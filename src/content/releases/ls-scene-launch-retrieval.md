@@ -5,8 +5,7 @@ version_or_label: phase-5a-auto-retrieval
 date: 2026-06-04
 status: shipped
 summary: >-
-  The first on-the-fly audiovisual trigger: launching a Session scene or crossing an
-  Arrangement locator auto-loads a fresh, immediately playable visual variant.
+  Launching a scene or crossing a locator auto-loads a playable variant.
 customer_value: >-
   Visuals hot-swap per song section as the set plays, so the imagery follows the
   arrangement on its own while the performer keeps playing music.
