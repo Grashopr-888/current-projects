@@ -3,12 +3,15 @@
   "label": "windchime-livecode",
   "product": "windchime",
   "dir": "windchime-livecode",
-  "commitCount": 31,
+  "commitCount": 85,
   "firstDate": "2026-05-16",
-  "lastDate": "2026-05-24",
+  "lastDate": "2026-08-05",
   "authors": 1,
   "months": {
-    "2026-05": 31
+    "2026-05": 38,
+    "2026-06": 9,
+    "2026-07": 24,
+    "2026-08": 14
   },
   "days": {
     "2026-05-16": {
@@ -38,8 +41,149 @@
       ]
     },
     "2026-05-24": {
+      "count": 5,
+      "subjects": [
+        "fix(web): unlockAudio verifies ctx.state actually transitioned",
+        "fix(web): restore post-hush settle + defensive resume (no suspend)",
+        "fix(web): drop AudioContext suspend/resume cycle from stop + transitions",
+        "fix(web): parent-window postMessage bridge for AudioContext unlock"
+      ]
+    },
+    "2026-05-27": {
       "count": 1,
-      "subjects": ["compiler: add `field` to KNOWN_STEM_TYPES"]
+      "subjects": ["feat(server): opt-in same-origin dev UI mount via WCA_DEV_UI_DIR"]
+    },
+    "2026-05-28": {
+      "count": 2,
+      "subjects": [
+        "feat(audio): analyser tap on master gain for live activity meter",
+        "feat(audio): master volume slider + no-cache iframe + mic hot-plug reco…"
+      ]
+    },
+    "2026-06-17": {
+      "count": 1,
+      "subjects": ["feat(web): warm-amber instrument reskin (shared Windchime design tokens)"]
+    },
+    "2026-06-23": {
+      "count": 2,
+      "subjects": [
+        "feat(livecode): Demo mode D3-D5 - command classifier + /demo/events SSE…",
+        "feat(livecode): GET /corpus/latent - UMAP/PCA/t-SNE projection of CLAP …"
+      ]
+    },
+    "2026-06-24": {
+      "count": 3,
+      "subjects": [
+        "Corpus expansion support + demo-audio/stability fixes",
+        "Log prompt embeddings + a /prompts/latent map",
+        "Add Sound Modes (Soundscape / Focused / Responsive)"
+      ]
+    },
+    "2026-06-25": {
+      "count": 1,
+      "subjects": ["Audio: /stop leaves the master gain cut, restore on next generation"]
+    },
+    "2026-06-28": {
+      "count": 1,
+      "subjects": ["feat: /retrieval_backend live model toggle + per-backend engine cache"]
+    },
+    "2026-06-29": {
+      "count": 1,
+      "subjects": ["fix: prompts-latent robust to mixed-dim embeddings (backend switching)"]
+    },
+    "2026-07-03": {
+      "count": 4,
+      "subjects": [
+        "feat(audio): master limiter chain + apply-time safety clamps + watchdog…",
+        "feat(corpus): seed templates/examples.jsonl with keeper #1",
+        "feat(computing): \"resolving\" stage frame so the arrival flash leads the…",
+        "feat(computing): broadcast generating control frames for the thinking s…"
+      ]
+    },
+    "2026-07-05": {
+      "count": 2,
+      "subjects": [
+        "fix(audio): watchdog rescue no longer replays a deliberately-stopped pl…",
+        "feat(install): variant-aware demo gate - speak-to-begin, prompt cap, un…"
+      ]
+    },
+    "2026-07-06": {
+      "count": 1,
+      "subjects": ["feat(soak): env-gated isolation seams for reliability soaks (no-op by d…"]
+    },
+    "2026-07-07": {
+      "count": 3,
+      "subjects": [
+        "server: wire immediacy injection into _generate + backend-switch safety",
+        "immediacy sound modes: Immediate / Settled / Peak (+ client audibility …",
+        "loudness sidecar v2/v2.1: full-file activity scan + corpus audit scripts"
+      ]
+    },
+    "2026-07-11": {
+      "count": 1,
+      "subjects": ["livecode: backend-aware prompt latent (fix recap connections) + eval ev…"]
+    },
+    "2026-07-12": {
+      "count": 6,
+      "subjects": [
+        "telemetry: visual_runtime (p5 | three) threaded into runs.jsonl",
+        "install audio: Bel Air tutorial bed (side-chained) + stop() severs in-f…",
+        "server wiring: mic_meter SSE + /llm_backend endpoints + no-cache for /d…",
+        "planner: selectable LLM entry point (claude|ollama) + telemetry + ollam…"
+      ]
+    },
+    "2026-07-17": {
+      "count": 1,
+      "subjects": ["tts: resume-guard on voice/bed start (partial) + document OPEN bug"]
+    },
+    "2026-07-28": {
+      "count": 3,
+      "subjects": [
+        "livecode: re-render tutorial narration for the new corpus line",
+        "livecode: fix tutorial narration dying after the first session",
+        "livecode: latent map follows the ACTIVE retrieval backend"
+      ]
+    },
+    "2026-07-31": {
+      "count": 3,
+      "subjects": [
+        "docs(livecode): measured latency profile + first-tutorial-line TTS find…",
+        "feat(livecode): LLM bypass - retrieval only, no LLM and no Strudel",
+        "docs: brief for the LLM bypass (retrieval without code generation)"
+      ]
+    },
+    "2026-08-02": {
+      "count": 2,
+      "subjects": [
+        "docs(livecode): sound-modes reference, both halves laid out explicitly",
+        "fix(livecode): first tutorial clip was silent on every later round"
+      ]
+    },
+    "2026-08-03": {
+      "count": 3,
+      "subjects": [
+        "feat(livecode): hold the first prompt's audio so the thinking bed plays…",
+        "feat(livecode): sound-mode presets - a per-prompt mode sequence, defaul…",
+        "fix(livecode): detect a dead mic input and re-enumerate, instead of nee…"
+      ]
+    },
+    "2026-08-04": {
+      "count": 4,
+      "subjects": [
+        "docs(livecode): the mic fault is TWO faults - CoreAudio deadlock + devi…",
+        "feat(livecode): expose norm_gain on /corpus/stems so sequence beds can …",
+        "feat(livecode): presence trim for continuous stems; exclusion list mach…",
+        "feat(audio): operator tuning stage, live spectrum feed, install defaults"
+      ]
+    },
+    "2026-08-05": {
+      "count": 5,
+      "subjects": [
+        "fix(scripts): device_guard now guards OUTPUT too, and stops on SIGTERM",
+        "feat(livecode): keep profanity off the public-facing screens",
+        "feat(scripts): device_guard - hold the operator's chosen input, spot a …",
+        "feat(scripts): corpus audit - retrieval frequency joined to loudness"
+      ]
     }
   },
   "tags": []

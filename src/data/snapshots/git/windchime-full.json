@@ -3,14 +3,15 @@
   "label": "windchime (umbrella)",
   "product": "windchime",
   "dir": "windchime-full",
-  "commitCount": 85,
+  "commitCount": 119,
   "firstDate": "2026-05-23",
-  "lastDate": "2026-07-17",
+  "lastDate": "2026-08-05",
   "authors": 1,
   "months": {
     "2026-05": 31,
     "2026-06": 35,
-    "2026-07": 19
+    "2026-07": 34,
+    "2026-08": 19
   },
   "days": {
     "2026-05-23": {
@@ -157,6 +158,81 @@
     "2026-07-17": {
       "count": 2,
       "subjects": ["pin: bump animation + livecode submodules"]
+    },
+    "2026-07-19": {
+      "count": 1,
+      "subjects": ["pins: animation waves O5+O6 (corpus 80) + retrieval stems_717 ingest"]
+    },
+    "2026-07-24": {
+      "count": 2,
+      "subjects": ["pin: animation wave O8 (corpus 102)", "pin: animation wave O7 (corpus 89)"]
+    },
+    "2026-07-25": {
+      "count": 2,
+      "subjects": [
+        "pin: animation WAVE_METHOD playbook + PORTS corpus fix",
+        "pin: animation wave O8 v2 (corpus 115)"
+      ]
+    },
+    "2026-07-26": {
+      "count": 1,
+      "subjects": ["pin animation -> cfbf2c9 (wave O9: 11 album-cover Three scenes)"]
+    },
+    "2026-07-28": {
+      "count": 2,
+      "subjects": [
+        "pin animation 50c994b · livecode b7a0b1e · retrieval d2f1698",
+        "dev-ui: presentation mode, real tutorial spotlight, top-bar tidy"
+      ]
+    },
+    "2026-07-29": {
+      "count": 2,
+      "subjects": [
+        "pin animation 3cd3321 (caption type, attract polish, wider prompt pools)",
+        "dev-ui: presentation mode goes fullscreen + hides the nav tabs"
+      ]
+    },
+    "2026-07-31": {
+      "count": 5,
+      "subjects": [
+        "pin: livecode → effc2dd (LLM bypass + latency profile)",
+        "feat(launcher): start the clamp3 sidecar by default, as an OPTIONAL ser…",
+        "feat(dev-ui): add the bypass option to the LLM dropdown",
+        "pin: animation → feea02d (wave O10 - nine mixed reference-art scenes)"
+      ]
+    },
+    "2026-08-02": {
+      "count": 2,
+      "subjects": [
+        "pin: livecode → 6b70ab2 · animation → e9ac19e",
+        "retrieval pin: 406-corpus audit refresh + corpus-size fix (93b4037)"
+      ]
+    },
+    "2026-08-03": {
+      "count": 3,
+      "subjects": [
+        "chore: bump animation to the monome-depth rework",
+        "pin: livecode → 4876f46 · animation → dc20602",
+        "feat(dev-ui): preset options, a tutorial spotlight that actually dims, …"
+      ]
+    },
+    "2026-08-04": {
+      "count": 5,
+      "subjects": [
+        "chore: bump livecode and animation pins for the 2026-08-04 levelling wo…",
+        "docs: open-issues register + 2026-08-04 mic session handoff",
+        "docs: corpus/sequence levelling and the retrieval tuning picture",
+        "docs(audio): AUDIO_CONTROLS.md + bump animation and livecode"
+      ]
+    },
+    "2026-08-05": {
+      "count": 9,
+      "subjects": [
+        "chore: bump retrieval pin to b6a8efc (tracked exclusion list)",
+        "docs: offline flags and the device guard are now automatic",
+        "chore: bump livecode pin - device_guard guards output + handles SIGTERM",
+        "chore: bump livecode pin for the public-safety text filter"
+      ]
     }
   },
   "tags": [

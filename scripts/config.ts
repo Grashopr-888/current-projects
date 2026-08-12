@@ -13,7 +13,14 @@ const ROOT = process.env.PL_REPOS_ROOT ?? os.homedir();
 export interface RepoSource {
   label: string;
   product: Product;
-  dir: string; // directory name under ROOT
+  dir: string; // stable key: names the snapshot file
+  /**
+   * Where the repo actually lives, relative to ROOT, when it differs from `dir`.
+   * Several services are developed as submodules of the umbrella, and the
+   * standalone sibling clones lag behind. Always read the authoritative copy,
+   * or the cadence silently undercounts the busiest repos.
+   */
+  path?: string;
   githubRepo?: string; // "owner/name", if you want GitHub metadata too
 }
 
@@ -26,9 +33,24 @@ export const REPOS: RepoSource[] = [
     githubRepo: 'Grashopr-888/windchime',
   },
   { label: 'windchime-retrieval', product: 'windchime', dir: 'windchime-retrieval' },
-  { label: 'windchime-livecode', product: 'windchime', dir: 'windchime-livecode' },
-  { label: 'windchime-animation', product: 'windchime', dir: 'windchime-animation' },
-  { label: 'windchime-eval', product: 'windchime', dir: 'windchime-eval' },
+  {
+    label: 'windchime-livecode',
+    product: 'windchime',
+    dir: 'windchime-livecode',
+    path: 'windchime-full/services/livecode',
+  },
+  {
+    label: 'windchime-animation',
+    product: 'windchime',
+    dir: 'windchime-animation',
+    path: 'windchime-full/services/animation',
+  },
+  {
+    label: 'windchime-eval',
+    product: 'windchime',
+    dir: 'windchime-eval',
+    path: 'windchime-full/services/eval',
+  },
   { label: 'windchime-soak', product: 'windchime', dir: 'windchime-soak' },
   {
     label: 'lichtspiel',
@@ -39,7 +61,7 @@ export const REPOS: RepoSource[] = [
 ];
 
 export function repoPath(src: RepoSource): string {
-  return path.join(ROOT, src.dir);
+  return path.join(ROOT, src.path ?? src.dir);
 }
 
 export const PATHS = {

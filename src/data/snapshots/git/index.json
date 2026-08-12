@@ -4,37 +4,37 @@
     {
       "label": "windchime (umbrella)",
       "product": "windchime",
-      "commitCount": 85,
+      "commitCount": 119,
       "firstDate": "2026-05-23",
-      "lastDate": "2026-07-17"
+      "lastDate": "2026-08-05"
     },
     {
       "label": "windchime-retrieval",
       "product": "windchime",
-      "commitCount": 23,
+      "commitCount": 27,
       "firstDate": "2026-05-07",
-      "lastDate": "2026-07-17"
+      "lastDate": "2026-08-04"
     },
     {
       "label": "windchime-livecode",
       "product": "windchime",
-      "commitCount": 31,
+      "commitCount": 85,
       "firstDate": "2026-05-16",
-      "lastDate": "2026-05-24"
+      "lastDate": "2026-08-05"
     },
     {
       "label": "windchime-animation",
       "product": "windchime",
-      "commitCount": 6,
+      "commitCount": 87,
       "firstDate": "2026-05-21",
-      "lastDate": "2026-05-23"
+      "lastDate": "2026-08-04"
     },
     {
       "label": "windchime-eval",
       "product": "windchime",
-      "commitCount": 3,
+      "commitCount": 11,
       "firstDate": "2026-05-20",
-      "lastDate": "2026-05-20"
+      "lastDate": "2026-07-11"
     },
     {
       "label": "windchime-soak",

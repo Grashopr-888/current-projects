@@ -3,12 +3,14 @@
   "label": "windchime-eval",
   "product": "windchime",
   "dir": "windchime-eval",
-  "commitCount": 3,
+  "commitCount": 11,
   "firstDate": "2026-05-20",
-  "lastDate": "2026-05-20",
+  "lastDate": "2026-07-11",
   "authors": 1,
   "months": {
-    "2026-05": 3
+    "2026-05": 6,
+    "2026-06": 4,
+    "2026-07": 1
   },
   "days": {
     "2026-05-20": {
@@ -18,6 +20,38 @@
         "Restyle UI to match windchime-livecode aesthetic; add references.md; qu…",
         "v0.1 scaffold: study protocol, UEQ-S + custom instruments, auto-logging…"
       ]
+    },
+    "2026-05-24": {
+      "count": 1,
+      "subjects": ["fix(cors): add CORSMiddleware so cross-origin POSTs work"]
+    },
+    "2026-05-27": {
+      "count": 1,
+      "subjects": ["feat(dashboard): completed_only filter + Real-eval preset"]
+    },
+    "2026-05-28": {
+      "count": 1,
+      "subjects": ["feat(prompts): add musical + abstract → 6-prompt study + soften wc1"]
+    },
+    "2026-06-17": {
+      "count": 1,
+      "subjects": ["feat(web): warm-amber instrument reskin + SurveyJS theme-var theming"]
+    },
+    "2026-06-23": {
+      "count": 1,
+      "subjects": ["feat(eval): Phase 7 C - mode theming (eval blue, participant questionna…"]
+    },
+    "2026-06-25": {
+      "count": 1,
+      "subjects": ["Theme: swap participant/demo palettes (participant magenta, demo green)"]
+    },
+    "2026-06-28": {
+      "count": 1,
+      "subjects": []
+    },
+    "2026-07-11": {
+      "count": 1,
+      "subjects": ["eval: session-condition capture (variant/model/sound/cap) + backend-awa…"]
     }
   },
   "tags": []

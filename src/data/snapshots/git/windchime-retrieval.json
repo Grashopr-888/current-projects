@@ -3,14 +3,15 @@
   "label": "windchime-retrieval",
   "product": "windchime",
   "dir": "windchime-retrieval",
-  "commitCount": 23,
+  "commitCount": 27,
   "firstDate": "2026-05-07",
-  "lastDate": "2026-07-17",
+  "lastDate": "2026-08-04",
   "authors": 1,
   "months": {
     "2026-05": 10,
     "2026-06": 6,
-    "2026-07": 7
+    "2026-07": 8,
+    "2026-08": 3
   },
   "days": {
     "2026-05-07": {
@@ -82,6 +83,21 @@
         "docs(corpus): document skip sentinel + record stems_712/stems_717 batch…",
         "Ingest stems_717 batch (39 studio stems) + skip-sentinel support"
       ]
+    },
+    "2026-07-25": {
+      "count": 1,
+      "subjects": ["Ingest stems_725 batch (37 studio stems); corpus 369 -> 406"]
+    },
+    "2026-08-02": {
+      "count": 2,
+      "subjects": [
+        "feat(audit): refresh notebook for the 406-stem corpus, add projection e…",
+        "fix(audit): read corpus size from the DB instead of a hardcoded 292"
+      ]
+    },
+    "2026-08-04": {
+      "count": 1,
+      "subjects": ["chore(corpus): track the operator's stem exclusion list"]
     }
   },
   "tags": [
