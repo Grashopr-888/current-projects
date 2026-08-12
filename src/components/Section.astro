@@ -5,22 +5,55 @@ interface Props {
   title?: string;
   id?: string;
   class?: string;
+  /** Render the whole section as a disclosure, collapsed by default. */
+  collapsible?: boolean;
+  /** Optional item count shown in the collapsed header. */
+  count?: number;
 }
-const { index, label, title, id, class: klass } = Astro.props;
+const { index, label, title, id, class: klass, collapsible = false, count } = Astro.props;
+const countLabel =
+  count === undefined ? undefined : `${count} ${count === 1 ? 'entry' : 'entries'}`;
 ---
 
-<section class:list={['section', klass]} id={id}>
-  <div class="section-head">
-    <p class="label">
-      {index && <span class="idx">{index}</span>}
-      {index && ' · '}{label}
-    </p>
-    {title && <h2 class="section-title">{title}</h2>}
-  </div>
-  <div class="section-body">
-    <slot />
-  </div>
-</section>
+{
+  collapsible ? (
+    <details class:list={['section', 'section-fold', klass]} id={id}>
+      <summary class="section-head section-summary">
+        <span class="section-headings">
+          <span class="label">
+            {index && <span class="idx">{index}</span>}
+            {index && ' · '}
+            {label}
+          </span>
+          {title && <h2 class="section-title">{title}</h2>}
+        </span>
+        <span class="section-meta">
+          {countLabel && <span class="section-count">{countLabel}</span>}
+          <span class="section-toggle" aria-hidden="true">
+            +
+          </span>
+        </span>
+      </summary>
+      <div class="section-body">
+        <slot />
+      </div>
+    </details>
+  ) : (
+    <section class:list={['section', klass]} id={id}>
+      <div class="section-head">
+        <p class="label">
+          {index && <span class="idx">{index}</span>}
+          {index && ' · '}
+          {label}
+        </p>
+        {title && <h2 class="section-title">{title}</h2>}
+      </div>
+      <div class="section-body">
+        <slot />
+      </div>
+    </section>
+  )
+}
 
 <style>
   .section {
@@ -34,4 +67,87 @@ const { index, label, title, id, class: klass } = Astro.props;
     margin-top: var(--sp-3);
     max-width: 24ch;
   }
+
+  /* ---- collapsible variant ---- */
+  .section-fold > .section-summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-5);
+    cursor: pointer;
+    list-style: none;
+    margin-bottom: 0;
+    padding: var(--sp-2) 0;
+    border-radius: var(--radius);
+    transition: color 0.15s ease;
+  }
+  .section-fold > .section-summary::-webkit-details-marker {
+    display: none;
+  }
+  .section-fold > .section-summary:hover .section-toggle,
+  .section-fold > .section-summary:hover .section-count {
+    color: var(--accent, var(--brand));
+  }
+  .section-headings {
+    display: block;
+    min-width: 0;
+  }
+  .section-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    flex: none;
+  }
+  .section-count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: color 0.15s ease;
+  }
+  .section-toggle {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--accent, var(--brand));
+    transition: transform 0.2s ease;
+  }
+  .section-fold[open] > .section-summary .section-toggle {
+    transform: rotate(45deg);
+  }
+  .section-fold > .section-body {
+    margin-top: var(--sp-5);
+  }
 </style>
+
+<script>
+  /* A collapsed section must open when something inside it is linked to, so
+     cross-page anchors (for example /projects/windchime#decisions, or a link
+     straight to one record) still land on visible content. */
+  function openTarget(): void {
+    const hash = location.hash;
+    if (!hash || hash.length < 2) return;
+    let el: Element | null = null;
+    try {
+      el = document.querySelector(hash);
+    } catch {
+      return; // malformed selector in the fragment
+    }
+    if (!el) return;
+    let node: Element | null = el;
+    while (node) {
+      if (node instanceof HTMLDetailsElement) node.open = true;
+      node = node.parentElement;
+    }
+    // Jump instantly: the CSS smooth-scroll animation does not reliably land a
+    // fragment jump fired during load. Scroll once now and again after the
+    // reflow that opening a disclosure causes. A timeout rather than rAF, which
+    // does not fire in every environment.
+    const target = el;
+    const jump = (): void => target.scrollIntoView({ block: 'start', behavior: 'instant' });
+    jump();
+    setTimeout(jump, 0);
+  }
+  addEventListener('hashchange', openTarget);
+  openTarget();
+</script>

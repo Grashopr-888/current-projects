@@ -41,8 +41,15 @@ export const PROJECT_META = {
     kind: 'Voice-conditioned audiovisual installation',
     accent: 'var(--wc)',
     logo: '/img/windchime-mark.svg',
-    art: '/img/windchime-rider.jpg',
-    artAlt: 'Windchime technical rider: installation render with labeled components',
+    art: '/img/windchime-hero.jpg',
+    artAlt: 'Windchime: a ring of suspended chime tubes rendered against a starfield',
+    // Secondary image, shown top-right of the project hero.
+    aside: '/img/windchime-rider.jpg',
+    asideAlt: 'Windchime technical rider: installation diagram with labeled components',
+    asideCaption: 'Technical rider',
+    // Installation demo. Privacy-enhanced (nocookie) embed of youtu.be/j3XyW2ynH5Y.
+    demoVideoId: 'j3XyW2ynH5Y',
+    demoVideoTitle: 'Windchime installation demo',
   },
   lichtspiel: {
     label: 'Lichtspiel',

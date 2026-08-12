@@ -14,6 +14,7 @@ import FlowDiagram from '../../components/FlowDiagram.astro';
 import Kanban from '../../components/Kanban.astro';
 import MonomeTwin from '../../components/MonomeTwin.astro';
 import LatentMap from '../../components/LatentMap.astro';
+import { existsSync } from 'node:fs';
 
 type Stage = { label: string; note?: string };
 const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: string }> = {
@@ -84,6 +85,15 @@ const diagram = DIAGRAMS[slug];
 const credit = CREDITS[slug];
 const demoVideoId = 'demoVideoId' in meta ? meta.demoVideoId : undefined;
 const demoVideoTitle = 'demoVideoTitle' in meta ? meta.demoVideoTitle : 'Project demo';
+
+/* A secondary hero image (top right), where a project defines one. */
+const aside = 'aside' in meta ? meta.aside : undefined;
+const asideAlt = 'asideAlt' in meta ? meta.asideAlt : '';
+const asideCaption = 'asideCaption' in meta ? meta.asideCaption : undefined;
+/* Only render an image that actually exists, so a not-yet-added asset degrades
+   to no image rather than a broken one. `public/` is served from the root. */
+const hasAsset = (p?: string): boolean =>
+  !!p && existsSync(new URL(`../../../public${p}`, import.meta.url));
 const { Content } = await render(project);
 const bundle = await projectBundle(slug);
 const timeline = toTimeline(bundle);
@@ -111,27 +121,43 @@ const idx = () => String(++n).padStart(2, '0');
     <header class="phero">
       <div class="container">
         <a class="phero-back plain" href={url('/projects')}>← All projects</a>
-        <div class="phero-top">
-          <span class="phero-kind">{meta?.kind}</span>
-          <Badge tone={STATUS_TONE[d.status] ?? 'neutral'}>{lbl(d.status)}</Badge>
-        </div>
-        <div class="phero-idrow">
-          {meta?.logo && <img class="phero-logo" src={url(meta.logo)} alt="" aria-hidden="true" />}
-          <h1 class="phero-title">{d.title}</h1>
-        </div>
-        <p class="phero-summary">{d.summary}</p>
-        <div class="phero-thesis">
-          <span class="label"><span class="idx">✳</span> Thesis</span>
-          <p>{d.thesis}</p>
-        </div>
-        <div class="phero-credits">
-          <span class="credit-context">{credit.context}</span>
-          <span class="credit-tools">
-            {credit.tools.map((t) => <span class="credit-chip">{t}</span>)}
-          </span>
+        <div class="phero-cols">
+          <div class="phero-main">
+            <div class="phero-top">
+              <span class="phero-kind">{meta?.kind}</span>
+              <Badge tone={STATUS_TONE[d.status] ?? 'neutral'}>{lbl(d.status)}</Badge>
+            </div>
+            <div class="phero-idrow">
+              {
+                meta?.logo && (
+                  <img class="phero-logo" src={url(meta.logo)} alt="" aria-hidden="true" />
+                )
+              }
+              <h1 class="phero-title">{d.title}</h1>
+            </div>
+            <p class="phero-summary">{d.summary}</p>
+            <div class="phero-thesis">
+              <span class="label"><span class="idx">✳</span> Thesis</span>
+              <p>{d.thesis}</p>
+            </div>
+            <div class="phero-credits">
+              <span class="credit-context">{credit.context}</span>
+              <span class="credit-tools">
+                {credit.tools.map((t) => <span class="credit-chip">{t}</span>)}
+              </span>
+            </div>
+          </div>
+          {
+            hasAsset(aside) && (
+              <figure class="phero-aside">
+                <img src={url(aside!)} alt={asideAlt} loading="lazy" />
+                {asideCaption && <figcaption>{asideCaption}</figcaption>}
+              </figure>
+            )
+          }
         </div>
         {
-          meta?.art && (
+          hasAsset(meta?.art) && (
             <figure class="phero-media">
               <img src={url(meta.art)} alt={meta.artAlt} loading="lazy" />
             </figure>
@@ -220,7 +246,14 @@ const idx = () => String(++n).padStart(2, '0');
 
       {
         timeline.length > 0 && (
-          <Section index={idx()} label="Timeline" title="What happened, in order">
+          <Section
+            index={idx()}
+            label="Timeline"
+            title="What happened, in order"
+            id="timeline"
+            collapsible
+            count={timeline.length}
+          >
             <Timeline events={timeline} />
           </Section>
         )
@@ -228,7 +261,14 @@ const idx = () => String(++n).padStart(2, '0');
 
       {
         bundle.decisions.length > 0 && (
-          <Section index={idx()} label="Decisions" title="Decision records" id="decisions">
+          <Section
+            index={idx()}
+            label="Decisions"
+            title="Decision records"
+            id="decisions"
+            collapsible
+            count={bundle.decisions.length}
+          >
             <div class="records">
               {bundle.decisions.map((rec) => (
                 <details class="rec" id={`rec-${rec.id}`}>
@@ -265,6 +305,8 @@ const idx = () => String(++n).padStart(2, '0');
             label="Releases"
             title="What shipped, and why it mattered"
             id="releases"
+            collapsible
+            count={bundle.releases.length}
           >
             <div class="records">
               {bundle.releases.map((rel) => (
@@ -302,6 +344,8 @@ const idx = () => String(++n).padStart(2, '0');
             label="Incidents"
             title="Bugs, postmortems, follow-through"
             id="incidents"
+            collapsible
+            count={bundle.incidents.length}
           >
             <div class="records">
               {bundle.incidents.map((inc) => (
@@ -447,6 +491,45 @@ const idx = () => String(++n).padStart(2, '0');
   .phero-title {
     font-size: var(--step-6);
   }
+  /* Hero: text column, with a secondary image pinned top-right on wide screens. */
+  .phero-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+    align-items: start;
+  }
+  .phero-aside {
+    margin: 0;
+    justify-self: start;
+    max-width: 26rem;
+  }
+  .phero-aside img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+  }
+  .phero-aside figcaption {
+    margin-top: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+  @media (min-width: 60rem) {
+    .phero-cols {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+      gap: var(--sp-7);
+    }
+    .phero-aside {
+      justify-self: end;
+      margin-top: var(--sp-5);
+    }
+  }
+
   .phero-media {
     margin: var(--sp-6) 0 0;
     border: var(--hair) solid var(--hairline);
@@ -455,13 +538,12 @@ const idx = () => String(++n).padStart(2, '0');
     max-width: 56rem;
     background: var(--surface-2);
   }
+  /* Show the full frame: this is the project's signature image, so it is not
+     cropped to a banner strip. */
   .phero-media img {
     display: block;
     width: 100%;
     height: auto;
-    max-height: 24rem;
-    object-fit: cover;
-    object-position: top center;
   }
   .phero-summary {
     margin-top: var(--sp-4);
