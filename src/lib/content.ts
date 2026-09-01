@@ -1,7 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { SEVERITY_TONE, STATUS_TONE, type Tone } from './taxonomy';
 
-export type Product = 'windchime' | 'lichtspiel';
+export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn';
 
 export interface TimelineEvent {
   date: Date;

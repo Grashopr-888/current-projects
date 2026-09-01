@@ -6,8 +6,8 @@ export const SITE = {
   author: 'Trent Eriksen',
   role: 'Technical Product Manager / Product Engineer',
   description:
-    'Current projects by Trent Eriksen. Windchime and Lichtspiel: ML audio research meeting ' +
-    'interactive AV prototyping, documented in depth.',
+    'Current projects by Trent Eriksen. Windchime, Lichtspiel, and HRNSXTN: ML audio ' +
+    'research meeting interactive AV prototyping, documented in depth.',
   handle: 'Grashopr-888',
   githubUrl: 'https://github.com/Grashopr-888',
   repoUrl: 'https://github.com/Grashopr-888/current-projects',
@@ -22,11 +22,12 @@ export const SHOW_EMAIL = false;
 export const NAV: ReadonlyArray<{
   label: string;
   href: string;
-  accent?: 'windchime' | 'lichtspiel';
+  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn';
 }> = [
   { label: 'Overview', href: '/' },
   { label: 'Windchime', href: '/projects/windchime', accent: 'windchime' },
   { label: 'Lichtspiel', href: '/projects/lichtspiel', accent: 'lichtspiel' },
+  { label: 'HRNSXTN', href: '/projects/hrnsxtn', accent: 'hrnsxtn' },
   { label: 'How I Work', href: '/how-i-work' },
   { label: 'Releases', href: '/releases' },
   { label: 'Research', href: '/research' },
@@ -61,5 +62,22 @@ export const PROJECT_META = {
     // Hackathon demo. Privacy-enhanced (nocookie) embed of youtu.be/wW3QNNuzD9M.
     demoVideoId: 'wW3QNNuzD9M',
     demoVideoTitle: 'Lichtspiel hackathon demo',
+  },
+  hrnsxtn: {
+    label: 'HRNSXTN',
+    kind: 'Neural audio instruments for a screenless pedal',
+    accent: 'var(--hsx)',
+    logo: '/img/hrnsxtn-mark.svg',
+    art: '/img/hrnsxtn-hero.jpg',
+    artAlt: 'The Elk Stomp development board on a dark desk beside an iMac running the desktop devkit',
+    aside: '/img/hrnsxtn-aside.png',
+    asideAlt: 'Log-scale chart of callback load on the Elk Stomp: average 6.8 percent of the 1.333 ms budget, peak 1302 percent',
+    asideCaption: 'The failure that shaped the design, measured on the pedal',
+    // Sponsor and event marks, shown in the hero credit strip (attribution, not endorsement).
+    partners: [
+      { img: '/img/logo-mutek.svg', alt: 'MUTEK — international festival of digital creativity and electronic music', dark: true },
+      { img: '/img/logo-elk.png', alt: 'Elk Audio' },
+      { img: '/img/logo-rfdl.jpg', alt: 'Roland Future Design Lab' },
+    ],
   },
 } as const;

@@ -14,40 +14,46 @@ const comparison = [
     dimension: 'Type',
     windchime: 'Voice-driven installation, runs unattended.',
     lichtspiel: 'Live instrument, played on stage.',
+    hrnsxtn: 'Neural instruments on an embedded pedal.',
   },
   {
     dimension: 'Origin',
     windchime: 'Grew out of Live Muse. Shown at Gray Area, SF.',
     lichtspiel: 'Built at a Berklee hackathon in Boston, 2026.',
+    hrnsxtn: 'Two podiums at a MUTEK hackathon, Montréal 2026.',
   },
   {
     dimension: 'AI approach',
     windchime: 'Retrieval. Reflects recorded sound back.',
     lichtspiel: 'Generation. Authors new visual scenes.',
+    hrnsxtn: 'Distillation. Big model offline, tiny one live.',
   },
   {
     dimension: 'AI at runtime',
     windchime: 'In the loop, guarded and failover backed.',
     lichtspiel: 'Never on the render path. Authoring time only.',
+    hrnsxtn: 'On a worker at 10 Hz. Never the audio thread.',
   },
   {
     dimension: 'Coupling',
     windchime: 'Self-contained: a browser and a monome.',
     lichtspiel: 'Runs inside Ableton Live and Max for Live.',
+    hrnsxtn: 'Runs on the Elk Stomp, under its own engine.',
   },
   {
     dimension: 'Success looks like',
     windchime: 'A full exhibition day with no crashes.',
     lichtspiel: 'A clean three to four minute set.',
+    hrnsxtn: 'A set from the pedal, no laptop on stage.',
   },
 ];
 
 const inherits = [
   "Lichtspiel reuses Windchime's p5.js instance-mode host loop and render pipeline.",
   'The same serialosc monome bridge and LED event protocol drive both.',
-  'Both fence the model behind validation. Neither trusts raw model output.',
+  'All three fence the model behind validation. None trusts raw model output.',
   'Both map musical meaning to output, not just amplitude.',
-  'Both track decisions, releases, and incidents the same way.',
+  'All three track decisions, releases, and incidents the same way.',
 ];
 
 const loop = [
@@ -68,6 +74,7 @@ const loop = [
         components draw on state-of-the-art audio research.
         <strong>Windchime</strong> is a voice-conditioned audiovisual installation.
         <strong>Lichtspiel</strong> is a live AV assistant for Ableton.
+        <strong>HRNSXTN</strong> is neural audio instruments on a screenless pedal.
       </p>
       <div class="hero-cta reveal" style="--d: 3">
         <a class="btn btn-primary" href={url('/projects/windchime')}>Windchime</a>
@@ -80,7 +87,7 @@ const loop = [
   <section class="container block" id="projects">
     <header class="block-head">
       <p class="label"><span class="idx">01</span> · The projects</p>
-      <h2>Two applications, shared architecture.</h2>
+      <h2>Three applications, shared discipline.</h2>
     </header>
     <div class="pgrid">
       {projects.map((project) => <ProjectCard project={project} />)}
@@ -90,9 +97,9 @@ const loop = [
   <section class="container block band-work">
     <header class="block-head">
       <p class="label"><span class="idx">02</span> · How I work</p>
-      <h2>The loop behind both projects.</h2>
+      <h2>The loop behind all three.</h2>
       <p class="block-lead measure">
-        Both projects came out of the same four-step loop. Each step produces an artifact you can
+        Every project here came out of the same four-step loop. Each step produces an artifact you can
         read on this site.
       </p>
     </header>
@@ -119,7 +126,8 @@ const loop = [
       <p class="block-lead measure">
         Lichtspiel started from Windchime's visual runtime. It reuses the same p5.js host loop, the
         serialosc monome bridge, and the LED event protocol, then points them at live performance in
-        Ableton instead of an unattended installation.
+        Ableton instead of an unattended installation. HRNSXTN carries the same discipline onto
+        embedded hardware: the loop and its records, pointed at a pedal.
       </p>
     </header>
     <ComparisonTable rows={comparison} />

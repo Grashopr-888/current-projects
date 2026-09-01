@@ -64,6 +64,8 @@
   --wc-soft: #17223d;
   --ls: #ff8a4c; /* Lichtspiel — warm contrast */
   --ls-soft: #2e1c10;
+  --hsx: #8f97e8; /* HRNSXTN — chrome violet, from the MUTEK 2026 deck */
+  --hsx-soft: #201d3c;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 8px 28px -12px rgba(0, 0, 0, 0.7);
@@ -287,6 +289,11 @@ hr {
   border-color: color-mix(in oklab, var(--ls) 45%, var(--hairline));
   background: color-mix(in oklab, var(--ls-soft) 55%, var(--surface));
 }
+.chip[data-product='hrnsxtn'] {
+  color: var(--hsx);
+  border-color: color-mix(in oklab, var(--hsx) 45%, var(--hairline));
+  background: color-mix(in oklab, var(--hsx-soft) 55%, var(--surface));
+}
 
 /* per-project accent binding */
 [data-accent='windchime'] {
@@ -296,6 +303,10 @@ hr {
 [data-accent='lichtspiel'] {
   --accent: var(--ls);
   --accent-soft: var(--ls-soft);
+}
+[data-accent='hrnsxtn'] {
+  --accent: var(--hsx);
+  --accent-soft: var(--hsx-soft);
 }
 [data-accent='shared'],
 [data-accent='brand'] {

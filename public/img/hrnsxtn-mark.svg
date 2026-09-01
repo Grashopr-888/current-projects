@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 214">
+  <!-- One Bar Late mark — a bar you play and the bar that answers: a solid
+       chrome-violet bar, its echo landing one bar later at a lower opacity,
+       and a drift of grains carrying material from one to the other.
+       Violet (brand), dimensional shading to sit beside the windchime and
+       lichtspiel marks. -->
+  <defs>
+    <linearGradient id="oblBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b3670"/>
+      <stop offset=".32" stop-color="#a9b0f2"/>
+      <stop offset=".52" stop-color="#7b86d4"/>
+      <stop offset=".78" stop-color="#565c9e"/>
+      <stop offset="1" stop-color="#37336a"/>
+    </linearGradient>
+    <linearGradient id="oblBarEcho" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b3670" stop-opacity=".55"/>
+      <stop offset=".38" stop-color="#9aa2ea" stop-opacity=".8"/>
+      <stop offset=".6" stop-color="#7b86d4" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#37336a" stop-opacity=".5"/>
+    </linearGradient>
+    <linearGradient id="oblBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#565c9e"/>
+      <stop offset="1" stop-color="#23204a"/>
+    </linearGradient>
+    <radialGradient id="oblGrain" cx=".35" cy=".3" r=".9">
+      <stop offset="0" stop-color="#e6e9ff"/>
+      <stop offset=".55" stop-color="#a9b0f2"/>
+      <stop offset="1" stop-color="#565c9e"/>
+    </radialGradient>
+  </defs>
+
+  <!-- baseline the bars stand on -->
+  <rect x="22" y="172" width="156" height="10" rx="5" fill="url(#oblBase)"/>
+
+  <!-- the bar you play -->
+  <rect x="46" y="38" width="34" height="134" rx="17" fill="url(#oblBar)"/>
+  <rect x="52" y="44" width="7" height="118" rx="3.5" fill="#ffffff" opacity=".28"/>
+
+  <!-- the answer, one bar late -->
+  <rect x="122" y="66" width="34" height="106" rx="17" fill="url(#oblBarEcho)"/>
+  <rect x="128" y="72" width="6" height="92" rx="3" fill="#ffffff" opacity=".18"/>
+
+  <!-- grains drifting from the played bar to its echo -->
+  <circle cx="92" cy="70" r="6.5" fill="url(#oblGrain)"/>
+  <circle cx="104" cy="92" r="4.5" fill="url(#oblGrain)" opacity=".9"/>
+  <circle cx="96" cy="118" r="3.2" fill="url(#oblGrain)" opacity=".75"/>
+  <circle cx="110" cy="52" r="2.6" fill="url(#oblGrain)" opacity=".6"/>
+  <circle cx="112" cy="140" r="2.2" fill="url(#oblGrain)" opacity=".5"/>
+</svg>

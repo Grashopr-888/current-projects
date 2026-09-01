@@ -3,6 +3,7 @@ interface Row {
   dimension: string;
   windchime: string;
   lichtspiel: string;
+  hrnsxtn: string;
 }
 interface Props {
   rows: Row[];
@@ -10,7 +11,7 @@ interface Props {
 const { rows } = Astro.props;
 ---
 
-<div class="cmp" role="table" aria-label="Windchime and Lichtspiel compared">
+<div class="cmp" role="table" aria-label="Windchime, Lichtspiel, and HRNSXTN compared">
   <div class="cmp-row cmp-head" role="row">
     <span class="cmp-dim" role="columnheader"></span>
     <span class="cmp-name" data-accent="windchime" role="columnheader">
@@ -18,6 +19,9 @@ const { rows } = Astro.props;
     </span>
     <span class="cmp-name" data-accent="lichtspiel" role="columnheader">
       <span class="cmp-dot" aria-hidden="true"></span>Lichtspiel
+    </span>
+    <span class="cmp-name" data-accent="hrnsxtn" role="columnheader">
+      <span class="cmp-dot" aria-hidden="true"></span>HRNSXTN
     </span>
   </div>
   {
@@ -38,6 +42,12 @@ const { rows } = Astro.props;
           </span>
           {r.lichtspiel}
         </span>
+        <span class="cmp-cell" data-accent="hrnsxtn" role="cell">
+          <span class="cmp-tag" aria-hidden="true">
+            HS
+          </span>
+          {r.hrnsxtn}
+        </span>
       </div>
     ))
   }
@@ -52,7 +62,7 @@ const { rows } = Astro.props;
   }
   .cmp-row {
     display: grid;
-    grid-template-columns: minmax(6rem, 8rem) 1fr 1fr;
+    grid-template-columns: minmax(6rem, 8rem) 1fr 1fr 1fr;
     border-top: var(--hair) solid var(--hairline);
   }
   .cmp-row:first-child {

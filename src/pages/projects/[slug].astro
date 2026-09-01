@@ -46,6 +46,21 @@ const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: st
     caption:
       'The live set drives visuals through a bridge. The model stays off the performance path.',
   },
+  'hrnsxtn': {
+    stages: [
+      { label: 'Corpus', note: 'a folder of recordings' },
+      { label: 'music2latent', note: 'offline, on a laptop' },
+      { label: 'Pack file', note: 'grains + embeddings' },
+      { label: 'Live match', note: 'student MLP, 10.7 Hz' },
+    ],
+    outputs: [
+      { label: 'Grain playback', note: 'real audio, 48 kHz' },
+      { label: 'Knobs', note: 'Sensei / Guru' },
+      { label: 'The answer', note: 'one bar later' },
+    ],
+    caption:
+      'The heavy model runs once, offline. On the pedal, decisions happen at 10.7 Hz and the audio thread only plays real recordings.',
+  },
 };
 /** Caption for the stylized monome twin, per project. */
 const HARDWARE: Record<Product, string> = {
@@ -59,6 +74,11 @@ const HARDWARE: Record<Product, string> = {
     'whatever hardware is plugged in, from a Grid 64 with an Arc 2 up to a Grid 128 with an ' +
     'Arc 4. The same on-screen twin keeps the piece fully playable with no hardware at all, ' +
     'which is also how it survives an unreliable stage.',
+  'hrnsxtn':
+    'The Elk Stomp development board is the whole interface: eight pots, four endless ' +
+    'encoders, four footswitches and a small OLED that the instrument deliberately ignores. ' +
+    'Five shaping controls, grain size, wet and randomness map straight onto the pots, so ' +
+    'the corpus is played by feel, the way the challenge asked.',
 };
 
 const CREDITS: Record<Product, { context: string; tools: string[] }> = {
@@ -69,6 +89,10 @@ const CREDITS: Record<Product, { context: string; tools: string[] }> = {
   lichtspiel: {
     context: 'Built at a Music Hackspace hackathon, Berklee',
     tools: ['Ableton Live', 'Max for Live', 'monome'],
+  },
+  'hrnsxtn': {
+    context: 'Music Hackspace × MUTEK, Montréal 2026 — 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab',
+    tools: ['Elk Stomp', 'JUCE', 'PyTorch', 'RTNeural'],
   },
 };
 
@@ -98,7 +122,9 @@ const { Content } = await render(project);
 const bundle = await projectBundle(slug);
 const timeline = toTimeline(bundle);
 
-const otherSlug: Product = slug === 'windchime' ? 'lichtspiel' : 'windchime';
+const PROJECT_CYCLE: Product[] = ['windchime', 'lichtspiel', 'hrnsxtn'];
+const otherSlug: Product =
+  PROJECT_CYCLE[(PROJECT_CYCLE.indexOf(slug) + 1) % PROJECT_CYCLE.length];
 const otherMeta = PROJECT_META[otherSlug];
 
 const specRows = [
@@ -146,6 +172,17 @@ const idx = () => String(++n).padStart(2, '0');
                 {credit.tools.map((t) => <span class="credit-chip">{t}</span>)}
               </span>
             </div>
+            {
+              'partners' in meta && (
+                <div class="phero-partners" aria-label="Event and challenge partners">
+                  {meta.partners.map((p) => (
+                    <span class={`partner-chip${'dark' in p && p.dark ? ' partner-dark' : ''}`}>
+                      <img src={url(p.img)} alt={p.alt} loading="lazy" />
+                    </span>
+                  ))}
+                </div>
+              )
+            }
           </div>
           {
             hasAsset(aside) && (
@@ -220,9 +257,24 @@ const idx = () => String(++n).padStart(2, '0');
         )
       }
 
-      <Section index={idx()} label="The hardware" title="Tactile control, mirrored on screen">
-        <MonomeTwin caption={HARDWARE[slug]} />
-      </Section>
+      {
+        slug === 'hrnsxtn' ? (
+          <Section index={idx()} label="The hardware" title="Knobs before screens">
+            <figure class="hw-board">
+              <img
+                src={url('/img/hs-board.png')}
+                alt="The Elk Stomp development board: eight pots, four encoders, footswitches and an OLED on a dark ground"
+                loading="lazy"
+              />
+              <figcaption>{HARDWARE[slug]}</figcaption>
+            </figure>
+          </Section>
+        ) : (
+          <Section index={idx()} label="The hardware" title="Tactile control, mirrored on screen">
+            <MonomeTwin caption={HARDWARE[slug]} />
+          </Section>
+        )
+      }
 
       {
         slug === 'windchime' && (
@@ -886,5 +938,68 @@ const idx = () => String(++n).padStart(2, '0');
     .road {
       grid-template-columns: 1fr;
     }
+  }
+
+  /* Partner marks in the hero (One Bar Late) — attribution strip, not decoration. */
+  .phero-partners {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .partner-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.6rem;
+    padding: 0.5rem 0.9rem;
+    border: var(--hair) solid var(--hairline);
+    border-radius: 10px;
+    background: #fff;
+  }
+  .partner-chip img {
+    height: 100%;
+    width: auto;
+    max-width: 18rem;
+    object-fit: contain;
+    display: block;
+  }
+  .partner-chip.partner-dark {
+    background: #161a1d;
+  }
+
+  /* Full-width hardware figure (One Bar Late). */
+  .hw-board {
+    margin: 0;
+  }
+  .hw-board img {
+    width: 100%;
+    max-width: 620px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 14px;
+  }
+  .prose :global(figure) {
+    margin: 1.6rem 0 0;
+  }
+  .prose :global(figure img) {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    border: var(--hair) solid var(--hairline);
+  }
+  .prose :global(figcaption) {
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .hw-board figcaption {
+    margin-top: 0.85rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    max-width: 62ch;
   }
 </style>
