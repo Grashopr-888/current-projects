@@ -5,7 +5,7 @@
  */
 interface GitSnap {
   label: string;
-  product: 'windchime' | 'lichtspiel';
+  product: 'windchime' | 'lichtspiel' | 'hrnsxtn';
   commitCount: number;
   firstDate: string | null;
   lastDate: string | null;
@@ -29,6 +29,7 @@ export interface MonthSignal {
   count: number;
   windchime: number;
   lichtspiel: number;
+  hrnsxtn: number;
 }
 
 export interface DayActivity {
@@ -44,18 +45,22 @@ export interface GitSignals {
   firstDate: string | null;
   lastDate: string | null;
   months: MonthSignal[];
-  byProduct: Record<'windchime' | 'lichtspiel', number>;
+  byProduct: Record<'windchime' | 'lichtspiel' | 'hrnsxtn', number>;
   /** Per-product day-level activity, merged across that product's repos. */
-  daysByProduct: Record<'windchime' | 'lichtspiel', Record<string, DayActivity>>;
+  daysByProduct: Record<'windchime' | 'lichtspiel' | 'hrnsxtn', Record<string, DayActivity>>;
   releaseTags: Array<{ name: string; date: string; product: string }>;
 }
 
 const MAX_MERGED_SUBJECTS = 4;
 
 export function gitSignals(): GitSignals {
-  const monthMap: Record<string, { windchime: number; lichtspiel: number }> = {};
-  const byProduct: Record<'windchime' | 'lichtspiel', number> = { windchime: 0, lichtspiel: 0 };
-  const daysByProduct: GitSignals['daysByProduct'] = { windchime: {}, lichtspiel: {} };
+  const monthMap: Record<string, { windchime: number; lichtspiel: number; hrnsxtn: number }> = {};
+  const byProduct: Record<'windchime' | 'lichtspiel' | 'hrnsxtn', number> = {
+    windchime: 0,
+    lichtspiel: 0,
+    hrnsxtn: 0,
+  };
+  const daysByProduct: GitSignals['daysByProduct'] = { windchime: {}, lichtspiel: {}, hrnsxtn: {} };
   let totalCommits = 0;
   let firstDate: string | null = null;
   let lastDate: string | null = null;
@@ -65,7 +70,7 @@ export function gitSignals(): GitSignals {
     totalCommits += s.commitCount;
     byProduct[s.product] += s.commitCount;
     for (const [m, c] of Object.entries(s.months)) {
-      monthMap[m] ??= { windchime: 0, lichtspiel: 0 };
+      monthMap[m] ??= { windchime: 0, lichtspiel: 0, hrnsxtn: 0 };
       monthMap[m][s.product] += c;
     }
     for (const [date, d] of Object.entries(s.days ?? {})) {
@@ -82,7 +87,7 @@ export function gitSignals(): GitSignals {
 
   const months = Object.entries(monthMap)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([month, v]) => ({ month, count: v.windchime + v.lichtspiel, ...v }));
+    .map(([month, v]) => ({ month, count: v.windchime + v.lichtspiel + v.hrnsxtn, ...v }));
   releaseTags.sort((a, b) => b.date.localeCompare(a.date));
 
   return {

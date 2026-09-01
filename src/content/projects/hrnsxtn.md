@@ -1,5 +1,5 @@
 ---
-title: HRNSXTN
+title: HRNSXTN x RDMSXN
 summary: >-
   Team THIRI's project from a two-podium weekend at the Music Hackspace × MUTEK
   hackathon in Montréal: a voice-leading harmonizer that fits a stompbox, and a
@@ -124,4 +124,16 @@ before the hackathon. These are its three faces.
 <figure>
   <img src="/current-projects/img/hs-ui-setup.jpg" alt="The setup panel: an Ableton routing checklist, block and buffer status, saved presets, and the corpus builder for sound worlds" loading="lazy" />
   <figcaption>Setup — the plumbing made legible: routing checklist, block/buffer health, presets, and the corpus builder that turns a folder of recordings into a sound world.</figcaption>
+</figure>
+
+## On the official program
+
+<figure>
+  <img src="/current-projects/img/hs-showcase-title.png" alt="MUTEK Forum page header for the Music Hackspace x MUTEK Hackathon Winners Showcase" loading="lazy" />
+  <figcaption>The festival's official <a href="https://forum.mutek.org/en/shows/2026/music-hackspace-x-mutek-hackathon-winners-showcase">Winners Showcase listing</a> — MUTEK Forum, August 28, Grands Ballets.</figcaption>
+</figure>
+
+<figure>
+  <img src="/current-projects/img/hs-showcase-winners.png" alt="The winners list from MUTEK's page, naming HRNSXTN x RDMSXN for the Elk Audio challenge: Dennison Blackett, Radu-Alex Ceban, Jazz Calls Home, and Trent Eriksen" loading="lazy" />
+  <figcaption>The winners presenting on stage, as published by MUTEK — HRNSXTN x RDMSXN for the Elk Audio challenge.</figcaption>
 </figure>

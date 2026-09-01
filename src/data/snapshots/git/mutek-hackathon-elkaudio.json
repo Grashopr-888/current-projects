@@ -1,0 +1,32 @@
+{
+  "note": "Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.",
+  "label": "hrnsxtn (elk port + platform)",
+  "product": "hrnsxtn",
+  "dir": "mutek-hackathon-elkaudio",
+  "commitCount": 5,
+  "firstDate": "2026-08-25",
+  "lastDate": "2026-08-31",
+  "authors": 1,
+  "months": {
+    "2026-08": 5
+  },
+  "days": {
+    "2026-08-25": {
+      "count": 1,
+      "subjects": ["Elk Stomp knowledge base, roadmap, and working desktop MVP of the laten…"]
+    },
+    "2026-08-26": {
+      "count": 1,
+      "subjects": ["MUTEK-2026-styled presentation deck: One Bar Late (Elk adaptation)"]
+    },
+    "2026-08-31": {
+      "count": 3,
+      "subjects": [
+        "Portfolio: official title HRNSXTN x RDMSXN, showcase date Aug 28, MUTEK…",
+        "Portfolio: single-file DOCX + PDF compilation of the portfolio docs",
+        "Portfolio docs: career-facing write-ups of the MUTEK hackathon work"
+      ]
+    }
+  },
+  "tags": []
+}

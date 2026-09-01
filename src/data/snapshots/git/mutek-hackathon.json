@@ -1,0 +1,60 @@
+{
+  "note": "Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.",
+  "label": "hrnsxtn (hackathon build)",
+  "product": "hrnsxtn",
+  "dir": "mutek-hackathon",
+  "commitCount": 24,
+  "firstDate": "2026-08-17",
+  "lastDate": "2026-08-25",
+  "authors": 1,
+  "months": {
+    "2026-08": 24
+  },
+  "days": {
+    "2026-08-17": {
+      "count": 7,
+      "subjects": [
+        "docs: log the team page + record its features as app work",
+        "feat(presentation): shareable project page for the team, built from tem…",
+        "docs: research inventory, sponsor API notes, plans, experiment log, aud…",
+        "feat(latent): latent granular resynthesis - core, audibility scanner, b…"
+      ]
+    },
+    "2026-08-18": {
+      "count": 9,
+      "subjects": [
+        "feat(ui): studio is the flagship theme and the default",
+        "docs(presentation): the interface, with screenshots; demo signal script",
+        "docs: controls reference, session 10, guide §11.4 / §11.8, manual, plan",
+        "feat(ui): presets, five shaping pots, a level control block, hardened k…"
+      ]
+    },
+    "2026-08-19": {
+      "count": 2,
+      "subjects": [
+        "perf(engine): memoise + persist the most-audible-window scan (offsets.j…",
+        "docs: LYDIA port plan, handoff 06, session 11 log, API re-check (Kumon …"
+      ]
+    },
+    "2026-08-20": {
+      "count": 3,
+      "subjects": [
+        "docs(presentation): new-UI screenshots, tentative LYDIA port section, f…",
+        "docs: guide synced to the colour-quiet/stack/drift decisions; session 1…",
+        "feat(ui): colour-quiet panels, symmetric control stack, unconditional l…"
+      ]
+    },
+    "2026-08-21": {
+      "count": 2,
+      "subjects": [
+        "docs(presentation): team page updated for the DIY toolkit - tiers, A/B/…",
+        "docs: DIY toolkit analysed - API table filled, port plan §0.5 revision,…"
+      ]
+    },
+    "2026-08-25": {
+      "count": 1,
+      "subjects": ["chore: close out the hackathon weekend - local-only trees ignored, pyte…"]
+    }
+  },
+  "tags": []
+}

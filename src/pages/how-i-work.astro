@@ -297,6 +297,9 @@ const practices = [
                 <span class="chip" data-product="lichtspiel">
                   Lichtspiel {sig.byProduct.lichtspiel}
                 </span>
+                <span class="chip" data-product="hrnsxtn">
+                  HRNSXTN {sig.byProduct.hrnsxtn}
+                </span>
               </span>
               <span class="sstat-l">commits by project</span>
             </div>
@@ -314,6 +317,13 @@ const practices = [
                 label="Lichtspiel"
                 accent="lichtspiel"
                 days={sig.daysByProduct.lichtspiel}
+                first={sig.firstDate}
+                last={sig.lastDate}
+              />
+              <CommitGrid
+                label="HRNSXTN x RDMSXN"
+                accent="hrnsxtn"
+                days={sig.daysByProduct.hrnsxtn}
                 first={sig.firstDate}
                 last={sig.lastDate}
               />

@@ -4,40 +4,23 @@ product: hrnsxtn
 date: 2026-08-25
 status: accepted
 context: >-
-  The laptop instrument decodes substituted latent frames back to audio through
-  music2latent's decoder — the single most expensive stage, and the one that
-  synthesizes sound. On the pedal, a neural decoder at audio rate is the part of
-  the design the hardware most clearly refuses.
+  The laptop instrument decodes latents back to audio through the codec — the most
+  expensive stage, and the one a no-NPU pedal most clearly refuses.
 options_considered:
-  - option: A small neural decoder (RAVE-class, shrunk)
-    tradeoffs: >-
-      Every published embedded run of that family needs a core 4–10× this one.
-      Keeps morph — true interpolation between recordings — but does not fit.
-  - option: A DSP-style decoder (DDSP-like oscillator bank)
-    tradeoffs: >-
-      Fits the budget (~10–20% of a core) but is a quality risk on textural,
-      polyphonic corpora. Kept as a stretch experiment, not the foundation.
-  - option: Delete the decoder — play back the original audio grains the matcher chose
-    tradeoffs: >-
-      Zero neural cost at audio rate and every sound is a real recording. The
-      cost is explicit: morph, depth, and smooth — the controls that synthesize
-      sounds existing between recordings — leave the minimum viable instrument.
+  - option: A small neural decoder
+    tradeoffs: Every published embedded run needs a core 4–10× this one.
+  - option: A DSP-style (DDSP-like) decoder
+    tradeoffs: Fits the budget; quality risk on textural corpora. Kept as a stretch.
+  - option: Delete the decoder — play the original audio grains the matcher chose
+    tradeoffs: Zero neural cost at audio rate; morph (sounds between recordings) leaves the MVP.
 decision: >-
-  Delete the decoder. Matching happens in the learned latent space; playback is
-  int16 corpus audio with equal-power crossfades from precomputed margins.
+  Delete the decoder. Match in the learned space; play back int16 corpus audio with
+  equal-power crossfades from precomputed margins.
 rationale: >-
-  The instrument's mosaic character — real grains, intelligently chosen — is the
-  half audiences respond to, and it survives intact. Intelligence in the choosing,
-  not the manufacturing, is also the honest version of the piece: nothing you hear
-  was invented by a network.
+  The mosaic character — real grains, intelligently chosen — is the half audiences respond
+  to, and it survives intact. Intelligence in the choosing, not the manufacturing.
 consequences: >-
-  The audio thread mixes and windows; that is all. Morph is a scoped-out feature
-  with a named path back (the DDSP-style stretch decoder in the roadmap), not a
-  silent omission. The corpus pack format stores audio grains with crossfade
-  margins so playback quality is a data-preparation problem, solved offline.
+  The audio thread only mixes and windows. Morph is a scoped-out feature with a named path
+  back, not a silent omission.
 tags: [granular, real-time, scope]
 ---
-
-The trade is written into the minimum viable instrument's definition of done: mix-mode
-mosaic, matching-family controls, one-bar-late clock — and no promise the hardware
-cannot keep.

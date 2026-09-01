@@ -49,6 +49,20 @@
       "commitCount": 43,
       "firstDate": "2026-06-11",
       "lastDate": "2026-06-15"
+    },
+    {
+      "label": "hrnsxtn (elk port + platform)",
+      "product": "hrnsxtn",
+      "commitCount": 5,
+      "firstDate": "2026-08-25",
+      "lastDate": "2026-08-31"
+    },
+    {
+      "label": "hrnsxtn (hackathon build)",
+      "product": "hrnsxtn",
+      "commitCount": 24,
+      "firstDate": "2026-08-17",
+      "lastDate": "2026-08-25"
     }
   ]
 }

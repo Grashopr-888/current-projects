@@ -17,9 +17,9 @@ const resolved = incidents.filter((i) => i.data.status === 'resolved').length;
     <p class="label"><span class="idx">§</span> Incidents &amp; Iteration</p>
     <h1>Bugs, and what they taught.</h1>
     <p class="lead measure">
-      The reliability story across all three products, as blameless postmortems: impact, root cause, fix,
-      and the follow-through. The postmortems say more about how the work is built than the feature
-      lists do.
+      The reliability story across all three products, as blameless postmortems: impact, root cause,
+      fix, and the follow-through. The postmortems say more about how the work is built than the
+      feature lists do.
     </p>
 
     <div class="toolbar">
@@ -27,6 +27,9 @@ const resolved = incidents.filter((i) => i.data.status === 'resolved').length;
         <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
         <button class="filter-btn" data-filter="windchime" aria-pressed="false">Windchime</button>
         <button class="filter-btn" data-filter="lichtspiel" aria-pressed="false">Lichtspiel</button>
+        <button class="filter-btn" data-filter="hrnsxtn" aria-pressed="false"
+          >HRNSXTN x RDMSXN</button
+        >
       </div>
       <span class="count">{resolved} resolved · {incidents.length} total</span>
     </div>
@@ -136,7 +139,11 @@ const resolved = incidents.filter((i) => i.data.status === 'resolved').length;
     gap: var(--sp-3);
   }
   .list[data-active='windchime'] :global(.rec[data-product='lichtspiel']),
-  .list[data-active='lichtspiel'] :global(.rec[data-product='windchime']) {
+  .list[data-active='windchime'] :global(.rec[data-product='hrnsxtn']),
+  .list[data-active='lichtspiel'] :global(.rec[data-product='windchime']),
+  .list[data-active='lichtspiel'] :global(.rec[data-product='hrnsxtn']),
+  .list[data-active='hrnsxtn'] :global(.rec[data-product='windchime']),
+  .list[data-active='hrnsxtn'] :global(.rec[data-product='lichtspiel']) {
     display: none;
   }
   .rec-statusline {

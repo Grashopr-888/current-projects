@@ -8,7 +8,7 @@ import type { DayActivity } from '../lib/signals';
 
 interface Props {
   label: string;
-  accent: 'windchime' | 'lichtspiel';
+  accent: 'windchime' | 'lichtspiel' | 'hrnsxtn';
   days: Record<string, DayActivity>;
   /** ISO dates bounding the shared time axis so multiple grids align. */
   first: string;
@@ -113,6 +113,9 @@ while (cursor.getTime() <= end.getTime() || cursor.getUTCDay() !== 0) {
   }
   .cg[data-accent='lichtspiel'] {
     --cg-c: var(--ls);
+  }
+  .cg[data-accent='hrnsxtn'] {
+    --cg-c: var(--hsx);
   }
   .cg-head {
     display: flex;

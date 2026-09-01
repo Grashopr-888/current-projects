@@ -46,7 +46,7 @@ const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: st
     caption:
       'The live set drives visuals through a bridge. The model stays off the performance path.',
   },
-  'hrnsxtn': {
+  hrnsxtn: {
     stages: [
       { label: 'Corpus', note: 'a folder of recordings' },
       { label: 'music2latent', note: 'offline, on a laptop' },
@@ -74,7 +74,7 @@ const HARDWARE: Record<Product, string> = {
     'whatever hardware is plugged in, from a Grid 64 with an Arc 2 up to a Grid 128 with an ' +
     'Arc 4. The same on-screen twin keeps the piece fully playable with no hardware at all, ' +
     'which is also how it survives an unreliable stage.',
-  'hrnsxtn':
+  hrnsxtn:
     'The Elk Stomp development board is the whole interface: eight pots, four endless ' +
     'encoders, four footswitches and a small OLED that the instrument deliberately ignores. ' +
     'Five shaping controls, grain size, wet and randomness map straight onto the pots, so ' +
@@ -90,8 +90,9 @@ const CREDITS: Record<Product, { context: string; tools: string[] }> = {
     context: 'Built at a Music Hackspace hackathon, Berklee',
     tools: ['Ableton Live', 'Max for Live', 'monome'],
   },
-  'hrnsxtn': {
-    context: 'Music Hackspace × MUTEK, Montréal 2026 — 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab',
+  hrnsxtn: {
+    context:
+      'Music Hackspace × MUTEK, Montréal 2026 — 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab',
     tools: ['Elk Stomp', 'JUCE', 'PyTorch', 'RTNeural'],
   },
 };
@@ -123,8 +124,7 @@ const bundle = await projectBundle(slug);
 const timeline = toTimeline(bundle);
 
 const PROJECT_CYCLE: Product[] = ['windchime', 'lichtspiel', 'hrnsxtn'];
-const otherSlug: Product =
-  PROJECT_CYCLE[(PROJECT_CYCLE.indexOf(slug) + 1) % PROJECT_CYCLE.length];
+const otherSlug: Product = PROJECT_CYCLE[(PROJECT_CYCLE.indexOf(slug) + 1) % PROJECT_CYCLE.length];
 const otherMeta = PROJECT_META[otherSlug];
 
 const specRows = [
@@ -172,17 +172,6 @@ const idx = () => String(++n).padStart(2, '0');
                 {credit.tools.map((t) => <span class="credit-chip">{t}</span>)}
               </span>
             </div>
-            {
-              'partners' in meta && (
-                <div class="phero-partners" aria-label="Event and challenge partners">
-                  {meta.partners.map((p) => (
-                    <span class={`partner-chip${'dark' in p && p.dark ? ' partner-dark' : ''}`}>
-                      <img src={url(p.img)} alt={p.alt} loading="lazy" />
-                    </span>
-                  ))}
-                </div>
-              )
-            }
           </div>
           {
             hasAsset(aside) && (
@@ -193,6 +182,17 @@ const idx = () => String(++n).padStart(2, '0');
             )
           }
         </div>
+        {
+          'partners' in meta && (
+            <div class="phero-partners" aria-label="Event and challenge partners">
+              {meta.partners.map((p) => (
+                <span class={`partner-chip${'dark' in p && p.dark ? ' partner-dark' : ''}`}>
+                  <img src={url(p.img)} alt={p.alt} loading="lazy" />
+                </span>
+              ))}
+            </div>
+          )
+        }
         {
           hasAsset(meta?.art) && (
             <figure class="phero-media">
@@ -944,29 +944,47 @@ const idx = () => String(++n).padStart(2, '0');
   .phero-partners {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    margin-top: 1.2rem;
-    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.6rem;
+    flex-wrap: nowrap;
   }
   .partner-chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 3.6rem;
-    padding: 0.5rem 0.9rem;
+    height: 5.4rem;
+    padding: 0.65rem 1.1rem;
     border: var(--hair) solid var(--hairline);
-    border-radius: 10px;
+    border-radius: 12px;
     background: #fff;
+    flex: none;
   }
   .partner-chip img {
     height: 100%;
     width: auto;
-    max-width: 18rem;
+    max-width: 27rem;
     object-fit: contain;
     display: block;
   }
   .partner-chip.partner-dark {
     background: #161a1d;
+  }
+  @media (max-width: 720px) {
+    .phero-partners {
+      flex-wrap: wrap;
+    }
+    .partner-chip {
+      height: 3.4rem;
+      padding: 0.45rem 0.8rem;
+    }
+  }
+  .partner-chip.partner-featured {
+    height: 5.2rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 12px;
+  }
+  .partner-chip.partner-featured img {
+    max-width: 26rem;
   }
 
   /* Full-width hardware figure (One Bar Late). */

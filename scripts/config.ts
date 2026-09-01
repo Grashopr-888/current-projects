@@ -1,7 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 
-export type Product = 'windchime' | 'lichtspiel';
+export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn';
 
 /**
  * Source repos live as siblings under this root. Resolved from $HOME at runtime,
@@ -58,6 +58,13 @@ export const REPOS: RepoSource[] = [
     dir: 'lichtspiel_github_trent',
     githubRepo: 'Grashopr-888/lichtspiel',
   },
+  {
+    label: 'hrnsxtn (elk port + platform)',
+    product: 'hrnsxtn',
+    dir: 'mutek-hackathon-elkaudio',
+    githubRepo: 'Grashopr-888/elk-mutek',
+  },
+  { label: 'hrnsxtn (hackathon build)', product: 'hrnsxtn', dir: 'mutek-hackathon' },
 ];
 
 export function repoPath(src: RepoSource): string {
