@@ -10,7 +10,7 @@ questions:
   - What is the minimum that must keep working for the demo to survive a failure?
   - How should each layer behave when the layer above or below it is missing?
 insights:
-  - Each fallback must be reachable without operator intervention mid-performance
+  - Each fallback must be reachable without operator intervention midperformance
   - A substitute that is never exercised is not a fallback
 implications:
   - Design each dependency with an explicit substitute one rung down the ladder

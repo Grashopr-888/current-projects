@@ -4,15 +4,14 @@ product: hrnsxtn
 date: 2026-08-25
 source_type: synthesis
 summary: >-
-  An eight-chapter, cited knowledge base of the Elk Stomp platform — hardware, OS, host
-  internals, and the real budget for machine learning — verified claim by claim.
+  An eight chapter, cited knowledge base of the Elk Stomp platform (hardware, OS, host internals, and the real budget for machine learning), verified claim by claim.
 questions:
   - Where does marketing end and measured capability begin?
   - What are the real budgets per sample, per frame, per callback?
 insights:
   - 'The budget gap is categorical: ~2,000 MACs per sample at audio rate, millions per frame at 10.7 Hz'
-  - No PyTorch runtime exists for the board's 32-bit architecture; inference compiles into the plugin
-  - Two latent host defects found by reading its source — both now design constraints
+  - No PyTorch runtime exists for the board's 32 bit architecture; inference compiles into the plugin
+  - Two latent host defects found by reading its source, both now design constraints
 implications:
   - Every port decision traces to a cited chapter rather than a hunch
   - The knowledge base doubles as the mentorship agenda with the platform's engineers

@@ -14,7 +14,7 @@ included_work:
   - Restore validation gates and the generated → promoted curation tier
   - Fold the restored rigor into the Python authoring pipeline
 notable_risks:
-  - Restoring rigor re-exposed a stubbed validation path (fixed, see incident)
+  - Restoring rigor reexposed a stubbed validation path (fixed, see incident)
 followups:
   - Package the instrument as a distributable Max for Live device
 linked_decisions:

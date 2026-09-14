@@ -10,12 +10,12 @@ customer_value: >-
   The visuals start to reflect what is actually happening in the Live Set, and a performer
   can nudge parameters from the Ableton device without leaving Live.
 included_work:
-  - A Live API helper that emits a stable session-state snapshot, guarded to degrade to defaults
+  - A Live API helper that emits a stable session state snapshot, guarded to degrade to defaults
   - An OSC receiver in the bridge for state, scene, and parameter addresses
   - Device dials mapped to visual parameters and buttons mapped to scenes
-  - Read paths for the playing clip, clip color, and selected-track device names
+  - Read paths for the playing clip, clip color, and selected track device names
 notable_risks:
-  - Arrangement property names are best-effort and need in-set verification
+  - Arrangement property names are best effort and need in set verification
 followups:
   - MIDI content summary deferred to a later phase
 tags: [ableton, max-for-live, osc, live-api]

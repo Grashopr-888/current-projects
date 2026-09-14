@@ -7,6 +7,6 @@ target: Ongoing
 theme: Quality
 confidence: medium
 summary: >-
-  Confirm the concurrent-generation and source-switching mitigations on real hardware.
+  Confirm the concurrent generation and source switching mitigations on real hardware.
 order: 1
 ---

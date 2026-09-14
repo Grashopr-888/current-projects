@@ -1,5 +1,5 @@
 ---
-title: Generated scenes can pass while leaving the controller half-dead
+title: Generated scenes can pass while leaving the controller half dead
 product: lichtspiel
 date: 2026-06-12
 severity: minor
@@ -23,7 +23,7 @@ fix: >-
 followup_actions:
   - action: Extend the playability gate to assert coverage
     status: open
-  - action: Confirm the related concurrent-generation mitigations on a live rig
+  - action: Confirm the related concurrent generation mitigations on a live rig
     status: open
 blameless_note: >-
   A good gate that turned out to be too permissive is a normal iteration of a quality bar,

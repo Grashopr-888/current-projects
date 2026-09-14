@@ -7,10 +7,10 @@ status: shipped
 summary: >-
   A Node hub carrying validated messages between Max for Live and the runtime.
 customer_value: >-
-  The visual runtime only ever receives well-formed control messages, so a bad input
+  The visual runtime only ever receives well formed control messages, so a bad input
   upstream cannot corrupt or crash the performance.
 included_work:
-  - Loopback WebSocket server with a p5 client and reconnect-with-backoff
+  - Loopback WebSocket server with a p5 client and reconnect with backoff
   - JSON validation against shared schemas, with readable rejection errors
   - Message logging and an HTTP status route
   - A CLI sender for scenes, parameters, state, and retrieval, for testing without Ableton

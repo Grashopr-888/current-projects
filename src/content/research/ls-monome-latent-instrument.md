@@ -1,5 +1,5 @@
 ---
-title: The monome as a latent-space instrument
+title: The monome as a latent space instrument
 product: lichtspiel
 date: 2026-06-02
 source_type: field-notes

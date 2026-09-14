@@ -7,6 +7,6 @@ target: Later
 theme: Platform
 confidence: low
 summary: >-
-  Update the shared parameter-vector contract both ways so scenes travel between projects.
+  Update the shared parameter vector contract both ways so scenes travel between projects.
 order: 5
 ---

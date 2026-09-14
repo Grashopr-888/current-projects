@@ -1,17 +1,17 @@
 ---
-title: 'Pre-hackathon: a folder of recordings becomes an instrument'
+title: 'Prehackathon: a folder of recordings becomes an instrument'
 product: hrnsxtn
 date: 2026-08-18
 source_type: experiment
 summary: >-
   The week before the hackathon, the latent granular idea was built and gated on a laptop:
-  encode a corpus, match live playing grain-by-grain in the latent space, answer a bar late.
+  encode a corpus, match live playing grain by grain in the latent space, answer a bar late.
 questions:
   - Does latent matching over real recordings feel like an instrument?
   - How few controls can carry the piece?
 insights:
-  - The latency became the identity — one block ahead reads as an answer, not a lag
-  - Anti-hub and stickiness penalties matter as much as similarity (worst corpus, 88% of picks from five grains)
+  - 'The latency became the identity: one block ahead reads as an answer, not a lag'
+  - Antihub and stickiness penalties matter as much as similarity (worst corpus, 88% of picks from five grains)
   - Five shaping controls were enough; presets mattered more than a sixth
 implications:
   - The control set maps almost one-to-one onto a pedal's eight pots

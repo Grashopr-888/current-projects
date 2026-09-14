@@ -1,5 +1,5 @@
 ---
-title: The p5 visual runtime (browser-only engine)
+title: The p5 visual runtime (browser only engine)
 product: lichtspiel
 version_or_label: phase-1-p5-runtime
 date: 2026-05-30
@@ -16,7 +16,7 @@ included_work:
   - Five initial scenes ported from the Processing corpus, verified at 60 fps
   - A diagnostics panel (frame rate, active template, live parameter readout)
 notable_risks:
-  - A template that throws mid-frame must not kill the host loop
+  - A template that throws midframe must not kill the host loop
 followups:
   - Add a screenshot and frame-rate smoke test to replace the structural smoke
 tags: [runtime, p5, rendering, browser-only]

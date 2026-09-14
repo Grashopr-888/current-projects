@@ -1,5 +1,5 @@
 ---
-title: Consolidation re-exposed a stubbed validation path
+title: Consolidation reexposed a stubbed validation path
 product: lichtspiel
 date: 2026-06-11
 severity: sev3
@@ -19,11 +19,11 @@ root_cause: >-
   The fork had prioritised UX and a new pipeline and left validation as a stub; the gap
   only mattered once that fork became the base everything else built on.
 fix: >-
-  A real validation script (strict type-check, an allow-list lint, a playability marker
+  A real validation script (strict typecheck, an allowlist lint, a playability marker
   check, and a headless render smoke test) shelled from the generator with up to three
-  self-repair passes before failing.
+  self repair passes before failing.
 followup_actions:
-  - action: Prove the rebuilt path end-to-end with a first generated scene
+  - action: Prove the rebuilt path end to end with a first generated scene
     status: done
   - action: Strengthen the playability gate to check coverage, not just presence
     status: open

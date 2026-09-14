@@ -17,14 +17,14 @@ options_considered:
 decision: >-
   Generated scenes surface behind a banner with two actions. Keep holds a scene in local
   session state that survives reload, and Promote moves the file into the committed tier
-  through an explicit, human-curated step.
+  through an explicit, human curated step.
 rationale: >-
   Validation proves a scene runs; it does not prove a scene is worth keeping. A human taste
   step is the right gate for the corpus, and separating a session keep from a permanent
   promote matches how a performer actually works.
 consequences: >-
   The trusted corpus only grows on a deliberate human action, and a session can still hold
-  onto promising scenes without polluting it. The first user-approved graduate came from a
+  onto promising scenes without polluting it. The first user approved graduate came from a
   live session, which validated the flow.
 tags: [generation, curation, corpus, workflow]
 ---

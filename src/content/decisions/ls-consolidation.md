@@ -4,7 +4,7 @@ product: lichtspiel
 date: 2026-06-11
 status: accepted
 context: >-
-  Collaboration had forked the project into three lines: the team's pre-AI base, a
+  Collaboration had forked the project into three lines: the team's base from before the AI work, a
   rigorous solo generator with real validation and curation, and a newer tree with a
   much better UX and a new generative pipeline, but whose validation had been stubbed out.
 options_considered:

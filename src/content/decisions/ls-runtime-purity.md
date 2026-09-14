@@ -5,7 +5,7 @@ date: 2026-06-08
 status: accepted
 context: >-
   Lichtspiel generates visuals with a language model, but it is played live on stage.
-  A model call mid-performance means unpredictable latency and a hard dependency on a
+  A model call midperformance means unpredictable latency and a hard dependency on a
   network that hackathon venues rarely provide reliably.
 options_considered:
   - option: Call the model live to react to the performance
@@ -20,9 +20,9 @@ rationale: >-
   On stage, predictability beats cleverness. A visual that renders every frame with no
   external dependency is worth more than one that occasionally stutters waiting on a model.
 consequences: >-
-  The runtime degrades gracefully to browser-only with no Ableton, bridge, or model
+  The runtime degrades gracefully to browser only with no Ableton, bridge, or model
   service. It also forced a clean split between an authoring pipeline and a play pipeline,
-  which made validation and curation natural rather than bolted-on.
+  which made validation and curation natural rather than bolted on.
 tags: [architecture, performance, reliability]
 ---
 

@@ -1,5 +1,5 @@
 ---
-term: Content-aware windowing
+term: Content aware windowing
 product: windchime
 definition: >-
   Embedding each stem from the window where the music actually plays, rather than a fixed

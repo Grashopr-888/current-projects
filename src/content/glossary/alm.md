@@ -1,5 +1,5 @@
 ---
-term: Audio-language model (ALM)
+term: Audio language model (ALM)
 product: windchime
 definition: >-
   A model that maps text and audio into one shared space, so a phrase can retrieve matching

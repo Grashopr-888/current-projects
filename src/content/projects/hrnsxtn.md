@@ -1,14 +1,13 @@
 ---
 title: HRNSXTN x RDMSXN
 summary: >-
-  Team THIRI's project from a two-podium weekend at the Music Hackspace × MUTEK
-  hackathon in Montréal: a voice-leading harmonizer that fits a stompbox, and a
-  latent granular instrument where a folder of recordings becomes a playable
-  sound world — whatever you play comes back one bar later, re-voiced through
+  Team THIRI's project from a two podium weekend at the Music Hackspace × MUTEK
+  hackathon in Montréal: a voice leading harmonizer that fits a stompbox, and a
+  latent granular instrument where a folder of recordings becomes a playable sound world: whatever you play comes back one bar later, revoiced through
   that corpus. Both live on the Elk Stomp, a screenless embedded pedal.
 status: active
 timeframe: August 2026 to present
-role: Audio ML (on a four-person team), then solo on the embedded port
+role: Audio ML (on a four person team), then solo on the embedded port
 collaborators:
   - Dennison Blackett
   - Radu-Alex Ceban
@@ -19,31 +18,30 @@ thesis: >-
   tiny, and put decisions at 10 Hz so the audio thread only ever plays real
   recordings.
 problem: >-
-  The instrument was built around music2latent, a 58M-parameter neural codec
-  that measures slower than real time on a laptop CPU — and the target is a
+  The instrument was built around music2latent, a 58M parameter neural codec
+  that measures slower than real time on a laptop CPU, and the target is a
   pedal with two 800 MHz cores, no neural accelerator, no PyTorch runtime for
   its architecture, and a hard 1.333 ms deadline on every audio callback. The
   team's hackathon plugin loaded on the board and averaged 6.8% of that budget,
-  then peaked at 1302% and glitched: the deadline is per-callback peak, not
-  average. The port is therefore an architecture problem, not an optimization
-  problem — which decisions genuinely need the network, and when.
+  then peaked at 1302% and glitched: the deadline is per callback peak, not
+  average. The port is therefore an architecture problem, not an optimization problem: which decisions genuinely need the network, and when.
 audience: >-
   Performers who want a corpus of their own recordings under their hands with
-  no laptop on stage — and embedded-audio developers asking what ML honestly
-  fits on NPU-less hardware.
+  no laptop on stage, and embedded audio developers asking what ML honestly
+  fits on hardware with no NPU.
 constraints:
-  - 'A hard real-time budget: 64 samples per callback at 48 kHz, 1.333 ms, on two in-order Cortex-A7 cores'
-  - No neural accelerator, and no PyTorch/LibTorch runtime exists for 32-bit armv7 at all
+  - 'A hard realtime budget: 64 samples per callback at 48 kHz, 1.333 ms, on two Cortex-A7 cores without out of order execution'
+  - No neural accelerator, and no PyTorch/LibTorch runtime exists for 32 bit armv7 at all
   - 'No screen, no menus: the challenge brief was knobs, encoders, and a footswitch, played by feel'
-  - Nothing may allocate, lock, or make a syscall on the audio thread (the dual-kernel OS turns violations into audible glitches)
-  - The embedded C++ must reproduce the Python research instrument exactly — its selections are the sound
+  - Nothing may allocate, lock, or make a syscall on the audio thread (the dual kernel OS turns violations into audible glitches)
+  - The embedded C++ must reproduce the Python research instrument exactly; its selections are the sound
 outcomes:
-  - '1st place, Elk Audio Challenge; 2nd place, Roland Future Design Lab Challenge — Music Hackspace × MUTEK, Montréal 2026'
-  - 58M-parameter codec replaced at the input by a distilled 103k-parameter student (560× smaller) running at 1–2% of one core
-  - The instrument runs end to end under Elk's own audio engine on desktop, validated by golden parity — 200/200 identical grain selections against the Python reference
-  - Worker cadence p99 under 99 ms against a 93.3 ms target, zero drops; audio-thread cost 0.09% average
-  - The team's post-hackathon fix put five harmony voices on the pedal at 0.59× of the deadline (a ~50× per-voice saving, and it follows the player's intonation)
-  - Two latent defects found in the platform's open-source audio engine by reading its source
+  - '1st place, Elk Audio Challenge; 2nd place, Roland Future Design Lab Challenge (Music Hackspace × MUTEK, Montréal 2026)'
+  - 58M parameter codec replaced at the input by a distilled 103k parameter student (560× smaller) running at 1–2% of one core
+  - "The instrument runs end to end under Elk's own audio engine on desktop, validated by golden parity: 200/200 identical grain selections against the Python reference"
+  - Worker cadence p99 under 99 ms against a 93.3 ms target, zero drops; audio thread cost 0.09% average
+  - The team's posthackathon fix put five harmony voices on the pedal at 0.59× of the deadline (a ~50× per voice saving, and it follows the player's intonation)
+  - Two latent defects found in the platform's open source audio engine by reading its source
 public_visibility_note: >-
   Source and corpora stay private. Shown here: the architecture, the measured
   numbers, and the process records. Event and sponsor marks appear for
@@ -67,73 +65,36 @@ languages:
 
 ## The opportunity
 
-The Elk Audio brief at MUTEK was blunt: no laptop, no menus — an instrument you work by feel.
+The Elk Audio brief at MUTEK was blunt: no laptop, no menus, an instrument you work by feel.
 The Roland Future Design Lab brief asked for a neural model treated as something performable.
 Both are the same question from different sides: what does machine learning look like when it
 has to live in a musician's hands rather than in a browser tab? Team THIRI entered both
-challenges and placed in both. The instrument on this page is my half of that answer — a
-corpus player where the intelligence chooses real recordings instead of synthesizing new ones
-— and the engineering that follows is what it took to make that honest on a pedal.
+challenges and placed in both. The instrument on this page is my half of that answer (a corpus player where the intelligence chooses real recordings instead of synthesizing new ones), and the engineering that follows is what it took to make that honest on a pedal.
 
 ## How it works, at the boundary
 
-A folder of recordings is embedded once, offline, by music2latent into 64-dimensional frames
-at 10.7 Hz, and packed with its audio into a single memory-mappable file. On the pedal, live
+A folder of recordings is embedded once, offline, by music2latent into 64 dimensional frames
+at 10.7 Hz, and packed with its audio into a single memory mappable file. On the pedal, live
 input becomes mel frames; a distilled student network predicts where the big model would have
 placed them; cosine matching with temperature sampling picks corpus grains; and the audio
-thread plays those grains back — real recordings, windowed and crossfaded — one bar behind
+thread plays those grains back (real recordings, windowed and crossfaded) one bar behind
 your playing. The latency is not hidden. It is the instrument's character: you play, and the
 room answers.
 
 ## What I chose, and why
 
-Three calls, each a decision record below. First, the model was never compressed — the
-decisions moved: offline precomputation, a 560×-smaller distilled student, inference at the
+Three calls, each a decision record below. First, the model was never compressed; the decisions moved: offline precomputation, a 560×-smaller distilled student, inference at the
 10.7 Hz decision rate instead of the 48 kHz audio rate. Second, the neural decoder was deleted
 rather than shrunk: playback is real corpus audio, which keeps the sound accountable and cost
 nothing the ear could keep. Third, equivalence over elegance: the C++ port is held to
-bit-identical grain selection against the Python reference, and the one divergence the parity
-harness caught was resolved in the reference's favor — its quirk is part of the sound.
+bit identical grain selection against the Python reference, and the one divergence the parity
+harness caught was resolved in the reference's favor, because its quirk is part of the sound.
 
 ## Proven before the hardware, honest about what is not
 
-The riskiest question — does cheap matching still feel like the big model's taste? — was
-answered before any hardware was touched. The finding that reframed it: at performance
+The riskiest question, whether cheap matching still feels like the big model's taste, was answered before any hardware was touched. The finding that reframed it: at performance
 settings the original instrument agrees with itself on only 2.6% of picks across seeds, so
 the right measure is regret, and the student lands in the teacher's top 4–7% of candidates
-(a raw-MFCC baseline fails outright at 15–18%). What remains open is stated plainly in the
-roadmap: cross-compiling to the board itself, on-board benchmarks, and a blind listening
-verdict. The prototyping before the hackathon — the studio interface with its live map of
-17,000 grains — is in the research notes below.
-
-## The prototype, on screen
-
-The instrument existed on a laptop before it met the pedal — built and gated the week
-before the hackathon. These are its three faces.
-
-<figure>
-  <img src="/current-projects/img/hs-ui-studio.jpg" alt="The granular instrument's studio view: two voice panels with shaping controls flanking a three-dimensional latent map of 16,945 grains from 38 files" loading="lazy" />
-  <figcaption>Studio — two voices over one corpus map (16,945 grains from 38 files). The five shaping controls, grain size, blend and gain-match sit exactly where the pedal's eight pots now pick them up.</figcaption>
-</figure>
-
-<figure>
-  <img src="/current-projects/img/hs-ui-stage.jpg" alt="The stage view: a dark performance theme where both voices' cursors traverse the latent point cloud" loading="lazy" />
-  <figcaption>Stage — the performance theme. The A and B cursors are the two voices moving through the corpus in real time; everything else recedes.</figcaption>
-</figure>
-
-<figure>
-  <img src="/current-projects/img/hs-ui-setup.jpg" alt="The setup panel: an Ableton routing checklist, block and buffer status, saved presets, and the corpus builder for sound worlds" loading="lazy" />
-  <figcaption>Setup — the plumbing made legible: routing checklist, block/buffer health, presets, and the corpus builder that turns a folder of recordings into a sound world.</figcaption>
-</figure>
-
-## On the official program
-
-<figure>
-  <img src="/current-projects/img/hs-showcase-title.png" alt="MUTEK Forum page header for the Music Hackspace x MUTEK Hackathon Winners Showcase" loading="lazy" />
-  <figcaption>The festival's official <a href="https://forum.mutek.org/en/shows/2026/music-hackspace-x-mutek-hackathon-winners-showcase">Winners Showcase listing</a> — MUTEK Forum, August 28, Grands Ballets.</figcaption>
-</figure>
-
-<figure>
-  <img src="/current-projects/img/hs-showcase-winners.png" alt="The winners list from MUTEK's page, naming HRNSXTN x RDMSXN for the Elk Audio challenge: Dennison Blackett, Radu-Alex Ceban, Jazz Calls Home, and Trent Eriksen" loading="lazy" />
-  <figcaption>The winners presenting on stage, as published by MUTEK — HRNSXTN x RDMSXN for the Elk Audio challenge.</figcaption>
-</figure>
+(a raw MFCC baseline fails outright at 15–18%). What remains open is stated plainly in the
+roadmap: cross compiling to the board itself, onboard benchmarks, and a blind listening
+verdict. The prototyping before the hackathon (the studio interface with its live map of 17,000 grains) is in the research notes below.

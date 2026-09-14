@@ -4,12 +4,12 @@ product: lichtspiel
 date: 2026-06-05
 source_type: market-scan
 summary: >-
-  A scan of live-visual tools: none understand the set's structure.
+  A scan of live visual tools: none understand the set's structure.
 questions:
   - What do existing VJ and live-visual tools actually map to?
   - Where is there room for something a performer would call an instrument, not an effect?
 insights:
-  - Session-aware mapping is the wedge competitors do not occupy
+  - Session aware mapping is the wedge competitors do not occupy
   - Treating the controller as an instrument, not a remote, is the second half of it
 implications:
   - Position deliberately as session-aware mapping + code-native visuals + monome-as-instrument

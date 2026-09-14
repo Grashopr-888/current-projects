@@ -1,5 +1,5 @@
 ---
-title: Encoder presses switched scenes mid-performance
+title: Encoder presses switched scenes midperformance
 product: lichtspiel
 date: 2026-06-04
 severity: sev3
@@ -10,7 +10,7 @@ impact: >-
   Expressive presses doubled as navigation, so a performer leaning into an
   encoder could yank the whole visual world out from under their set.
 detection: >-
-  Reproduced during rehearsal play-throughs on the physical Arc.
+  Reproduced during rehearsal playthroughs on the physical Arc.
 response: >-
   Audited every monome binding, found the legacy fallback that mapped presses to
   random/next-template navigation and a grid region to scene select, and removed
@@ -20,7 +20,7 @@ root_cause: >-
   a grid region were still bound to template switching from before the idiom
   layer existed.
 fix: >-
-  Removed all template-switching from the monome mapping. Hardware drives
+  Removed all template switching from the monome mapping. Hardware drives
   parameters only; navigation stays on the keyboard and in Ableton.
 blameless_note: >-
   This established a rule the idiom layer inherited: the instrument surface is

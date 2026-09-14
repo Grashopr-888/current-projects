@@ -11,8 +11,8 @@ customer_value: >-
   actually playing, without writing code and without risking a broken scene on stage.
 included_work:
   - Audio "vibe" extraction (CLAP + librosa features) feeding generation
-  - Text-prompt generation conditioned on the live set
-  - Five-gate validation chain with a bounded self-repair loop
+  - Text prompt generation conditioned on the live set
+  - Five gate validation chain with a bounded self repair loop
   - Keep / Promote curation tiers for generated scenes
 notable_risks:
   - The playability gate checks that controls exist, not that they cover the surface
