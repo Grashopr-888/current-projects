@@ -1,25 +1,23 @@
 ---
-title: 'Venue hardening: offline by default, guarded devices, public-safe text'
+title: 'Venue hardening: offline, guarded devices, public safe text'
 product: windchime
 version_or_label: venue-hardening
 date: 2026-08-05
 status: shipped
 summary: >-
-  Assumes a hostile venue: a vendored offline runtime, a device guard, and profanity kept off
-  public screens.
+  For a hostile venue.
 customer_value: >-
-  The installation opens in a room with no usable network, keeps the sound on the
-  devices the operator chose, and never puts a visitor's unfortunate phrasing on a
-  wall in front of the next visitor.
+  Offline, on chosen devices, never showing visitor phrasing.
 included_work:
-  - Live-coding runtime vendored so the venue needs no internet
-  - Offline made the default-safe case in the launcher, with the guard supervised
-  - Device guard holds the chosen input and output, detects a wedged microphone, exits cleanly
-  - Word-boundary text filter on the public-facing screens
-  - Venue startup runbook, including the no-internet path
-  - Corpus audit joining retrieval frequency to measured loudness
+  - Vendored runtime
+  - Offline default, supervised guard
+  - Guard holds chosen input and output
+  - Wedged mic detection, clean exit
+  - Word boundary text filter
+  - Runbook with no internet path
+  - Frequency to loudness audit
 notable_risks:
-  - The guard latches a device identifier, and identifiers can shift when hardware is re-enumerated
+  - Device identifiers can shift on reenumeration
 tags: [install, reliability, safety]
 ---
 

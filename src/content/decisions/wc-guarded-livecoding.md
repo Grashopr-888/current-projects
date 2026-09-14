@@ -1,12 +1,10 @@
 ---
-title: 'Guard the model behind a schema: never let it emit raw code'
+title: 'A schema guard: the model never emits raw code'
 product: windchime
 date: 2026-05-16
 status: accepted
 context: >-
-  The installation live-codes music from a language model. Letting the model write
-  executable audio code directly is fast to prototype but unaccountable and unsafe
-  in a room full of speakers. A single bad generation can produce noise or silence.
+  Generated audio code near live speakers: one bad output plays noise or silence.
 options_considered:
   - option: Model emits Strudel/audio code directly
     tradeoffs: Most flexible; unbounded and unsafe; hard to validate before it plays
@@ -15,16 +13,13 @@ options_considered:
   - option: No model (fully deterministic templates only)
     tradeoffs: Perfectly safe; loses the responsiveness that makes the piece feel alive
 decision: >-
-  The model selects from curated template families and fills a validated schema. A
-  validator and compiler render approved patterns; raw model code never reaches the
-  audio engine.
+  The model fills a validated schema from curated template families; a compiler renders it, so
+  raw code never plays.
 rationale: >-
-  In an unattended installation, safety and inspectability outrank raw expressiveness.
-  A schema is a contract the whole system can reason about.
+  Unattended, inspectable safety beats expressiveness: a schema is a contract.
 consequences: >-
-  Every musical result is bounded and reviewable, and the same guard enabled the
-  three-tier planner failover. The cost is a curation burden: the template families
-  are hand-authored.
+  Bounded, reviewable output that enabled three tier failover, at the cost of hand authored
+  template families.
 tags: [safety, architecture, llm]
 ---
 

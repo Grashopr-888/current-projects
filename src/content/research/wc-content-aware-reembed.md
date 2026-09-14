@@ -1,18 +1,17 @@
 ---
-title: Content-aware re-embedding and index-epoch provenance
+title: Content aware reembedding and index epoch provenance
 product: windchime
 date: 2026-07-07
 source_type: experiment
 summary: >-
-  A method for repairing a retrieval index when a fixed indexing window lands on silence, plus
-  a provenance scheme recording which index epoch each measurement used.
+  Repair an index whose fixed window hit silence; log each measurement's epoch.
 questions:
   - When a stem is indexed from a fixed window, how often does that window miss the stem's actual sound?
   - Can only the affected rows be repaired without disturbing the rest of a frozen index?
   - How do we keep every downstream measurement attributable to the exact index it ran against?
 insights:
-  - Files that open with long silence embed as essentially nothing under a fixed head window
-  - Reading each stem from its most representative window targets the repair to only the compromised rows
+  - Silent openings embed as near nothing
+  - Representative windows limit repair to compromised rows
 implications:
   - Retrieval quality depends as much on the indexing window as on the model, so the window is a first-class design choice
   - Stamping each analysis with its index epoch keeps results reproducible and prevents accidentally comparing numbers across different indexes

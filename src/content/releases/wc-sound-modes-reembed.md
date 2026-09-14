@@ -1,23 +1,24 @@
 ---
-title: Sound modes and a content-aware re-embed
+title: Sound modes and a content aware reembed
 product: windchime
 version_or_label: sound-modes-reembed
 date: 2026-07-07
 status: shipped
 summary: >-
-  Playback presets landed with a surgical re-embed repairing stems whose index window was
-  silent.
+  Repairs stems with a silent index window.
 customer_value: >-
-  The operator can shape how the audio behaves, from an ambient wash to a tighter,
-  more immediate response, and a spoken phrase now reliably reaches stems by their
-  real content rather than by dead air at the start of a file.
+  Wash to tight response; phrases reach content, not silence.
 included_work:
-  - Sound-mode presets bundling retrieval and playback settings, toggle-able live
-  - A loudness sidecar precompute (has-audio flag, per-clip gain, best window)
-  - A content-aware re-embed of only the compromised rows, per backend
-  - Append-only index-epoch provenance stamped into every audit record
+  - Retrieval and playback presets
+  - Live preset toggle
+  - Loudness sidecar precompute
+  - Has audio flag
+  - Clip gain
+  - Best window
+  - Compromised rows reembedded per backend
+  - Append only epoch provenance
 notable_risks:
-  - Per-clip normalization gain is computed and broadcast but not yet applied per sample in the pattern
+  - Per clip gain not yet applied per sample
 followups:
   - Apply per-sample gain once templates support per-sample rather than per-voice gain
 tags: [audio, retrieval, provenance]

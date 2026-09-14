@@ -1,12 +1,10 @@
 ---
-title: Three-tier failover for the code planner
+title: Three tier failover for the code planner
 product: windchime
 date: 2026-05-16
 status: accepted
 context: >-
-  The planner turns a voice into a chosen template family and its parameters using a
-  language model. In an unattended installation a single hosted model is a single
-  point of failure, and a dropped network must never strand a visitor mid-turn.
+  One hosted model is a single point of failure that could strand a visitor midturn.
 options_considered:
   - option: Hosted model only
     tradeoffs: >-
@@ -19,17 +17,12 @@ options_considered:
     tradeoffs: >-
       More paths to maintain, but the piece can always produce a valid plan.
 decision: >-
-  The planner tries a hosted model first with prompt caching, falls back to a local
-  model in JSON mode, and finally to a deterministic in-code template fill. Every
-  output is validated before a compiler renders it.
+  Hosted LLM with prompt caching, then a local model in JSON mode, then a deterministic
+  template; every plan validated before compiling.
 rationale: >-
-  Degrading through progressively more local options keeps the installation
-  responsive and always able to answer, even fully offline. The validate-then-compile
-  boundary means no tier can emit unapproved output, whichever one produced the plan.
+  More local tiers still answer offline, and none can skip validation.
 consequences: >-
-  The piece keeps running through a network outage, and each run records which tier
-  planned it. A later operator selector exposed the same chain in the UI, so a dead
-  host degrades to the next tier instead of stranding a visitor.
+  It survives outages and logs each turn's tier; an operator selector exposes the chain.
 tags: [architecture, reliability, planner]
 ---
 

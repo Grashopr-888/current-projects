@@ -1,35 +1,27 @@
 ---
-title: An arc encoder switch is dead, confirmed by a paired-marker test
+title: A dead arc encoder switch, proven by paired markers
 product: windchime
 date: 2026-08-03
 severity: sev3
 status: open
 summary: >-
-  An arc push switch registers nothing; an absent event is indistinguishable from a mapping
-  bug.
+  Silent, exactly like a mapping bug.
 impact: >-
-  Every gesture bound to that encoder's press is unreachable, across all scenes,
-  including a page-flip chord that assumed both encoders.
+  Its press gestures, including a two encoder page flip chord, are unreachable.
 detection: >-
-  A paired-marker diagnostic: press the suspect encoder, then immediately press a
-  known-good one as a timestamp. Six evidenced attempts produced twenty-eight turns
-  and zero key events from the suspect encoder.
+  Six paired marker attempts: 28 turns, zero key events.
 response: >-
   Ruled out software by reading the bridge, which parses press events with no
   per-encoder branching, then confirmed the fault survives a full stack restart and
   a cable reseat.
 root_cause: >-
-  A hardware fault in the encoder's switch. It cannot be a mapping problem, because
-  the code path that would drop it does not distinguish between encoders.
+  Hardware: the code path treats both encoders identically.
 fix: >-
-  Not fixed in software by design. Affected gestures were remapped off the dead
-  switch; the hardware needs repair or replacement.
+  No software fix by design: gestures moved off it, and the hardware needs repair.
 followup_actions:
-  - action: Repair or replace the affected controller
+  - action: Repair or replace the controller
     status: open
 blameless_note: >-
-  The reusable trick is the diagnostic, not the finding. When a null result depends
-  on an action you cannot observe, pair it with one you can, so silence becomes
-  evidence rather than ambiguity.
+  Pair an unobservable null result with an observable action, so silence becomes evidence.
 tags: [monome, hardware, diagnostics]
 ---

@@ -1,5 +1,5 @@
 ---
-title: Per-family tuning across the visual corpus
+title: Per family visual tuning
 product: windchime
 horizon: later
 status: planned
@@ -7,7 +7,6 @@ target: Later
 theme: Visuals
 confidence: medium
 summary: >-
-  A tuning pass across 135 scene families, 63 on the live rig, so idle composition, exposure,
-  and framing read as deliberately as the best.
+  Idle composition, exposure and framing, family by family.
 order: 7
 ---

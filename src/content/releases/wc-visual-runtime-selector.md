@@ -1,24 +1,23 @@
 ---
-title: Boot-time visual runtime selector and a Three.js scene set
+title: Boot time visual runtime selector, with Three.js scenes
 product: windchime
 version_or_label: visual-runtime-selector
 date: 2026-07-16
 status: shipped
 summary: >-
-  Two selectable runtimes at boot, the p5 system and an experimental Three.js runtime, one
-  host interface.
+  Beside p5, one runtime per session.
 customer_value: >-
-  The piece can be shown on either renderer for a direct fidelity comparison, one
-  runtime per session, with no change to hardware behaviour or interaction, so the
-  choice is purely about how it looks.
+  A direct fidelity comparison; hardware and interaction unchanged.
 included_work:
-  - A full-screen runtime selector before any renderer or audio init, with a URL parameter to pin it for kiosk boots
-  - A second host implementation sharing the existing host contract (params, LED flush, mount semantics)
-  - The p5 family corpus ported to Three.js siblings, plus original 3D scenes
-  - Per-runtime dynamic imports, so a session loads only the runtime it selected
+  - Selector before renderer or audio init
+  - URL pin for kiosk boots
+  - Second host sharing params, LED flush, mount
+  - p5 families ported to Three.js
+  - Original 3D scenes
+  - Per runtime dynamic imports
 notable_risks:
-  - The newest scenes still await an in-person audition and per-family fidelity tuning
-  - A physical-hardware pass is pending for the latest scenes, so far verified only through the on-screen twin
+  - Newest scenes need audition and tuning
+  - Hardware pass pending; twin verified only
 followups:
   - Audition the new scenes on the rig and tune idle framing and exposure per family
 tags: [visuals, rendering, three-js]

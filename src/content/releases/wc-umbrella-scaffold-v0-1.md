@@ -1,22 +1,21 @@
 ---
-title: Umbrella repo that unifies the four service branches
+title: Umbrella repo unifying four service branches
 product: windchime
 version_or_label: 'v0.1'
 date: 2026-05-23
 status: shipped
 summary: >-
-  The first umbrella binding four siblings as submodules behind one launcher and control bus.
+  The first umbrella.
 customer_value: >-
-  One command brings the whole installation up on a laptop, so the piece can be
-  built, demoed, and tested as a single system instead of four repositories wired
-  together by hand each time.
+  One command runs it all on a laptop.
 included_work:
-  - Submodule layout unifying the four sibling services
-  - A unified launcher that starts all four services together
-  - A dev UI shell plus an end-to-end smoke target
-  - A control bus so livecode publishes and animation consumes
+  - Four services as submodules
+  - One launcher for all four
+  - Dev UI shell
+  - End to end smoke target
+  - Control bus, livecode to animation
 notable_risks:
-  - Localhost-only trust model; state-changing endpoints still needed an Origin allowlist before any wider exposure
+  - Localhost only trust; needed an Origin allowlist
 followups:
   - Layer operator demo and unattended visitor flows on top of the scaffold
 tags: [architecture, tooling, scaffold]

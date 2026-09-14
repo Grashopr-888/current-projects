@@ -4,34 +4,27 @@ product: windchime
 date: 2026-05-16
 severity: sev3
 summary: >-
-  The first retrieval worked and every one after failed: one database connection reused across
-  threads.
+  One database connection reused across threads.
 impact: >-
-  During bring-up the end-to-end pipeline was unusable past a single query, which
-  blocked browser testing of the whole voice-to-audio path.
+  Bringup stalled after one query, blocking browser tests.
 detection: >-
-  Surfaced immediately in end-to-end browser testing. The first generate succeeded and
-  the second raised a thread-ownership error from the database driver.
+  The second generate raised a driver thread ownership error.
 response: >-
   Traced the failure to a single shared query engine that was constructed on one
   thread and then called from the server's request threads.
 root_cause: >-
-  The corpus database connection enforces same-thread use by default. One engine
-  instance was shared across the server's worker threads, which the driver refuses.
+  The connection enforces same thread use by default, and one engine was shared across worker
+  threads.
 fix: >-
-  The engine opens its connection with the same-thread check disabled. This is safe
-  here because the engine is read-only after construction, so there are no concurrent
-  writes to race.
+  The same thread check is disabled, safe because the engine is read only after construction.
 followup_actions:
-  - action: Confirm the shared engine stays read-only after construction so the relaxed check remains safe
+  - action: Confirm the shared engine stays read only
     status: done
-  - action: Keep retrieval in-process rather than splitting it into a separate service
+  - action: Keep retrieval in process
     status: done
 status: resolved
 blameless_note: >-
-  The same-thread guard is a sensible database default meeting a reasonable server
-  pattern of one shared, read-only engine. The lesson is about matching connection
-  settings to the threading model, not about blame.
+  Match connection settings to the threading model.
 tags: [retrieval, threading, database]
 ---
 

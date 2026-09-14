@@ -5,18 +5,18 @@ version_or_label: participant-flow
 date: 2026-05-28
 status: shipped
 summary: >-
-  Participant mode: one-click trials, two-stage consent, stuck-mic recovery, and a transcript
-  panel.
+  The first build someone else could run.
 customer_value: >-
-  The earliest release where someone other than the builder could run the piece.
-  Everything a participant needs (consent, orientation, recovery from a wedged
-  mic) happens in the interface, with no operator standing by.
+  Consent, orientation and mic recovery need no operator.
 included_work:
-  - Dev / participant mode toggle with a one-click trial session
-  - Two-stage consent and onboarding, served same-origin
-  - Stuck-microphone detection and automatic recovery
-  - Live audio-activity meter, master volume, and a transcript panel
-  - Six-prompt study configuration for bounded trial sessions
+  - Dev / participant toggle
+  - One click trials
+  - Two stage consent, same origin
+  - Stuck mic detection, recovery
+  - Audio activity meter
+  - Master volume
+  - Transcript panel
+  - Six prompt trials
 linked_incidents:
   - wc-participant-audio-suspend
 tags: [experience, research, reliability]

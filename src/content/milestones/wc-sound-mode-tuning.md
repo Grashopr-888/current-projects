@@ -7,7 +7,6 @@ target: Next
 theme: Experience
 confidence: medium
 summary: >-
-  Sound modes now run as a per-prompt sequence. Two decisions remain: which preset an
-  exhibition runs, and whether visitors hear the planner or the bypass.
+  Which preset to exhibit, and planner or bypass.
 order: 4
 ---

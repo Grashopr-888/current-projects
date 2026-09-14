@@ -1,24 +1,22 @@
 ---
-title: Install-mode feature wave
+title: Install mode feature wave
 product: windchime
 version_or_label: install-features
 date: 2026-07-12
 status: shipped
 summary: >-
-  A single-day install wave: mic meter, narrated tour, selectable planner, five scene
-  families.
+  Shipped in one day.
 customer_value: >-
-  A visitor walking up cold now gets narrated orientation, visible proof the
-  microphone hears them, and continuous sound design (attract beds that
-  alternate, a tutorial bed side-chained under the narration, and an idle bed
-  after each visit) instead of silence between sessions.
+  Orientation, and sound between visits.
 included_work:
-  - Microphone input VU meter in the visitor bar
-  - Narrated tour with pre-generated voice clips, stepped by the runtime
-  - Selectable LLM planner backend (hosted or local) with safe revert
-  - Five new Grid+Arc scene families, growing that corpus from 38 to 43
-  - Compact header pills for the visitor-facing status row
-  - Install audio map with attract alternation, side-chained tutorial bed, and idle bed
+  - Mic VU meter
+  - Narrated tour, pregenerated clips
+  - Hosted or local LLM planner, safe revert
+  - Grid+Arc families, 38 to 43
+  - Header status pills
+  - Alternating attract beds
+  - Sidechained tutorial bed
+  - Idle bed after visits
 tags: [install, experience, audio]
 ---
 

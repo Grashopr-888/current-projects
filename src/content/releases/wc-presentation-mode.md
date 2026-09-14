@@ -5,18 +5,17 @@ version_or_label: presentation-mode
 date: 2026-07-29
 status: shipped
 summary: >-
-  A fullscreen presentation mode, click-to-audition on any stem, a curation lock, and a wedge
-  watchdog.
+  Show and curate from one build.
 customer_value: >-
-  The same build can be shown to an audience without looking like a control panel,
-  and the operator can audition and curate what the piece reaches for without
-  leaving the interface.
+  It shows cleanly; curation stays in the interface.
 included_work:
-  - Fullscreen presentation mode that hides the developer navigation
-  - Click-to-audition on any retrieved stem name, with hold
-  - Curation lock and a wedge watchdog on the interface
-  - Latent map labels the active retrieval model and tracks the selection
-  - Prompt-suggestion pools widened, attract-screen repeat fixed
+  - Fullscreen hides developer navigation
+  - Click and hold stem audition
+  - Curation lock
+  - Wedge watchdog
+  - Latent map labels model, tracks selection
+  - Wider prompt pools
+  - Attract repeat fixed
 tags: [experience, install, tooling]
 ---
 

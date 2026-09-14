@@ -1,23 +1,23 @@
 ---
-title: Demo mode for operator-run showcases
+title: Demo mode for operator run showcases
 product: windchime
 version_or_label: demo-mode
 date: 2026-06-24
 status: shipped
 summary: >-
-  An operator presentation layer: branded overlay, intro and outro flashes, and a closing
-  recap.
+  With a closing recap.
 customer_value: >-
-  A presenter can run the piece as a polished showcase during a talk or a visit,
-  with reachable controls for sound mode, transition, and demo set, and playback
-  that keeps going while the screen is being recorded.
+  Polished talks and visits; playback survives screen recording.
 included_work:
-  - Branded demo overlay with intro and outro flashes and a logo reveal
-  - A demo set picker and per-section beds
-  - Sound-mode and transition selectors placed in the demo header
-  - Operator controls and a presentation theme
+  - Branded overlay, logo reveal
+  - Intro and outro flashes
+  - Demo set picker
+  - Section beds
+  - Header mode and transition selectors
+  - Operator controls
+  - Presentation theme
 notable_risks:
-  - A manual operator flow; the unattended visitor lifecycle is a later, separate build
+  - Manual flow; unattended lifecycle came later
 followups:
   - Generalize the showcase machinery into an unattended install mode
 tags: [demo, ui, presentation]

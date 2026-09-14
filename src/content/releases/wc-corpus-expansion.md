@@ -5,19 +5,16 @@ version_or_label: corpus-batches
 date: 2026-07-17
 status: shipped
 summary: >-
-  The corpus grew through successive studio batches, ingested idempotently, with a multi-
-  backend re-embed runbook.
+  Repeatable and auditable.
 customer_value: >-
-  A larger and better-labelled sound library gives every spoken phrase more and more
-  varied material to reach, while the repeatable ingest keeps that growth safe to
-  redo and easy to audit.
+  More varied, better labelled material.
 included_work:
-  - Successive batch ingests sorted into the category layout
-  - A skip sentinel that makes re-ingesting a batch idempotent
-  - A documented re-embed runbook covering every backend
-  - Index-history entries recording each corpus-addition re-index
+  - Batches sorted by category
+  - Idempotent reingest via skip sentinel
+  - Reembed runbook, every backend
+  - Index history per reindex
 notable_risks:
-  - Adding stems means re-embedding every backend to keep cross-backend comparisons fair
+  - Fair comparison means reembedding every backend
 followups:
   - Fold staged attract-only stems into the retrieval corpus in a future batch
 tags: [corpus, retrieval, data]

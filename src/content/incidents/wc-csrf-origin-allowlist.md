@@ -1,39 +1,31 @@
 ---
-title: State-changing endpoints accepted cross-site requests
+title: State changing endpoints accepted cross site requests
 product: windchime
 date: 2026-05-23
 severity: sev3
 summary: >-
-  State-changing endpoints allowed cross-origin calls, so another open page could have
-  triggered generation.
+  Another open page could trigger generation.
 impact: >-
-  While the stack runs on a developer machine, a malicious page visited in the same
-  browser could have started the microphone or spent model-API budget. No exploit was
-  observed; this was a latent exposure.
+  A malicious page could start the mic or spend model API budget; none observed.
 detection: >-
-  Found during a security review of the endpoints while unifying the services under
-  the umbrella.
+  A security review during the umbrella unification.
 response: >-
   Threat-modelled the state-changing endpoints and added an Origin check rather than
   relying on permissive cross-origin response rules.
 root_cause: >-
-  Open cross-origin settings block reading a response but do not stop a simple
-  cross-site POST from being sent. With no Origin check, the state-changing endpoints
-  trusted any caller.
+  Open cross origin settings block reading, not sending, a cross site POST; nothing checked
+  Origin.
 fix: >-
-  Every state-changing endpoint now checks the browser Origin against an allowlist of
-  the installation's own service URLs. Non-browser callers, which send no Origin, still
-  pass, so command-line scripts and the microphone runtime are unaffected.
+  Endpoints check Origin against the installation's own URLs; scripts and the mic runtime send
+  none and pass.
 followup_actions:
-  - action: Keep the launcher port list and the Origin allowlist in sync whenever a service port changes
+  - action: Sync the port list and Origin allowlist
     status: open
-  - action: Add a bearer token or an authenticating proxy before any non-loopback exposure
+  - action: Token or authenticating proxy before nonloopback exposure
     status: open
 status: resolved
 blameless_note: >-
-  A permissive default is common for a localhost dev tool. Adding the Origin check is a
-  proportionate mitigation for the current trust model, and it is documented so it gets
-  revisited before any wider exposure.
+  Proportionate for localhost, and documented for review.
 tags: [security, csrf, endpoints]
 ---
 

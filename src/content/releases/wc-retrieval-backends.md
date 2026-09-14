@@ -1,24 +1,23 @@
 ---
-title: Exchangeable retrieval backends with an offline audit harness
+title: Exchangeable retrieval backends and an audit harness
 product: windchime
 version_or_label: retrieval-backends
 date: 2026-06-28
 status: shipped
 summary: >-
-  Retrieval moved behind one embedding interface, configurations selectable at runtime, plus
-  an audit harness.
+  One interface, many models.
 customer_value: >-
-  The installation can run identically while the audio-language model is changed as
-  a controlled variable, which keeps the piece stable for visitors and makes the
-  model itself something that can be studied.
+  Stable for visitors while the ALM varies.
 included_work:
-  - An embedding-backend interface over one shared, model-independent corpus DB
-  - Audio embedded offline once per configuration; heavy models behind a text-only sidecar
-  - A runtime backend toggle with a liveness probe and auto-revert
-  - A multilingual configuration plus an offline distributional-audit harness
+  - Model independent corpus DB
+  - Offline audio embedding per configuration
+  - Text only sidecar for heavy models
+  - Runtime toggle, liveness probe, autorevert
+  - Multilingual configuration
+  - Offline distributional audit harness
 notable_risks:
-  - One model carries a research-evaluation licence and stays restricted to offline, audit-only use
-  - Keeping several backends warm for instant switching costs some memory
+  - 'Research licensed model: offline audit only'
+  - Warm backends cost memory
 followups:
   - Reuse the same seam to run the backend as a hidden, logged study condition
 tags: [retrieval, architecture, research]

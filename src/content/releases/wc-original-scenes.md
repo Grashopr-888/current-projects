@@ -5,17 +5,14 @@ version_or_label: originals-o1-o4
 date: 2026-07-17
 status: shipped
 summary: >-
-  Four waves of original Three.js scenes, including cities where field recordings were made;
-  69 families.
+  Four waves, 69 families.
 customer_value: >-
-  The visuals gained a body of original, place-rooted work rather than a library
-  of adapted sketches, and every new scene answers to the same rules: expressive
-  clicks, LED acknowledgement for every gesture, and the whole grid alive.
+  Place rooted originals: expressive clicks, LED acknowledgement, the whole grid alive.
 included_work:
-  - Waves O1 and O2, abstract and kinetic originals
-  - Waves O3 and O4, city scenes rooted in the corpus's recording locations
-  - Authoring guide codifying monome interaction rules for all future scenes
-  - Regression gates kept green across the full scene corpus
+  - 'O1 and O2: abstract, kinetic'
+  - 'O3 and O4: recording location cities'
+  - Authoring guide codifies monome rules
+  - Regression gates green corpus wide
 followups:
   - Per-family tuning pass for idle composition and exposure
 tags: [visuals, three-js, corpus]

@@ -1,37 +1,28 @@
 ---
-title: A closed kiosk page could leave the audio gate stuck
+title: A closed kiosk page could latch the audio gate
 product: windchime
 date: 2026-07-12
 severity: sev2
 summary: >-
-  A closed kiosk page could leave a shared phase gate latched, stranding audio in the wrong
-  state.
+  Audio stranded in the wrong phase.
 impact: >-
-  On an unattended kiosk this could strand the piece in a stuck phase with no operator
-  present to clear it, which defeats the whole point of a self-resetting visitor
-  lifecycle.
+  No operator would clear it, defeating the self resetting lifecycle.
 detection: >-
-  Found by the synthetic-visitor soak, which drives hundreds of sessions and exercises
-  abrupt page exits that manual testing rarely reaches.
+  The soak's abrupt page exits, which manual tests rarely reach.
 response: >-
   Added an explicit reset on the normal exit path and a best-effort reset that still
   fires while the page is being torn down.
 root_cause: >-
-  The phase gate was only cleared on a graceful showcase exit. A page that was closed
-  or crashed never sent that signal, so the gate could remain latched.
+  Only a graceful showcase exit cleared the gate.
 fix: >-
-  The controller posts an idle phase on showcase exit, and the page fires a page-hide
-  beacon to a reset endpoint, so a dying page cannot leave the gate stuck. A beacon is
-  used because it survives the page being torn down, where an ordinary request would
-  not.
+  Exit posts an idle phase, and a pagehide beacon (which survives teardown) hits a reset
+  endpoint.
 followup_actions:
-  - action: Keep the page-hide reset covering future kiosk auto-boot paths
+  - action: Cover future kiosk autoboot paths
     status: open
 status: resolved
 blameless_note: >-
-  Abrupt page death is exactly the kind of edge a long unattended run hits and a short
-  manual test misses. The soak surfacing this before exhibition is the intended payoff,
-  not a failing.
+  Long unattended runs hit abrupt page death; short manual tests miss it.
 tags: [reliability, kiosk, lifecycle]
 ---
 

@@ -1,22 +1,21 @@
 ---
-title: 'Audio safety: limiter, clamps, and a watchdog'
+title: 'Audio safety: limiter, clamps and a watchdog'
 product: windchime
 version_or_label: soundstate-feedback-v1
 date: 2026-07-03
 status: shipped
 summary: >-
-  A three-layer defence against runaway: a master limiter, apply-time clamps, and a 1 Hz
-  watchdog.
+  Three layers; a 1 Hz watchdog.
 customer_value: >-
-  The installation can no longer roar or go silent. Speakers are protected and the
-  sound recovers itself without a page refresh or a new visitor gesture.
+  Speakers stay safe; the sound recovers itself.
 included_work:
-  - Master limiter chain (compressor into a NaN-proof ceiling)
-  - Per-voice ring-out bounds and effect/gain literal caps
-  - Audio watchdog with soft and deep in-place rescue
-  - '"Wild mode": the runaway texture preserved as an opt-in, speakers still protected'
+  - Compressor into NaN proof ceiling
+  - Voice ring out bounds
+  - Effect and gain caps
+  - Soft and deep watchdog rescue
+  - Optional wild mode texture
 notable_risks:
-  - The audio path itself is not yet covered by the long-duration soak harness
+  - The soak harness skips the audio path
 followups:
   - Soak the audio path and watchdog specifically over 6 to 8 hours
 linked_incidents:

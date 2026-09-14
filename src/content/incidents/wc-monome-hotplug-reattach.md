@@ -1,40 +1,31 @@
 ---
-title: Monome went silent after an unplug and would not recover
+title: Monome silent after an unplug
 product: windchime
 date: 2026-05-24
 severity: sev2
 summary: >-
-  Replugging a controller mid-session left it detached, recoverable only by restarting the
-  bridge.
+  A replug left it detached until a bridge restart.
 impact: >-
-  In a live setting a bumped or reseated cable would drop the controller for the rest
-  of the show unless someone restarted the bridge, which is not acceptable for an
-  unattended piece.
+  A bumped cable would drop it for the whole show.
 detection: >-
-  Reproduced during hardware testing. After a device detach and reattach, the bridge
-  kept reporting the device lost and no input or LED output resumed.
+  Hardware testing: no input or LEDs after reattaching.
 response: >-
   Inspected the device-discovery handshake to see why a returning device was never
   re-adopted.
 root_cause: >-
-  The bridge armed its device-notification subscription once and deduplicated
-  advertisements, so after a detach it never re-armed the subscription or re-pointed a
-  returning device back at itself.
+  The bridge armed device notifications once and deduplicated advertisements, so returning
+  devices were never repointed.
 fix: >-
-  The bridge now re-arms its device-notification subscription after every attach and
-  detach and runs a short periodic re-poll as a backup, so a replugged device
-  re-attaches within a few seconds with no restart. Redundant device chatter is
-  suppressed by deduplicating only the attach event, not the re-pointing.
+  It rearms on every attach and detach, with a periodic repoll as backup: replugs reattach
+  within seconds.
 followup_actions:
-  - action: Make input matching tolerant of a foreign address prefix left behind by another monome app
+  - action: Tolerate another app's prefix
     status: done
-  - action: Recover the host-side audio input path after a USB re-enumeration
+  - action: Recover audio input after USB reenumeration
     status: done
 status: resolved
 blameless_note: >-
-  Hot-plug recovery is easy to miss when the first plug works cleanly. The fix makes
-  the bridge self-healing, which is the right posture for hardware that will get
-  bumped in a gallery.
+  First plugs always work; gallery hardware gets bumped.
 tags: [hardware, monome, reliability]
 ---
 

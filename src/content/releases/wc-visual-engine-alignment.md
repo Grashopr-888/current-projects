@@ -5,20 +5,18 @@ version_or_label: visuals-alignment
 date: 2026-06-23
 status: shipped
 summary: >-
-  A two-day port of the sibling visual engine: shared parameter vector, twin, ~30 new
-  families.
+  Two days of porting the sibling engine.
 customer_value: >-
-  The visuals stopped being a fixed sketch and became a corpus: dozens of scene
-  families driven by one parameter contract, playable by hand, by audio, or by
-  the auto-performer, with a map that shows a visitor where they are in the
-  corpus.
+  One parameter contract, played by hand, audio or autoperformer.
 included_work:
-  - Param-model bridge with a shared visual parameter vector and layered-target smoothing
-  - Device-adaptive on-screen twin of the connected monome hardware
-  - Corpus migration adding ~30 audio-reactive scene families (24 net new)
-  - Takeover auto-performer with Off / Auto / Listen modes
-  - Latent-space corpus map (UMAP / PCA / t-SNE) with sketch upload
-  - Responsive canvas and per-mode theming
+  - Param model bridge, shared parameter vector
+  - Layered target smoothing
+  - Device adaptive monome twin
+  - '~30 audio reactive families, 24 new'
+  - Off / Auto / Listen autoperformer
+  - UMAP / PCA / t-SNE map
+  - Sketch upload
+  - Responsive canvas, mode theming
 tags: [visuals, architecture, platform]
 ---
 

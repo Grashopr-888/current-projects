@@ -1,12 +1,10 @@
 ---
-title: Mirror the monome hardware with an on-screen digital twin
+title: An onscreen digital twin of the monome
 product: windchime
 date: 2026-05-22
 status: accepted
 context: >-
-  The visuals branch drives monome Grid and Arc LEDs over a hardware bridge.
-  Developing, testing, and operating the piece cannot depend on the physical
-  controllers always being attached and correctly seated.
+  Work cannot depend on attached, correctly seated Grid and Arc hardware.
 options_considered:
   - option: Hardware-only, with no on-screen representation
     tradeoffs: >-
@@ -21,17 +19,12 @@ options_considered:
       It has to render exactly what is sent to the device, but it enables
       hardware-free development, regression, and an operator view.
 decision: >-
-  The app renders a virtual monome whose LED state is byte-identical to the frame sent
-  to the physical device, and it records or replays input traces so gestures can be
-  exercised with no hardware present.
+  A virtual monome renders the byte identical LED frame sent to the device, and records or
+  replays input traces.
 rationale: >-
-  A faithful twin lets sketches be built and regression-tested with no device attached,
-  gives operators a live view of device state, and keeps on-screen and on-hardware
-  behaviour provably in sync rather than merely similar.
+  Development and regression without hardware, a live operator view, provable sync.
 consequences: >-
-  Visual and behaviour regression can run headless in CI, and the twin doubles as the
-  verification surface when hardware is unavailable. It later became part of the
-  onboarding tour, where a visitor watches the twins light up.
+  Headless CI regression; the twin stands in for hardware and joined the onboarding tour.
 tags: [hardware, monome, tooling]
 ---
 

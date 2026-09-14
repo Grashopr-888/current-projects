@@ -7,8 +7,7 @@ date: 2026-07-05
 target: Jul 2026
 theme: Reliability
 summary: >-
-  The full kiosk lifecycle plus the three-layer audio safety fix: the point Windchime could be
-  left running in a gallery.
+  Kiosk lifecycle plus three layer audio safety.
 linked_releases:
   - wc-install-mode-v1
   - wc-audio-safety

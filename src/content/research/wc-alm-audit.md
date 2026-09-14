@@ -1,18 +1,17 @@
 ---
-title: Auditing audio-language models as a controlled variable
+title: Auditing ALMs as a controlled variable
 product: windchime
 date: 2026-06-28
 source_type: experiment
 summary: >-
-  Hold the whole installation constant and vary only the audio-language model, then measure
-  how differently each configuration behaves over the same corpus and prompts.
+  Hold the installation constant, vary only the ALM, and compare behaviour.
 questions:
   - Does the choice of audio-language model change which stems a voice can reach?
   - Are some configurations more stable under paraphrase, or across languages?
   - How evenly does each model cover the catalogue versus concentrating on a few stems?
 insights:
-  - One embedding interface over a model-independent corpus makes "which model" a clean toggle
-  - Distributional metrics describe behaviour without needing ground-truth labels
+  - One interface makes the model a toggle
+  - Distributional metrics need no ground truth labels
 implications:
   - The same seam that enables the science also hardens the product (liveness probe, auto-revert)
   - Provenance matters. Every measurement must be attributable to the exact index epoch it ran against

@@ -1,5 +1,5 @@
 ---
-title: Hardware-endurance pass for the monome
+title: Monome hardware endurance pass
 product: windchime
 horizon: later
 status: planned
@@ -7,7 +7,6 @@ target: Later
 theme: Reliability
 confidence: low
 summary: >-
-  A full-day endurance test of the Grid and Arc: hot-plug recovery, marginal USB, self-healing
-  device grab. One arc encoder is a confirmed fault, to repair first.
+  Full day Grid and Arc test (hotplug, marginal USB), after the encoder repair.
 order: 6
 ---

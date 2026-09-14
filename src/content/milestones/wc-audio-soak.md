@@ -7,7 +7,6 @@ target: Next
 theme: Reliability
 confidence: medium
 summary: >-
-  Extend the synthetic-visitor soak to the live audio path and watchdog: real playback, stop-
-  and-replace between visitors, forced faults. The 6-hour run excluded audio.
+  Real playback, stop and replace and forced faults.
 order: 3
 ---

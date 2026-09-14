@@ -1,22 +1,20 @@
 ---
-title: Reference-art scene waves, and a repeatable method for building them
+title: Reference art scene waves and a repeatable method
 product: windchime
 version_or_label: originals-o5-o10
 date: 2026-07-31
 status: shipped
 summary: >-
-  Six further scene waves took the registry from 69 to 135 families, and produced a repeatable
-  playbook.
+  Built by playbook, not improvisation.
 customer_value: >-
-  A visual corpus deep enough that a visitor rarely sees the same world twice, built
-  by a process that can be repeated rather than improvised each time.
+  Visitors rarely see a world twice.
 included_work:
-  - Six waves of original scene families, registry 69 to 135
-  - An authoring playbook covering briefs, dispatch, gating, and browser verification
-  - Verified host-rendering facts promoted into the authoring guide
-  - Regression gates kept green across the whole registry
+  - 'Six waves: registry 69 to 135'
+  - 'Playbook: briefs, dispatch, gating, verification'
+  - Host rendering facts verified
+  - Registry wide regression gates green
 notable_risks:
-  - A large registry raises the cost of any per-family tuning pass
+  - Per family tuning now costs more
 followups:
   - Select and tune the subset that runs on the live rig
 tags: [visuals, three-js, method]

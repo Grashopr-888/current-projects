@@ -1,12 +1,10 @@
 ---
-title: Import retrieval as a library, not a network service
+title: Retrieval as an in process library, not a service
 product: windchime
 date: 2026-05-16
 status: accepted
 context: >-
-  The livecode server needs semantic retrieval on every utterance. Retrieval could be
-  its own networked microservice or an in-process library constructed inside the
-  server that already handles the request.
+  Every utterance needs retrieval, via a service or an in process library.
 options_considered:
   - option: A separate retrieval microservice over HTTP
     tradeoffs: >-
@@ -17,19 +15,13 @@ options_considered:
       One fewer moving part and no hop, but the engine must be thread-safe and stay
       read-only after it is built.
 decision: >-
-  Retrieval is installed as a package and constructed once in-process, shared
-  read-only across the server's worker threads. The exception is a small set of
-  dependency-conflicting heavy backends, which run as a minimal text-only sidecar
-  because they genuinely cannot share the process.
+  Built once in process, shared read only across worker threads; only dependency conflicting
+  heavy backends run in a minimal text only sidecar.
 rationale: >-
-  Keeping the default retrieval in-process removes a network hop and a supervised
-  process from the visitor hot path, which matters for both latency and reliability in
-  an unattended piece. Sidecars are reserved only for models that cannot coexist in
-  one environment.
+  No network hop or extra supervised process on the visitor hot path.
 consequences: >-
-  The shared engine had to be made safe to use across threads, which surfaced a real
-  bug during bring-up. In the common case the piece stays a single process, and only
-  the active heavy backend needs its sidecar running.
+  Thread safety work surfaced a real bringup bug; normally one process runs, plus the active
+  heavy backend's sidecar.
 tags: [architecture, retrieval, deployment]
 ---
 

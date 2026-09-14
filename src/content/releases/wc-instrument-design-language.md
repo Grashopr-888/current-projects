@@ -5,15 +5,14 @@ version_or_label: design-tokens-v1
 date: 2026-06-17
 status: shipped
 summary: >-
-  All four applications reskinned onto one shared set of warm-amber instrument design tokens.
+  Warm amber.
 customer_value: >-
-  A visitor moving between the visitor bar, the visuals, and a survey sees one
-  instrument, not four developer tools. Every later mode (demo, install) builds
-  on this shared identity.
+  One instrument, not four developer tools; later modes build on it.
 included_work:
-  - Shared design-token set applied across all four app surfaces
-  - The study app's survey theme matched to the instrument language
-  - Submodule remote migration and umbrella pin updates
+  - Tokens across all four surfaces
+  - Survey theme matched
+  - Submodule remote migration
+  - Umbrella pin updates
 tags: [design, platform]
 ---
 
