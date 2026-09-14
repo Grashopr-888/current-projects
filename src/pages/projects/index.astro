@@ -14,10 +14,10 @@ const projects = (await getCollection('projects')).sort(
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Projects</p>
-    <h1>Two products, one way of working.</h1>
+    <h1>Different products, one way of working.</h1>
     <p class="lead measure">
       Each project below is presented as evidence of the whole lifecycle: the problem, the
-      trade-offs, what shipped, what broke, and what it taught.
+      tradeoffs, what shipped, what broke, and what it taught.
     </p>
     <div class="pgrid">
       {projects.map((project) => <ProjectCard project={project} />)}

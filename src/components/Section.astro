@@ -9,10 +9,12 @@ interface Props {
   collapsible?: boolean;
   /** Optional item count shown in the collapsed header. */
   count?: number;
+  /** Optional header hint instead of a count, for example "3 min read". */
+  meta?: string;
 }
-const { index, label, title, id, class: klass, collapsible = false, count } = Astro.props;
+const { index, label, title, id, class: klass, collapsible = false, count, meta } = Astro.props;
 const countLabel =
-  count === undefined ? undefined : `${count} ${count === 1 ? 'entry' : 'entries'}`;
+  meta ?? (count === undefined ? undefined : `${count} ${count === 1 ? 'entry' : 'entries'}`);
 ---
 
 {

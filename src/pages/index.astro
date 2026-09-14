@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
+import Disclosure from '../components/Disclosure.astro';
 import { url } from '../lib/url';
 
 const projects = (await getCollection('projects')).sort(
@@ -12,56 +13,51 @@ const projects = (await getCollection('projects')).sort(
 const comparison = [
   {
     dimension: 'Type',
-    windchime: 'Voice-driven installation, runs unattended.',
+    windchime: 'Voice driven installation, runs unattended.',
     lichtspiel: 'Live instrument, played on stage.',
     hrnsxtn: 'Neural instruments on an embedded pedal.',
   },
   {
     dimension: 'Origin',
-    windchime: 'Grew out of Live Muse. Shown at Gray Area, SF.',
-    lichtspiel: 'Built at a Berklee hackathon in Boston, 2026.',
-    hrnsxtn: 'Two podiums at a MUTEK hackathon, Montréal 2026.',
+    windchime: 'Built on Live Muse; Gray Area, SF.',
+    lichtspiel: 'Berklee hackathon, Boston, 2026.',
+    hrnsxtn: 'Two podiums, MUTEK hackathon, Montréal 2026.',
   },
   {
     dimension: 'AI approach',
     windchime: 'Retrieval. Reflects recorded sound back.',
     lichtspiel: 'Generation. Authors new visual scenes.',
-    hrnsxtn: 'Distillation. Big model offline, tiny one live.',
+    hrnsxtn: 'Distillation: big model offline, tiny live.',
   },
   {
     dimension: 'AI at runtime',
-    windchime: 'In the loop, guarded and failover backed.',
-    lichtspiel: 'Never on the render path. Authoring time only.',
-    hrnsxtn: 'On a worker at 10 Hz. Never the audio thread.',
+    windchime: 'In the loop, guarded, with failover.',
+    lichtspiel: 'Authoring only, off the render path.',
+    hrnsxtn: '10 Hz worker, never the audio thread.',
   },
   {
     dimension: 'Coupling',
-    windchime: 'Self-contained: a browser and a monome.',
-    lichtspiel: 'Runs inside Ableton Live and Max for Live.',
-    hrnsxtn: 'Runs on the Elk Stomp, under its own engine.',
+    windchime: 'Standalone: a browser and a monome.',
+    lichtspiel: 'Inside Ableton Live and Max for Live.',
+    hrnsxtn: 'Elk Stomp, under its own engine.',
   },
   {
     dimension: 'Success looks like',
-    windchime: 'A full exhibition day with no crashes.',
+    windchime: 'A full exhibition day, no crashes.',
     lichtspiel: 'A clean three to four minute set.',
-    hrnsxtn: 'A set from the pedal, no laptop on stage.',
+    hrnsxtn: 'A pedal set, no laptop on stage.',
   },
 ];
 
 const inherits = [
-  "Lichtspiel reuses Windchime's p5.js instance-mode host loop and render pipeline.",
-  'The same serialosc monome bridge and LED event protocol drive both.',
-  'All three fence the model behind validation. None trusts raw model output.',
-  'Both map musical meaning to output, not just amplitude.',
-  'All three track decisions, releases, and incidents the same way.',
+  "Windchime's p5.js instance mode host loop and render pipeline.",
+  'The serialosc monome bridge and LED event protocol.',
+  'Musical meaning mapped to output, not just amplitude.',
+  'All three fence the model behind validation.',
+  'All three keep the same decision, release and incident records.',
 ];
 
-const loop = [
-  { step: 'Discover', line: 'Talk to the user, find the real problem, name what it is not.' },
-  { step: 'Decide', line: 'Weigh the options in the open. Write the trade-off down as a record.' },
-  { step: 'Ship', line: 'Small, validated releases. Done means running in the room.' },
-  { step: 'Learn', line: 'Soak it, let it break, write the postmortem, fold it back in.' },
-];
+const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
 ---
 
 <BaseLayout>
@@ -69,12 +65,7 @@ const loop = [
     <div class="container hero-inner">
       <h1 class="hero-title reveal" style="--d: 1">What I'm building right now.</h1>
       <p class="hero-sub reveal measure" style="--d: 2">
-        An in-depth, public view of current work where ML audio research meets interactive AV
-        prototyping: recorded music combined with custom-built interactive systems whose ML
-        components draw on state-of-the-art audio research.
-        <strong>Windchime</strong> is a voice-conditioned audiovisual installation.
-        <strong>Lichtspiel</strong> is a live AV assistant for Ableton.
-        <strong>HRNSXTN x RDMSXN</strong> is neural audio instruments on a screenless pedal.
+        ML audio research meeting interactive AV prototyping, documented in depth.
       </p>
       <div class="hero-cta reveal" style="--d: 3">
         <a class="btn btn-primary" href={url('/projects/windchime')}>Windchime</a>
@@ -91,7 +82,7 @@ const loop = [
       <h2>Three applications, shared discipline.</h2>
     </header>
     <div class="pgrid">
-      {projects.map((project) => <ProjectCard project={project} />)}
+      {projects.map((project) => <ProjectCard project={project} compact />)}
     </div>
   </section>
 
@@ -99,18 +90,14 @@ const loop = [
     <header class="block-head">
       <p class="label"><span class="idx">02</span> · How I work</p>
       <h2>The loop behind all three.</h2>
-      <p class="block-lead measure">
-        Every project here came out of the same four-step loop. Each step produces an artifact you
-        can read on this site.
-      </p>
+      <p class="block-lead measure">Each step leaves an artifact you can read on this site.</p>
     </header>
     <div class="loop">
       {
-        loop.map((l, i) => (
-          <a class="loop-step" href={url('/how-i-work')}>
+        loop.map((step, i) => (
+          <a class="loop-step plain" href={url('/how-i-work')}>
             <span class="loop-idx">{String(i + 1).padStart(2, '0')}</span>
-            <span class="loop-step-name">{l.step}</span>
-            <span class="loop-line">{l.line}</span>
+            <span class="loop-step-name">{step}</span>
           </a>
         ))
       }
@@ -125,19 +112,19 @@ const loop = [
       <p class="label"><span class="idx">03</span> · How they relate</p>
       <h2>Shared lineage, different problems.</h2>
       <p class="block-lead measure">
-        Lichtspiel started from Windchime's visual runtime. It reuses the same p5.js host loop, the
-        serialosc monome bridge, and the LED event protocol, then points them at live performance in
-        Ableton instead of an unattended installation. HRNSXTN carries the same discipline onto
-        embedded hardware: the loop and its records, pointed at a pedal.
+        Lichtspiel started from Windchime's visual runtime; HRNSXTN carries the same discipline onto
+        embedded hardware.
       </p>
     </header>
-    <ComparisonTable rows={comparison} />
-    <div class="overlaps">
-      <p class="label"><span class="idx">◈</span> What Lichtspiel inherits</p>
-      <ul class="overlap-list">
-        {inherits.map((o) => <li>{o}</li>)}
-      </ul>
-    </div>
+    <Disclosure label="Compare them side by side" meta="6 dimensions">
+      <ComparisonTable rows={comparison} />
+      <div class="overlaps">
+        <p class="label"><span class="idx">◈</span> What Lichtspiel inherits</p>
+        <ul class="overlap-list">
+          {inherits.map((o) => <li>{o}</li>)}
+        </ul>
+      </div>
+    </Disclosure>
   </section>
 </BaseLayout>
 
@@ -253,11 +240,6 @@ const loop = [
     font-size: var(--step-1);
     font-weight: 520;
     color: var(--ink);
-  }
-  .loop-line {
-    font-size: var(--step--1);
-    color: var(--muted);
-    line-height: 1.5;
   }
 
   /* ---- blocks ---- */

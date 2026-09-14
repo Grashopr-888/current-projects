@@ -12,6 +12,15 @@ export function fmtDate(d: Date): string {
   }).format(d);
 }
 
+/** "Aug 5": for rows whose year is already clear from the page. */
+export function fmtDay(d: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(d);
+}
+
 export function fmtMonth(d: Date): string {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',

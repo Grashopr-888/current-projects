@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import Badge from './Badge.astro';
 import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
+import { recordAnchor } from '../lib/content';
 
 interface Props {
   milestones: CollectionEntry<'milestones'>[];
@@ -32,7 +33,11 @@ const inColumn = (key: string) =>
         </header>
         <div class="kb-cards">
           {inColumn(c.key).map((m) => (
-            <article class="kb-card" data-accent={showProduct ? m.data.product : undefined}>
+            <article
+              class="kb-card"
+              id={recordAnchor('milestone', m.id)}
+              data-accent={showProduct ? m.data.product : undefined}
+            >
               {m.data.theme && <span class="kb-theme">{m.data.theme}</span>}
               <p class="kb-card-title">{m.data.title}</p>
               <p class="kb-card-summary">{m.data.summary}</p>
@@ -106,6 +111,10 @@ const inColumn = (key: string) =>
     border-radius: var(--radius);
     background: var(--surface);
     transition: border-color 0.15s ease;
+  }
+  .kb-card:target {
+    background: color-mix(in oklab, var(--accent, var(--brand)) 10%, var(--surface));
+    border-color: var(--accent, var(--brand));
   }
   .kb-card:hover {
     border-color: color-mix(in oklab, var(--accent, var(--brand)) 40%, var(--hairline));

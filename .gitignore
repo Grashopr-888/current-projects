@@ -32,3 +32,4 @@ dev.log
 # private planning documents and local agent/session config — never publish
 Product Lifecycle Showcase Spec for Lichtspiel and Windchime.md
 .claude/
+handoff/

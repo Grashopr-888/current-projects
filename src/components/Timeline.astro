@@ -1,7 +1,8 @@
 ---
-import { fmtDate, isoDate } from '../lib/format';
-import { url } from '../lib/url';
+import { fmtDate, fmtDay, isoDate } from '../lib/format';
 import type { TimelineEvent } from '../lib/content';
+import Badge from './Badge.astro';
+import RecordBody from './RecordBody.astro';
 
 interface Props {
   events: TimelineEvent[];
@@ -13,17 +14,43 @@ const { events } = Astro.props;
   {
     events.map((e) => (
       <li class="tl-item">
-        <time class="tl-date" datetime={isoDate(e.date)}>
-          {fmtDate(e.date)}
+        <time class="tl-date" datetime={isoDate(e.date)} title={fmtDate(e.date)}>
+          {fmtDay(e.date)}
         </time>
-        <div class="tl-card" data-tone={e.tone ?? 'neutral'}>
-          <span class="tl-kindrow">
-            <span class="tl-node" aria-hidden="true" />
-            <span class="tl-kind">{e.kind}</span>
-          </span>
-          <span class="tl-title">{e.href ? <a href={url(e.href)}>{e.title}</a> : e.title}</span>
-          {e.summary && <p class="tl-summary">{e.summary}</p>}
-        </div>
+        {e.type === 'milestone' ? (
+          <div class="tl-card" data-tone={e.tone ?? 'neutral'}>
+            <span class="tl-kindrow">
+              <span class="tl-node" aria-hidden="true" />
+              <span class="tl-kind">{e.kind}</span>
+            </span>{' '}
+            <a class="tl-title tl-link plain" href={`#${e.anchor}`}>
+              {e.title}
+            </a>
+          </div>
+        ) : (
+          <details class="tl-card tl-rec" id={e.anchor} data-tone={e.tone ?? 'neutral'}>
+            <summary>
+              <span class="tl-head">
+                <span class="tl-kindrow">
+                  <span class="tl-node" aria-hidden="true" />
+                  <span class="tl-kind">{e.kind}</span>{' '}
+                  {e.status && (
+                    <Badge tone={e.statusTone ?? 'neutral'} dot={false}>
+                      {e.status}
+                    </Badge>
+                  )}
+                </span>{' '}
+                <span class="tl-title">{e.title}</span>
+              </span>
+              <span class="tl-chevron" aria-hidden="true">
+                +
+              </span>
+            </summary>
+            <div class="tl-body">
+              <RecordBody {...e} />
+            </div>
+          </details>
+        )}
       </li>
     ))
   }
@@ -62,6 +89,7 @@ const { events } = Astro.props;
     border-radius: var(--radius-lg);
     background: var(--surface);
     padding: var(--sp-4);
+    min-width: 0;
   }
   .tl-card[data-tone='positive'] {
     --tone-c: var(--t-positive);
@@ -76,9 +104,68 @@ const { events } = Astro.props;
     --tone-c: var(--t-info);
   }
 
+  /* Expandable record rows */
+  .tl-rec {
+    padding: 0;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+  .tl-rec:hover {
+    border-color: color-mix(in oklab, var(--accent, var(--brand)) 50%, var(--hairline));
+    border-left-color: var(--tone-c);
+  }
+  .tl-rec > summary {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-3);
+    padding: var(--sp-4);
+    cursor: pointer;
+    list-style: none;
+  }
+  .tl-rec > summary::-webkit-details-marker {
+    display: none;
+  }
+  .tl-rec[open] > summary {
+    border-bottom: var(--hair) solid var(--hairline);
+  }
+  .tl-head {
+    flex: 1;
+    min-width: 0;
+  }
+  .tl-chevron {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1.2;
+    color: var(--accent, var(--brand));
+    transition: transform 0.2s ease;
+  }
+  .tl-rec[open] .tl-chevron {
+    transform: rotate(45deg);
+  }
+  .tl-body {
+    padding: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+  .tl-body :global(ul:not(.rb-chips)) {
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .tl-body :global(li)::marker {
+    color: var(--accent, var(--brand));
+  }
+
   .tl-kindrow {
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.45rem;
   }
   .tl-node {
@@ -105,12 +192,8 @@ const { events } = Astro.props;
     line-height: 1.2;
     color: var(--ink);
   }
-  .tl-summary {
-    margin-top: 0.35rem;
-    color: var(--muted);
-    font-size: var(--step--1);
-    line-height: 1.55;
-    max-width: 62ch;
+  .tl-link:hover {
+    color: var(--accent, var(--brand));
   }
 
   @media (max-width: 560px) {

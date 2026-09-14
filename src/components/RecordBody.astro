@@ -1,0 +1,133 @@
+---
+import type { TimelineRecord } from '../lib/content';
+
+/** The full body of a release, incident or research record. Rendered once, inside the
+ *  project page Timeline; the aggregate pages list linked rows instead. */
+type Props = Exclude<TimelineRecord, { type: 'milestone' }>;
+const rec = Astro.props;
+---
+
+<div class="rb">
+  {
+    rec.type === 'release' && (
+      <>
+        <p>{rec.entry.data.summary}</p>
+        <p>
+          <strong>Customer value.</strong> {rec.entry.data.customer_value}
+        </p>
+        {rec.entry.data.included_work.length > 0 && (
+          <>
+            <ul class="rb-chips">
+              {rec.entry.data.included_work.map((w) => (
+                <li class="chip">{w}</li>
+              ))}
+            </ul>
+          </>
+        )}
+        {rec.entry.data.notable_risks.length > 0 && (
+          <>
+            <p class="rb-sub">Risks</p>
+            <ul>
+              {rec.entry.data.notable_risks.map((w) => (
+                <li>{w}</li>
+              ))}
+            </ul>
+          </>
+        )}
+      </>
+    )
+  }
+
+  {
+    rec.type === 'incident' && (
+      <>
+        <p>{rec.entry.data.summary}</p>
+        <p>
+          <strong>Impact.</strong> {rec.entry.data.impact}
+        </p>
+        <p>
+          <strong>Detection.</strong> {rec.entry.data.detection}
+        </p>
+        <p>
+          <strong>Root cause.</strong> {rec.entry.data.root_cause}
+        </p>
+        <p>
+          <strong>Fix.</strong> {rec.entry.data.fix}
+        </p>
+        {rec.entry.data.followup_actions.length > 0 && (
+          <>
+            <p class="rb-sub">Followups</p>
+            <ul>
+              {rec.entry.data.followup_actions.map((a) => (
+                <li>
+                  {a.action} <em>({a.status})</em>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        {rec.entry.data.blameless_note && (
+          <p class="rb-note">
+            <strong>Blameless note.</strong> {rec.entry.data.blameless_note}
+          </p>
+        )}
+      </>
+    )
+  }
+
+  {
+    rec.type === 'research' && (
+      <>
+        <p>{rec.entry.data.summary}</p>
+        {rec.entry.data.insights.length > 0 && (
+          <>
+            <p class="rb-sub">Insights</p>
+            <ul>
+              {rec.entry.data.insights.map((i) => (
+                <li>{i}</li>
+              ))}
+            </ul>
+          </>
+        )}
+        {rec.entry.data.redaction_status !== 'clean' && (
+          <p class="rb-note">
+            <strong>Published as process only.</strong> Results stay private while under review.
+          </p>
+        )}
+      </>
+    )
+  }
+</div>
+
+<style>
+  /* A root element, not top-level expressions: Astro drops the space between a </strong>
+     label and its value in top-level expressions. display: contents keeps the flex gap. */
+  .rb {
+    display: contents;
+  }
+  .rb-sub {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+  .rb-chips {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  /* Included-work items can run longer than a tag; let them wrap rather than overflow. */
+  .rb-chips .chip {
+    white-space: normal;
+    line-height: 1.4;
+  }
+  .rb-note {
+    padding: var(--sp-3);
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    color: var(--muted);
+  }
+</style>

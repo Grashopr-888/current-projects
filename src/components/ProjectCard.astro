@@ -8,8 +8,10 @@ import { existsSync } from 'node:fs';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  /** Skim card: kind, title, status, stack and timeframe, without the summary paragraph. */
+  compact?: boolean;
 }
-const { project } = Astro.props;
+const { project, compact = false } = Astro.props;
 const d = project.data;
 const slug = project.id;
 const meta = PROJECT_META[slug as keyof typeof PROJECT_META];
@@ -24,7 +26,7 @@ const cardArt = has(meta?.art) ? meta.art : has(asideArt) ? asideArt : undefined
 const cardAlt = has(meta?.art) ? meta.artAlt : asideArtAlt;
 ---
 
-<a class="pcard card" href={url(`/projects/${slug}`)} data-accent={slug}>
+<a class="pcard card plain" href={url(`/projects/${slug}`)} data-accent={slug}>
   <span class="pcard-spine" aria-hidden="true"></span>
   {
     cardArt && (
@@ -41,7 +43,7 @@ const cardAlt = has(meta?.art) ? meta.artAlt : asideArtAlt;
     {meta?.logo && <img class="pcard-logo" src={url(meta.logo)} alt="" aria-hidden="true" />}
     <h3 class="pcard-title">{d.title}</h3>
   </div>
-  <p class="pcard-summary">{d.summary}</p>
+  {!compact && <p class="pcard-summary">{d.summary}</p>}
   {
     d.languages.length > 0 && (
       <div class="pcard-langs">

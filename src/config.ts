@@ -39,7 +39,7 @@ export const NAV: ReadonlyArray<{
 export const PROJECT_META = {
   windchime: {
     label: 'Windchime',
-    kind: 'Voice-conditioned audiovisual installation',
+    kind: 'Voice conditioned audiovisual installation',
     accent: 'var(--wc)',
     logo: '/img/windchime-mark.svg',
     art: '/img/windchime-hero.jpg',
@@ -68,6 +68,9 @@ export const PROJECT_META = {
     kind: 'Neural audio instruments for a screenless pedal',
     accent: 'var(--hsx)',
     logo: '/img/hrnsxtn-mark.svg',
+    // Project demo. Privacy-enhanced (nocookie) embed of youtu.be/gLobf3o0Qg0.
+    demoVideoId: 'gLobf3o0Qg0',
+    demoVideoTitle: 'HRNSXTN x RDMSXN demo',
     art: '/img/hrnsxtn-hero.jpg',
     artAlt:
       'The Elk Stomp development board on a dark desk beside an iMac running the desktop devkit',
@@ -75,7 +78,7 @@ export const PROJECT_META = {
     partners: [
       {
         img: '/img/logo-mutek.svg',
-        alt: 'MUTEK — international festival of digital creativity and electronic music',
+        alt: 'MUTEK, international festival of digital creativity and electronic music',
         dark: true,
       },
       { img: '/img/logo-elk.png', alt: 'Elk Audio' },

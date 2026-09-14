@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FlowDiagram from '../components/FlowDiagram.astro';
 import CommitGrid from '../components/CommitGrid.astro';
+import Disclosure from '../components/Disclosure.astro';
 import { url } from '../lib/url';
 import { fmtMonth } from '../lib/format';
 import { gitSignals } from '../lib/signals';
@@ -21,7 +22,7 @@ const loop: Array<{ step: string; line: string; artifacts: ArtifactLink[] }> = [
   },
   {
     step: 'Decide',
-    line: 'Weigh options in the open and write the trade-off down, so the reasoning survives the decision.',
+    line: 'Weigh options in the open and write the tradeoff down, so the reasoning survives the decision.',
     artifacts: [
       { label: 'Windchime ADRs', href: '/projects/windchime#decisions' },
       { label: 'Lichtspiel ADRs', href: '/projects/lichtspiel#decisions' },
@@ -48,7 +49,7 @@ const pipeline = [
   },
   {
     stage: 'Frame',
-    what: 'A one-page PRD-lite: problem, goal, non-goals, and a success metric stated up front.',
+    what: 'A one page PRD lite: problem, goal, what is out of scope, and a success metric stated up front.',
     example: 'Install mode framed as "survives a full day with no operator."',
   },
   {
@@ -59,30 +60,30 @@ const pipeline = [
   {
     stage: 'Prototype',
     what: 'The smallest real version that can prove the idea wrong.',
-    example: 'Voice-to-stem retrieval running end to end before any polish.',
+    example: 'Voice to stem retrieval running end to end before any polish.',
   },
   {
     stage: 'Gate',
     what: 'Nothing ships on trust: typed schemas, validation chains, redaction checks, soak runs.',
-    example: 'A 6-hour, 879-visitor synthetic soak before the gallery gets it.',
+    example: 'A 6 hour, 879 visitor synthetic soak before the gallery gets it.',
   },
   {
     stage: 'Ship & learn',
     what: 'Releases framed by customer value; failures become blameless postmortems that feed the roadmap.',
-    example: 'The audio-runaway postmortem became a three-layer safety fix.',
+    example: 'The audio runaway postmortem became a three layer safety fix.',
   },
 ];
 
 const templates = [
   {
-    name: 'PRD-lite',
-    purpose: 'One page before building anything non-trivial.',
-    body: `# <feature>: PRD-lite
+    name: 'PRD lite',
+    purpose: 'One page before building anything nontrivial.',
+    body: `# <feature>: PRD lite
 
 **Problem**: what's broken, for whom, and why now.
 **Users / context**: who hits this, how often, in what situation.
 **Goal**: the one outcome that means success.
-**Non-goals**: what we are deliberately NOT doing.
+**Out of scope**: what we are deliberately NOT doing.
 **Approach**: the shape of the solution (a level up from implementation).
 **Success metric**: how we'll know, stated before we build.
 **Risks / unknowns**: what could make this wrong.
@@ -95,7 +96,7 @@ const templates = [
 
 **Status**: proposed | accepted | superseded
 **Context**: the forces in play; what makes this a real choice.
-**Options considered**: each with its honest trade-offs.
+**Options considered**: each with its honest tradeoffs.
 **Decision**: what we chose.
 **Rationale**: why this beat the alternatives.
 **Consequences**: what this makes easy, and what it costs.`,
@@ -113,7 +114,7 @@ const templates = [
   },
   {
     name: 'Release checklist',
-    purpose: 'Pre-flight before anything ships.',
+    purpose: 'Preflight before anything ships.',
     body: `# Release: <label>
 
 - [ ] Tests + typecheck green
@@ -145,7 +146,7 @@ const templates = [
 **Response**: what we did, in order.
 **Root cause**: the real mechanism, not the symptom.
 **Fix**: what changed, and how we verified it.
-**Follow-up actions**: owner + status for each.
+**Followup actions**: owner + status for each.
 **Blameless note**: the systemic lesson, not the culprit.`,
   },
 ];
@@ -154,7 +155,7 @@ const templates = [
 const agentPractices = [
   {
     name: 'Context before code',
-    body: 'Every repo carries a context document an agent must read first: architecture, invariants, privacy hard-stops, known hazards.',
+    body: 'Every repo carries a context document an agent must read first: architecture, invariants, privacy hard stops, known hazards.',
   },
   {
     name: 'Persistent memory, curated',
@@ -165,7 +166,7 @@ const agentPractices = [
     body: 'Each session owns one scoped mission and ends with a handoff note, because context windows are a budget.',
   },
   {
-    name: 'Subagents for fan-out',
+    name: 'Subagents for fanout',
     body: 'Research is delegated to parallel agents with narrow briefs and the privacy rules restated in every prompt.',
   },
   {
@@ -173,7 +174,7 @@ const agentPractices = [
     body: 'Typecheck, build, and a redaction scan define finished; the agent claiming success does not.',
   },
   {
-    name: 'Human-gated commits',
+    name: 'Human gated commits',
     body: 'Nothing lands without the owner directing it, because the history itself is a product artifact.',
   },
   {
@@ -182,18 +183,18 @@ const agentPractices = [
   },
   {
     name: 'Review loops on agent code',
-    body: 'Agent-written diffs get adversarial review before landing, the same as any teammate would.',
+    body: 'Agent written diffs get adversarial review before landing, the same as any teammate would.',
   },
 ];
 
 const practices = [
-  'A PRD-lite with a success metric exists before anything non-trivial gets built.',
+  'A PRD lite with a success metric exists before anything nontrivial gets built.',
   'Judgment calls are captured as decision records at the moment they are made.',
-  'Typed content and validated schemas everywhere. A broken cross-link fails the build.',
-  'A redaction gate (redact:check) runs before anything private-derived ships.',
-  'Releases are written as customer value, not diffs, against a pre-flight checklist.',
-  'Incidents get blameless postmortems with tracked follow-up actions.',
-  'CI installs, type-checks, and builds every change; deploys are automated.',
+  'Typed content and validated schemas everywhere. A broken crosslink fails the build.',
+  'A redaction gate (redact:check) runs before anything privately derived ships.',
+  'Releases are written as customer value, not diffs, against a preflight checklist.',
+  'Incidents get blameless postmortems with tracked followup actions.',
+  'CI installs, typechecks, and builds every change; deploys are automated.',
   'Issue/PR templates and CODEOWNERS keep the repo itself honest.',
 ];
 ---
@@ -206,8 +207,8 @@ const practices = [
     <p class="label"><span class="idx">§</span> How I work</p>
     <h1>How I build, start to finish.</h1>
     <p class="lead measure">
-      Both products came out of the same loop and the same templates. This page is the operating
-      system itself: the cadence behind the work, and the artifacts you can lift and use.
+      Windchime and Lichtspiel came out of the same loop and the same templates. This page is the
+      operating system itself: the cadence behind the work, and the artifacts you can lift and use.
     </p>
 
     <div class="loop">
@@ -238,7 +239,7 @@ const practices = [
       <FlowDiagram
         stages={[
           { label: 'Signal', note: 'observed, not invented' },
-          { label: 'Frame', note: 'PRD-lite + metric' },
+          { label: 'Frame', note: 'PRD lite + metric' },
           { label: 'Decide', note: 'ADR' },
           { label: 'Prototype', note: 'smallest real thing' },
         ]}
@@ -249,18 +250,20 @@ const practices = [
         ]}
         caption="Discovery converges to one decision, then fans out into gated delivery and learning."
       />
-      <div class="stages">
-        {
-          pipeline.map((p, i) => (
-            <div class="stage">
-              <span class="stage-idx">{String(i + 1).padStart(2, '0')}</span>
-              <h4 class="stage-name">{p.stage}</h4>
-              <p class="stage-what">{p.what}</p>
-              <p class="stage-ex">{p.example}</p>
-            </div>
-          ))
-        }
-      </div>
+      <Disclosure label="Each stage, with a real example" meta={String(pipeline.length)}>
+        <div class="stages">
+          {
+            pipeline.map((p, i) => (
+              <div class="stage">
+                <span class="stage-idx">{String(i + 1).padStart(2, '0')}</span>
+                <h4 class="stage-name">{p.stage}</h4>
+                <p class="stage-what">{p.what}</p>
+                <p class="stage-ex">{p.example}</p>
+              </div>
+            ))
+          }
+        </div>
+      </Disclosure>
     </div>
 
     {
@@ -271,7 +274,7 @@ const practices = [
               <span class="idx">◆</span> Shipping cadence
             </p>
             <p class="signal-note">
-              Ingested from {sig.repoCount} private repos: day-level counts plus redacted, truncated
+              Ingested from {sig.repoCount} private repos: day level counts plus redacted, truncated
               subject lines, everything passed through the redaction gate. See the{' '}
               <a href={url('/about')}>note on the source code</a>.
             </p>
@@ -362,26 +365,30 @@ const practices = [
     <div class="agents">
       <p class="label"><span class="idx">⌘</span> Building with agents</p>
       <p class="agents-lead measure">
-        Both projects and this site are built with agentic coding tools in the loop. The practices
-        below are what make that fast without making it careless.
+        Every project here, and this site, is built with agentic coding tools in the loop. The
+        practices below are what make that fast without making it careless.
       </p>
-      <div class="agrid">
-        {
-          agentPractices.map((p) => (
-            <div class="acard">
-              <h4 class="acard-name">{p.name}</h4>
-              <p class="acard-body">{p.body}</p>
-            </div>
-          ))
-        }
-      </div>
+      <Disclosure label="The agent practices" meta={String(agentPractices.length)}>
+        <div class="agrid">
+          {
+            agentPractices.map((p) => (
+              <div class="acard">
+                <h4 class="acard-name">{p.name}</h4>
+                <p class="acard-body">{p.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </Disclosure>
     </div>
 
     <div class="disc">
       <p class="label"><span class="idx">↳</span> Product &amp; engineering practices</p>
-      <ul class="disc-list">
-        {practices.map((p) => <li>{p}</li>)}
-      </ul>
+      <Disclosure label="The practices" meta={String(practices.length)}>
+        <ul class="disc-list">
+          {practices.map((p) => <li>{p}</li>)}
+        </ul>
+      </Disclosure>
     </div>
   </section>
 </BaseLayout>

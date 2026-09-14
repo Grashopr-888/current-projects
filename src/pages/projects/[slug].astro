@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
+import Disclosure from '../../components/Disclosure.astro';
 import SpecSheet from '../../components/SpecSheet.astro';
 import Badge from '../../components/Badge.astro';
 import Timeline from '../../components/Timeline.astro';
@@ -9,7 +10,7 @@ import { projectBundle, toTimeline, type Product } from '../../lib/content';
 import { STATUS_TONE, label as lbl } from '../../lib/taxonomy';
 import { PROJECT_META } from '../../config';
 import { url } from '../../lib/url';
-import { fmtDate } from '../../lib/format';
+import { fmtDay, readingTime } from '../../lib/format';
 import FlowDiagram from '../../components/FlowDiagram.astro';
 import Kanban from '../../components/Kanban.astro';
 import MonomeTwin from '../../components/MonomeTwin.astro';
@@ -21,16 +22,16 @@ const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: st
   windchime: {
     stages: [
       { label: 'Voice', note: 'microphone' },
-      { label: 'ASR', note: 'on-device' },
+      { label: 'ASR', note: 'on device' },
       { label: 'Retrieval', note: 'ALM + FAISS' },
       { label: 'Guarded planner', note: 'fills a schema' },
     ],
     outputs: [
-      { label: 'Live-coded audio', note: 'Strudel' },
+      { label: 'Live coded audio', note: 'Strudel' },
       { label: 'Generative visuals', note: 'p5 / Three.js' },
       { label: 'monome LEDs' },
     ],
-    caption: 'One direction of flow, from a spoken phrase to sound, light, and hardware.',
+    caption: 'One direction of flow: a spoken phrase becomes sound, light and hardware state.',
   },
   lichtspiel: {
     stages: [
@@ -65,20 +66,78 @@ const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: st
 /** Caption for the stylized monome twin, per project. */
 const HARDWARE: Record<Product, string> = {
   windchime:
-    'A monome Grid and Arc sit with the display, reprogrammed per scene over serialosc and ' +
-    'controlling visual parameters only (no tactile path reaches the audio). The interface ' +
-    'mirrors every LED in an on-screen digital twin with a plain-language legend, so the ' +
-    'mapping is legible before a visitor touches it.',
+    'A monome Grid and Arc, remapped per scene over serialosc, steer visuals only; an ' +
+    'onscreen twin mirrors every LED.',
   lichtspiel:
-    'The monome is the instrument: a capability-adaptive mapping folds each sketch onto ' +
+    'The monome is the instrument: a capability adaptive mapping folds each sketch onto ' +
     'whatever hardware is plugged in, from a Grid 64 with an Arc 2 up to a Grid 128 with an ' +
-    'Arc 4. The same on-screen twin keeps the piece fully playable with no hardware at all, ' +
+    'Arc 4. The same onscreen twin keeps the piece fully playable with no hardware at all, ' +
     'which is also how it survives an unreliable stage.',
   hrnsxtn:
     'The Elk Stomp development board is the whole interface: eight pots, four endless ' +
     'encoders, four footswitches and a small OLED that the instrument deliberately ignores. ' +
     'Five shaping controls, grain size, wet and randomness map straight onto the pots, so ' +
     'the corpus is played by feel, the way the challenge asked.',
+};
+
+/** Image sections shown in the skim layer, so screenshots are never hidden in the story. */
+type Figure = {
+  src: string;
+  alt: string;
+  caption: string;
+  link?: { label: string; href: string; after: string };
+};
+type Gallery = { label: string; title: string; lead?: string; figures: Figure[] };
+const GALLERIES: Partial<Record<Product, { program?: Gallery; prototype?: Gallery }>> = {
+  hrnsxtn: {
+    program: {
+      label: 'Recognition',
+      title: 'On the official program',
+      figures: [
+        {
+          src: '/img/hs-showcase-title.png',
+          alt: 'MUTEK Forum page header for the Music Hackspace x MUTEK Hackathon Winners Showcase',
+          caption: "The festival's official ",
+          link: {
+            label: 'Winners Showcase listing',
+            href: 'https://forum.mutek.org/en/shows/2026/music-hackspace-x-mutek-hackathon-winners-showcase',
+            after: ': MUTEK Forum, August 28, Grands Ballets.',
+          },
+        },
+        {
+          src: '/img/hs-showcase-winners.png',
+          alt: "The winners list from MUTEK's page, naming HRNSXTN x RDMSXN for the Elk Audio challenge: Dennison Blackett, Radu-Alex Ceban, Jazz Calls Home, and Trent Eriksen",
+          caption:
+            'The winners presenting on stage, as published by MUTEK: HRNSXTN x RDMSXN for the Elk Audio challenge.',
+        },
+      ],
+    },
+    prototype: {
+      label: 'The prototype',
+      title: 'Three faces, on screen',
+      lead: 'Built and gated on a laptop the week before the hackathon, before it met the pedal.',
+      figures: [
+        {
+          src: '/img/hs-ui-studio.jpg',
+          alt: "The granular instrument's studio view: two voice panels with shaping controls flanking a 3D latent map of 16,945 grains from 38 files",
+          caption:
+            "Studio: two voices over one map of 16,945 grains from 38 files. Five shaping controls, grain size, blend and gain match sit where the pedal's eight pots now read them.",
+        },
+        {
+          src: '/img/hs-ui-stage.jpg',
+          alt: "The stage view: a dark performance theme where both voices' cursors traverse the latent point cloud",
+          caption:
+            'Stage: the performance theme. Cursors A and B are the two voices moving through the corpus live; everything else recedes.',
+        },
+        {
+          src: '/img/hs-ui-setup.jpg',
+          alt: 'The setup panel: an Ableton routing checklist, block and buffer status, saved presets, and the corpus builder for sound worlds',
+          caption:
+            'Setup: routing checklist, block and buffer health, presets, and the corpus builder that turns a folder of recordings into a sound world.',
+        },
+      ],
+    },
+  },
 };
 
 const CREDITS: Record<Product, { context: string; tools: string[] }> = {
@@ -92,7 +151,7 @@ const CREDITS: Record<Product, { context: string; tools: string[] }> = {
   },
   hrnsxtn: {
     context:
-      'Music Hackspace × MUTEK, Montréal 2026 — 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab',
+      'Music Hackspace × MUTEK, Montréal 2026: 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab',
     tools: ['Elk Stomp', 'JUCE', 'PyTorch', 'RTNeural'],
   },
 };
@@ -108,6 +167,7 @@ const slug = project.id as Product;
 const meta = PROJECT_META[slug];
 const diagram = DIAGRAMS[slug];
 const credit = CREDITS[slug];
+const gallery = GALLERIES[slug] ?? {};
 const demoVideoId = 'demoVideoId' in meta ? meta.demoVideoId : undefined;
 const demoVideoTitle = 'demoVideoTitle' in meta ? meta.demoVideoTitle : 'Project demo';
 
@@ -221,6 +281,7 @@ const idx = () => String(++n).padStart(2, '0');
         )
       }
 
+      {/* Skim layer: visible by default. */}
       <Section index={idx()} label="At a glance" id="glance">
         <div class="glance">
           <SpecSheet rows={specRows} />
@@ -233,17 +294,50 @@ const idx = () => String(++n).padStart(2, '0');
         </div>
         {
           d.constraints.length > 0 && (
-            <div class="constraints">
-              <span class="label">Constraints that shaped it</span>
+            <Disclosure label="Constraints that shaped it" meta={String(d.constraints.length)}>
               <ul class="constraint-list">
                 {d.constraints.map((c) => (
                   <li>{c}</li>
                 ))}
               </ul>
-            </div>
+            </Disclosure>
           )
         }
       </Section>
+
+      {
+        d.outcomes.length > 0 && (
+          <Section index={idx()} label="Outcomes" title="What changed">
+            <ul class="outcomes">
+              {d.outcomes.map((o) => (
+                <li>
+                  <span class="outcome-mark" aria-hidden="true" />
+                  {o}
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )
+      }
+
+      {
+        gallery.program && (
+          <Section index={idx()} label={gallery.program.label} title={gallery.program.title}>
+            <div class="gallery gallery-program">
+              {gallery.program.figures.map((f) => (
+                <figure>
+                  <img src={url(f.src)} alt={f.alt} loading="lazy" />
+                  <figcaption>
+                    {f.caption}
+                    {f.link && <a href={f.link.href}>{f.link.label}</a>}
+                    {f.link?.after}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </Section>
+        )
+      }
 
       {
         diagram && (
@@ -277,6 +371,22 @@ const idx = () => String(++n).padStart(2, '0');
       }
 
       {
+        gallery.prototype && (
+          <Section index={idx()} label={gallery.prototype.label} title={gallery.prototype.title}>
+            {gallery.prototype.lead && <p class="gallery-lead">{gallery.prototype.lead}</p>}
+            <div class="gallery">
+              {gallery.prototype.figures.map((f) => (
+                <figure>
+                  <img src={url(f.src)} alt={f.alt} loading="lazy" />
+                  <figcaption>{f.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </Section>
+        )
+      }
+
+      {
         slug === 'windchime' && (
           <Section index={idx()} label="Under the hood" title="Retrieval in embedding space">
             <LatentMap />
@@ -284,17 +394,32 @@ const idx = () => String(++n).padStart(2, '0');
         )
       }
 
+      {/* Detail layer: one click away. */}
+      <Section
+        index={idx()}
+        label="The story"
+        title="How it came together"
+        id="story"
+        collapsible
+        meta={readingTime(project.body)}
+      >
+        <div class="prose"><Content /></div>
+      </Section>
+
       {
         bundle.milestones.length > 0 && (
-          <Section index={idx()} label="Roadmap" title="Now, next, later" id="roadmap">
+          <Section
+            index={idx()}
+            label="Roadmap"
+            title="Now, next, later"
+            id="roadmap"
+            collapsible
+            count={bundle.milestones.length}
+          >
             <Kanban milestones={bundle.milestones} />
           </Section>
         )
       }
-
-      <Section index={idx()} label="The story">
-        <div class="prose"><Content /></div>
-      </Section>
 
       {
         timeline.length > 0 && (
@@ -306,6 +431,10 @@ const idx = () => String(++n).padStart(2, '0');
             collapsible
             count={timeline.length}
           >
+            {/* Legacy section anchors: Releases, Incidents and Research now live in the Timeline. */}
+            <span id="releases" />
+            <span id="incidents" />
+            <span id="research" />
             <Timeline events={timeline} />
           </Section>
         )
@@ -327,7 +456,7 @@ const idx = () => String(++n).padStart(2, '0');
                   <summary>
                     <Badge tone={STATUS_TONE[rec.data.status]}>{lbl(rec.data.status)}</Badge>
                     <span class="rec-title">{rec.data.title}</span>
-                    <time class="rec-date">{fmtDate(rec.data.date)}</time>
+                    <time class="rec-date">{fmtDay(rec.data.date)}</time>
                   </summary>
                   <div class="rec-body">
                     <p>
@@ -349,143 +478,11 @@ const idx = () => String(++n).padStart(2, '0');
           </Section>
         )
       }
-
-      {
-        bundle.releases.length > 0 && (
-          <Section
-            index={idx()}
-            label="Releases"
-            title="What shipped, and why it mattered"
-            id="releases"
-            collapsible
-            count={bundle.releases.length}
-          >
-            <div class="records">
-              {bundle.releases.map((rel) => (
-                <details class="rec" id={`rel-${rel.id}`}>
-                  <summary>
-                    <Badge tone={STATUS_TONE[rel.data.status]}>{lbl(rel.data.status)}</Badge>
-                    <span class="rec-title">{rel.data.title}</span>
-                    <time class="rec-date">{fmtDate(rel.data.date)}</time>
-                  </summary>
-                  <div class="rec-body">
-                    <p class="rec-tag">{rel.data.version_or_label}</p>
-                    <p>{rel.data.summary}</p>
-                    <p>
-                      <strong>Customer value.</strong> {rel.data.customer_value}
-                    </p>
-                    {rel.data.included_work.length > 0 && (
-                      <ul>
-                        {rel.data.included_work.map((w) => (
-                          <li>{w}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </Section>
-        )
-      }
-
-      {
-        bundle.incidents.length > 0 && (
-          <Section
-            index={idx()}
-            label="Incidents"
-            title="Bugs, postmortems, follow-through"
-            id="incidents"
-            collapsible
-            count={bundle.incidents.length}
-          >
-            <div class="records">
-              {bundle.incidents.map((inc) => (
-                <details class="rec" id={`inc-${inc.id}`}>
-                  <summary>
-                    <Badge tone={STATUS_TONE[inc.data.status]}>{lbl(inc.data.status)}</Badge>
-                    <span class="rec-title">{inc.data.title}</span>
-                    <time class="rec-date">{fmtDate(inc.data.date)}</time>
-                  </summary>
-                  <div class="rec-body">
-                    <p>
-                      <strong>Impact.</strong> {inc.data.impact}
-                    </p>
-                    <p>
-                      <strong>Root cause.</strong> {inc.data.root_cause}
-                    </p>
-                    <p>
-                      <strong>Fix.</strong> {inc.data.fix}
-                    </p>
-                    {inc.data.blameless_note && (
-                      <p class="rec-blameless">
-                        <strong>Blameless note.</strong> {inc.data.blameless_note}
-                      </p>
-                    )}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </Section>
-        )
-      }
-
-      {
-        bundle.research.length > 0 && (
-          <Section index={idx()} label="Research" title="How the thinking is tested">
-            <div class="records">
-              {bundle.research.map((r) => (
-                <details class="rec" id={`res-${r.id}`}>
-                  <summary>
-                    <Badge tone="info">{lbl(r.data.source_type)}</Badge>
-                    <span class="rec-title">{r.data.title}</span>
-                    <time class="rec-date">{fmtDate(r.data.date)}</time>
-                  </summary>
-                  <div class="rec-body">
-                    <p>{r.data.summary}</p>
-                    {r.data.insights.length > 0 && (
-                      <>
-                        <p class="rec-tag">What it showed</p>
-                        <ul>
-                          {r.data.insights.map((i) => (
-                            <li>{i}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-                    {r.data.redaction_status !== 'clean' && (
-                      <p class="rec-blameless">
-                        <strong>Note.</strong> Published as process only. Results and write-ups
-                        remain private while under review.
-                      </p>
-                    )}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </Section>
-        )
-      }
-
-      {
-        d.outcomes.length > 0 && (
-          <Section index={idx()} label="Outcomes" title="What changed">
-            <ul class="outcomes">
-              {d.outcomes.map((o) => (
-                <li>
-                  <span class="outcome-mark" aria-hidden="true" />
-                  {o}
-                </li>
-              ))}
-            </ul>
-          </Section>
-        )
-      }
     </div>
 
     <nav class="pnext" aria-label="Other project">
       <div class="container">
-        <a class="pnext-link" href={url(`/projects/${otherSlug}`)} data-accent={otherSlug}>
+        <a class="pnext-link plain" href={url(`/projects/${otherSlug}`)} data-accent={otherSlug}>
           <span class="label">Next project →</span>
           <span class="pnext-name">{otherMeta?.label}</span>
           <span class="pnext-kind">{otherMeta?.kind}</span>
@@ -708,11 +705,8 @@ const idx = () => String(++n).padStart(2, '0');
   .callout-muted .label {
     color: var(--muted);
   }
-  .constraints {
-    margin-top: var(--sp-6);
-  }
   .constraint-list {
-    margin-top: var(--sp-3);
+    margin-top: 0;
     padding: 0;
     list-style: none;
     display: grid;
@@ -848,26 +842,6 @@ const idx = () => String(++n).padStart(2, '0');
     font-size: var(--step--1);
     line-height: 1.6;
   }
-  .rec-body ul {
-    padding-left: 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-  .rec-body li::marker {
-    color: var(--accent);
-  }
-  .rec-tag {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-  }
-  .rec-blameless {
-    padding: var(--sp-3);
-    background: var(--surface-2);
-    border-radius: var(--radius);
-    color: var(--muted);
-  }
 
   .outcomes {
     list-style: none;
@@ -985,6 +959,39 @@ const idx = () => String(++n).padStart(2, '0');
   }
   .partner-chip.partner-featured img {
     max-width: 26rem;
+  }
+
+  /* Image sections (skim layer). */
+  .gallery-lead {
+    margin-bottom: var(--sp-5);
+    max-width: 60ch;
+    color: var(--ink-soft);
+  }
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: var(--sp-5);
+  }
+  .gallery-program {
+    grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
+    align-items: start;
+  }
+  .gallery figure {
+    margin: 0;
+  }
+  .gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: var(--hair) solid var(--hairline);
+    background: var(--surface-2);
+  }
+  .gallery figcaption {
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
   }
 
   /* Full-width hardware figure (One Bar Late). */

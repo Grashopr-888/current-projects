@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { url } from '../lib/url';
 
 const all = (await getCollection('glossary')).sort((a, b) =>
   a.data.term.localeCompare(b.data.term)
@@ -10,10 +9,15 @@ const all = (await getCollection('glossary')).sort((a, b) =>
 // term name lookup for "see also" links (related[] holds entry slugs)
 const nameBySlug = new Map(all.map((t) => [t.id, t.data.term]));
 
-type Group = { key: 'windchime' | 'lichtspiel' | 'shared'; label: string; blurb: string };
+type Group = {
+  key: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'shared';
+  label: string;
+  blurb: string;
+};
 const GROUPS: Group[] = [
   { key: 'windchime', label: 'Windchime', blurb: 'Voice, retrieval, and the audio corpus.' },
   { key: 'lichtspiel', label: 'Lichtspiel', blurb: 'Live performance, generation, and the set.' },
+  { key: 'hrnsxtn', label: 'HRNSXTN x RDMSXN', blurb: 'Grains, latents, and compression.' },
   { key: 'shared', label: 'Shared', blurb: 'Hardware, reliability, and process.' },
 ];
 const grouped = GROUPS.map((g) => ({
@@ -24,14 +28,14 @@ const grouped = GROUPS.map((g) => ({
 
 <BaseLayout
   title="Glossary"
-  description="Plain-language definitions of the terms used across Windchime, Lichtspiel, and HRNSXTN x RDMSXN: audio-language models, retrieval, the monome, validation gates, and more."
+  description="Plain-language definitions of the terms used across Windchime, Lichtspiel, and HRNSXTN x RDMSXN: audio language models, retrieval, the monome, validation gates, and more."
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Glossary</p>
     <h1>Field terms, in plain language.</h1>
     <p class="lead measure">
       The vocabulary that recurs across the projects, defined for readers who don't live in audio ML
-      or live-performance tooling. Grouped by where each term shows up; cross-links point to related
+      or live performance tooling. Grouped by where each term shows up; crosslinks point to related
       terms.
     </p>
 
@@ -44,11 +48,16 @@ const grouped = GROUPS.map((g) => ({
               {g.blurb} · {g.terms.length} terms
             </span>
           </header>
-          <dl class="glossary">
+          <div class="glossary">
             {g.terms.map((t) => (
-              <div class="gterm" id={t.id} data-accent={g.key}>
-                <dt>{t.data.term}</dt>
-                <dd>
+              <details class="gterm" id={t.id} data-accent={g.key}>
+                <summary class="gterm-summary">
+                  <span class="gterm-name">{t.data.term}</span>
+                  <span class="gterm-toggle" aria-hidden="true">
+                    +
+                  </span>
+                </summary>
+                <div class="gterm-body">
                   <p class="gdef">{t.data.definition}</p>
                   {t.data.related.filter((s) => nameBySlug.has(s)).length > 0 && (
                     <p class="gsee">
@@ -56,16 +65,16 @@ const grouped = GROUPS.map((g) => ({
                       {t.data.related
                         .filter((s) => nameBySlug.has(s))
                         .map((s) => (
-                          <a class="gsee-link plain" href={url(`/glossary#${s}`)}>
+                          <a class="gsee-link plain" href={`#${s}`}>
                             {nameBySlug.get(s)}
                           </a>
                         ))}
                     </p>
                   )}
-                </dd>
-              </div>
+                </div>
+              </details>
             ))}
-          </dl>
+          </div>
         </div>
       ))
     }
@@ -109,13 +118,41 @@ const grouped = GROUPS.map((g) => ({
   .glossary {
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(26rem, 100%), 1fr));
-    gap: 0 var(--sp-7);
+    grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+    gap: 0 var(--sp-6);
+    align-items: start;
   }
   .gterm {
-    padding: var(--sp-5) 0;
     border-top: var(--hair) solid var(--hairline);
-    scroll-margin-top: 5rem;
+  }
+  .gterm-summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    padding: var(--sp-4) 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .gterm-summary::-webkit-details-marker {
+    display: none;
+  }
+  .gterm-summary:hover .gterm-name,
+  .gterm-summary:hover .gterm-toggle {
+    color: var(--accent);
+  }
+  .gterm-toggle {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+  .gterm[open] .gterm-toggle {
+    transform: rotate(45deg);
+  }
+  .gterm-body {
+    padding-bottom: var(--sp-5);
   }
   .gterm:target {
     background: color-mix(in oklab, var(--accent) 7%, transparent);
@@ -123,7 +160,7 @@ const grouped = GROUPS.map((g) => ({
       -0.75rem 0 0 color-mix(in oklab, var(--accent) 7%, transparent),
       0.75rem 0 0 color-mix(in oklab, var(--accent) 7%, transparent);
   }
-  dt {
+  .gterm-name {
     font-family: var(--font-display);
     font-size: var(--step-1);
     font-weight: 700;
@@ -131,7 +168,7 @@ const grouped = GROUPS.map((g) => ({
     color: var(--ink);
   }
   .gdef {
-    margin: 0.5rem 0 0;
+    margin: 0;
     max-width: 54ch;
     color: var(--muted);
     font-size: var(--step--1);
@@ -168,3 +205,20 @@ const grouped = GROUPS.map((g) => ({
     border-color: var(--accent);
   }
 </style>
+
+<script>
+  /* A term is a closed disclosure; open it when the fragment names it, on load and when a
+     "See also" link changes the hash. A timeout rather than rAF, which does not fire everywhere. */
+  function openTerm(): void {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (!(el instanceof HTMLDetailsElement) || !el.classList.contains('gterm')) return;
+    el.open = true;
+    const jump = (): void => el.scrollIntoView({ block: 'start', behavior: 'instant' });
+    jump();
+    setTimeout(jump, 0);
+  }
+  addEventListener('hashchange', openTerm);
+  openTerm();
+</script>

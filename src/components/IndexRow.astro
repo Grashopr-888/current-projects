@@ -1,0 +1,119 @@
+---
+import Badge from './Badge.astro';
+import type { Tone } from '../lib/taxonomy';
+import { fmtDate } from '../lib/format';
+import { url } from '../lib/url';
+
+/** One linked line in a cross-project index (/releases, /incidents, /research, /roadmap).
+ *  The full record lives on its project page; this row points there. */
+interface Props {
+  href: string;
+  title: string;
+  product: string;
+  tone?: Tone;
+  badge?: string;
+  meta?: string;
+  date?: Date;
+}
+const { href, title, product, tone = 'neutral', badge, meta, date } = Astro.props;
+
+/* Enum values render as-is except where the public name differs. */
+const PROD_LABEL: Record<string, string> = { hrnsxtn: 'HRNSXTN x RDMSXN' };
+---
+
+<a class="irow plain" href={url(href)} data-product={product}>
+  <span class="irow-lead">
+    {badge && <Badge tone={tone}>{badge}</Badge>}
+    <span class="irow-prod" data-product={product}>{PROD_LABEL[product] ?? product}</span>
+  </span>
+  <span class="irow-title">{title}</span>
+  <span class="irow-meta">
+    {meta && <span class="irow-metatext">{meta}</span>}
+    {date && <time class="irow-date">{fmtDate(date)}</time>}
+    <span class="irow-arrow" aria-hidden="true">→</span>
+  </span>
+</a>
+
+<style>
+  .irow {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+  .irow:hover {
+    border-color: color-mix(in oklab, var(--brand) 50%, var(--hairline));
+    background: color-mix(in oklab, var(--ink) 8%, var(--surface));
+  }
+  .irow:hover .irow-arrow {
+    transform: translateX(2px);
+  }
+  .irow-lead {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: none;
+  }
+  .irow-prod {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .irow-prod[data-product='windchime'] {
+    color: var(--wc);
+  }
+  .irow-prod[data-product='lichtspiel'] {
+    color: var(--ls);
+  }
+  .irow-prod[data-product='hrnsxtn'] {
+    color: var(--hsx);
+  }
+  .irow-title {
+    flex: 1;
+    min-width: 0;
+    font-weight: 560;
+    color: var(--ink);
+  }
+  .irow-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-3);
+    flex: none;
+  }
+  .irow-metatext {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--faint);
+  }
+  .irow-date {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .irow-arrow {
+    font-family: var(--font-mono);
+    color: var(--brand);
+    transition: transform 0.15s ease;
+  }
+
+  @media (max-width: 600px) {
+    .irow {
+      flex-wrap: wrap;
+    }
+    .irow-title {
+      flex-basis: 100%;
+      order: 3;
+    }
+    .irow-meta {
+      order: 4;
+    }
+  }
+</style>

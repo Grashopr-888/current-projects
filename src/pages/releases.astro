@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import RecordCard from '../components/RecordCard.astro';
-import { allReleases } from '../lib/content';
+import IndexRow from '../components/IndexRow.astro';
+import { allReleases, recordPath } from '../lib/content';
 import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
 
 const releases = await allReleases();
@@ -16,7 +16,7 @@ const shipped = releases.filter((r) => r.data.status === 'shipped').length;
     <p class="label"><span class="idx">§</span> Releases</p>
     <h1>What shipped, and why it mattered.</h1>
     <p class="lead measure">
-      A reverse-chronological changelog across all three products. Each entry is framed by the value
+      A reverse chronological changelog across all three products. Each entry is framed by the value
       it delivered and the risk it carried, not the diff behind it.
     </p>
 
@@ -35,40 +35,14 @@ const shipped = releases.filter((r) => r.data.status === 'shipped').length;
     <div class="list" id="release-list" data-active="all">
       {
         releases.map((r) => (
-          <RecordCard
+          <IndexRow
+            href={recordPath('release', r.data.product, r.id)}
             tone={STATUS_TONE[r.data.status] ?? 'neutral'}
             badge={lbl(r.data.status)}
             title={r.data.title}
-            date={r.data.date}
             product={r.data.product}
-            anchor={`rel-${r.id}`}
-            meta={r.data.version_or_label}
-          >
-            <p>{r.data.summary}</p>
-            <p>
-              <strong>Customer value.</strong> {r.data.customer_value}
-            </p>
-            {r.data.included_work.length > 0 && (
-              <>
-                <p class="rec-sub">Included</p>
-                <ul>
-                  {r.data.included_work.map((w) => (
-                    <li>{w}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {r.data.notable_risks.length > 0 && (
-              <>
-                <p class="rec-sub">Notable risks</p>
-                <ul>
-                  {r.data.notable_risks.map((w) => (
-                    <li>{w}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </RecordCard>
+            date={r.data.date}
+          />
         ))
       }
     </div>
@@ -126,20 +100,13 @@ const shipped = releases.filter((r) => r.data.status === 'shipped').length;
     flex-direction: column;
     gap: var(--sp-3);
   }
-  .list[data-active='windchime'] :global(.rec[data-product='lichtspiel']),
-  .list[data-active='windchime'] :global(.rec[data-product='hrnsxtn']),
-  .list[data-active='lichtspiel'] :global(.rec[data-product='windchime']),
-  .list[data-active='lichtspiel'] :global(.rec[data-product='hrnsxtn']),
-  .list[data-active='hrnsxtn'] :global(.rec[data-product='windchime']),
-  .list[data-active='hrnsxtn'] :global(.rec[data-product='lichtspiel']) {
+  .list[data-active='windchime'] :global(.irow[data-product='lichtspiel']),
+  .list[data-active='windchime'] :global(.irow[data-product='hrnsxtn']),
+  .list[data-active='lichtspiel'] :global(.irow[data-product='windchime']),
+  .list[data-active='lichtspiel'] :global(.irow[data-product='hrnsxtn']),
+  .list[data-active='hrnsxtn'] :global(.irow[data-product='windchime']),
+  .list[data-active='hrnsxtn'] :global(.irow[data-product='lichtspiel']) {
     display: none;
-  }
-  .rec-sub {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--faint);
   }
 </style>
 

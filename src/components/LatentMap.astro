@@ -59,14 +59,14 @@ const DATA = { points, query, selected };
 <figure class="lm">
   <div class="lm-head">
     <span class="lm-hint"
-      >Drag to rotate · 3D projection of the joint text-audio embedding space</span
+      >Drag to rotate · 3D projection of the joint text/audio embedding space</span
     >
     <span class="lm-readout" data-readout>synthetic points, not the private corpus</span>
   </div>
   <div class="lm-frame" data-lm>
     <canvas
       class="lm-canvas"
-      aria-label="Rotatable 3D scatter of stem embeddings by instrument role, with an embedded spoken prompt linked to its one-per-role retrievals"
+      aria-label="Rotatable 3D scatter of stem embeddings by instrument role, with an embedded spoken prompt linked to its one per role retrievals"
     ></canvas>
   </div>
   <div class="lm-legend">
@@ -88,12 +88,9 @@ const DATA = { points, query, selected };
     </span>
   </div>
   <figcaption class="lm-caption">
-    How retrieval works underneath: contrastive audio-language pretraining gives text and audio a
-    shared embedding space, so a transcribed prompt and every stem are just L2-normalized vectors.
-    Cosine similarity over a FAISS exact index ranks the neighbourhood, and the one-per-role
-    selection policy keeps at most one stem per instrument role for timbral variety. In the
-    installation, the corpus map rail shows the real projection (UMAP, PCA, or t-SNE) of the live
-    index.
+    Contrastive pretraining puts text and audio in one space: L2 normalized vectors ranked by cosine
+    similarity over a FAISS exact index. The installation's rail projects the live index (UMAP, PCA
+    or t-SNE).
   </figcaption>
 </figure>
 

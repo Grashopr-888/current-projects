@@ -1,15 +1,44 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { SEVERITY_TONE, STATUS_TONE, type Tone } from './taxonomy';
+import { SEVERITY_TONE, STATUS_TONE, label, type Tone } from './taxonomy';
 
 export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn';
 
-export interface TimelineEvent {
+/** One row of a project Timeline. Releases, incidents and research carry their full record,
+ *  rendered in place (the project page is the archive); shipped milestones link to their
+ *  kanban card on the same page. */
+export type TimelineRecord =
+  | { type: 'release'; entry: CollectionEntry<'releases'> }
+  | { type: 'incident'; entry: CollectionEntry<'incidents'> }
+  | { type: 'research'; entry: CollectionEntry<'research'> }
+  | { type: 'milestone'; entry: CollectionEntry<'milestones'> };
+
+export type TimelineEvent = TimelineRecord & {
   date: Date;
   kind: string;
   tone?: Tone;
   title: string;
-  summary?: string;
-  href?: string;
+  /** Status label shown beside the kind (releases and incidents). */
+  status?: string;
+  statusTone?: Tone;
+  /** Element id of the full record, or of the kanban card for a milestone. */
+  anchor: string;
+};
+
+/** Anchor prefixes per record type. File ids never change, so these stay stable. */
+const ANCHOR_PREFIX = {
+  release: 'rel',
+  incident: 'inc',
+  research: 'res',
+  milestone: 'ms',
+} as const;
+
+export function recordAnchor(type: TimelineRecord['type'], id: string): string {
+  return `${ANCHOR_PREFIX[type]}-${id}`;
+}
+
+/** Where a record renders in full: its project page, at its anchor. Pass through url(). */
+export function recordPath(type: TimelineRecord['type'], product: string, id: string): string {
+  return `/projects/${product}/#${recordAnchor(type, id)}`;
 }
 
 const byDateDesc = (a: { data: { date: Date } }, b: { data: { date: Date } }): number =>
@@ -43,39 +72,72 @@ export async function projectBundle(product: Product): Promise<ProjectBundle> {
   return { decisions, releases, incidents, research, milestones };
 }
 
-/** Merge releases, incidents, and shipped milestones into one reverse-chronological stream. */
+/**
+ * Order of two events that share a calendar day. Negative puts `a` first (higher on the page).
+ * Returning 0 keeps insertion order: releases, then incidents, then research, then milestones.
+ */
+function sameDayOrder(a: TimelineEvent, b: TimelineEvent): number {
+  // A hook for a deliberate same-day order; for now insertion order stands.
+  void a;
+  void b;
+  return 0;
+}
+
+/** Merge releases, incidents, research and shipped milestones into one reverse-chronological stream. */
 export function toTimeline(b: ProjectBundle): TimelineEvent[] {
   const events: TimelineEvent[] = [];
   for (const r of b.releases) {
     events.push({
+      type: 'release',
+      entry: r,
       date: r.data.date,
       kind: 'Release',
       tone: STATUS_TONE[r.data.status] ?? 'positive',
       title: r.data.title,
-      summary: r.data.summary,
+      // "Shipped" is what a release row already implies; only other states get a badge.
+      status: r.data.status === 'shipped' ? undefined : label(r.data.status),
+      statusTone: STATUS_TONE[r.data.status] ?? 'neutral',
+      anchor: recordAnchor('release', r.id),
     });
   }
   for (const i of b.incidents) {
     events.push({
+      type: 'incident',
+      entry: i,
       date: i.data.date,
-      kind: `Incident · ${i.data.severity}`,
+      kind: `Incident · ${label(i.data.severity)}`,
       tone: SEVERITY_TONE[i.data.severity] ?? 'warn',
       title: i.data.title,
-      summary: i.data.summary,
+      status: label(i.data.status),
+      statusTone: STATUS_TONE[i.data.status] ?? 'neutral',
+      anchor: recordAnchor('incident', i.id),
+    });
+  }
+  for (const r of b.research) {
+    events.push({
+      type: 'research',
+      entry: r,
+      date: r.data.date,
+      kind: `Research · ${label(r.data.source_type)}`,
+      tone: 'info',
+      title: r.data.title,
+      anchor: recordAnchor('research', r.id),
     });
   }
   for (const m of b.milestones) {
     if (m.data.horizon === 'shipped' && m.data.date) {
       events.push({
+        type: 'milestone',
+        entry: m,
         date: m.data.date,
         kind: 'Milestone',
         tone: 'positive',
         title: m.data.title,
-        summary: m.data.summary,
+        anchor: recordAnchor('milestone', m.id),
       });
     }
   }
-  events.sort((a, b) => b.date.getTime() - a.date.getTime());
+  events.sort((a, b) => b.date.getTime() - a.date.getTime() || sameDayOrder(a, b));
   return events;
 }
 

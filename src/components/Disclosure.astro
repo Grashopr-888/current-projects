@@ -1,0 +1,67 @@
+---
+/** Detail one click away. The skim layer stays visible; the depth sits behind a labelled toggle.
+ *  `meta` is a short count or hint shown beside the label ("5", "3 min read"). */
+interface Props {
+  label: string;
+  meta?: string;
+  class?: string;
+}
+const { label, meta, class: klass } = Astro.props;
+---
+
+<details class:list={['more', klass]}>
+  <summary class="more-summary">
+    <span class="more-toggle" aria-hidden="true">+</span>
+    <span class="more-label">{label}</span>
+    {meta && <span class="more-meta">{meta}</span>}
+  </summary>
+  <div class="more-body">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .more {
+    margin-top: var(--sp-5);
+  }
+  .more-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.9rem 0.45rem 0.7rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: 100px;
+    background: var(--surface);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    transition:
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .more-summary::-webkit-details-marker {
+    display: none;
+  }
+  .more-summary:hover {
+    border-color: var(--accent, var(--brand));
+    color: var(--ink);
+  }
+  .more-toggle {
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--accent, var(--brand));
+    transition: transform 0.2s ease;
+  }
+  .more[open] > .more-summary .more-toggle {
+    transform: rotate(45deg);
+  }
+  .more-meta {
+    color: var(--faint);
+  }
+  .more-body {
+    margin-top: var(--sp-4);
+  }
+</style>
