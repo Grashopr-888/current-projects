@@ -24,6 +24,7 @@ const asideArt = 'aside' in meta ? meta.aside : undefined;
 const asideArtAlt = 'asideAlt' in meta ? meta.asideAlt : '';
 const cardArt = has(meta?.art) ? meta.art : has(asideArt) ? asideArt : undefined;
 const cardAlt = has(meta?.art) ? meta.artAlt : asideArtAlt;
+const partners = 'partners' in meta ? meta.partners : [];
 ---
 
 <a class="pcard card plain" href={url(`/projects/${slug}`)} data-accent={slug}>
@@ -45,6 +46,28 @@ const cardAlt = has(meta?.art) ? meta.artAlt : asideArtAlt;
   </div>
   {!compact && <p class="pcard-summary">{d.summary}</p>}
   {
+    partners.length > 0 && (
+      <div class="pcard-partners" aria-label="Venues, events and affiliations">
+        {partners.map((p) => (
+          <span
+            class:list={['pcard-partner', { 'pcard-partner-dark': 'dark' in p && p.dark }]}
+            style={'scale' in p ? `--logo-scale: ${p.scale}` : undefined}
+          >
+            <img src={url(p.img)} alt={p.alt} loading="lazy" />
+          </span>
+        ))}
+      </div>
+    )
+  }
+  {
+    'credit' in meta && (
+      <p class="pcard-credit">
+        {meta.credit}
+        {'partnersNote' in meta && <span class="pcard-credit-note">{meta.partnersNote}</span>}
+      </p>
+    )
+  }
+  {
     d.languages.length > 0 && (
       <div class="pcard-langs">
         <span class="pcard-langs-label">Languages</span>
@@ -63,6 +86,46 @@ const cardAlt = has(meta?.art) ? meta.artAlt : asideArtAlt;
 </a>
 
 <style>
+  .pcard-credit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-weight: 600;
+    font-size: var(--step--1);
+    line-height: 1.45;
+    color: var(--accent);
+  }
+  .pcard-credit-note {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: color-mix(in oklab, var(--accent) 75%, var(--muted));
+  }
+  .pcard-partners {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .pcard-partner {
+    display: inline-flex;
+    align-items: center;
+    height: 3.2rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 8px;
+    background: #fff;
+    border: var(--hair) solid var(--hairline);
+  }
+  .pcard-partner-dark {
+    background: #161a1d;
+  }
+  .pcard-partner img {
+    height: calc(100% * var(--logo-scale, 1));
+    width: auto;
+    max-width: 12rem;
+    object-fit: contain;
+    display: block;
+  }
   .pcard {
     position: relative;
     display: flex;

@@ -158,6 +158,7 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         name: 'Gray Area',
         place: 'San Francisco, USA · Aug 5–7, 2026',
         detail: 'Debuted at the Gray Area Cultural Incubator Showcase.',
+        logo: { src: '/img/logo-grayarea.svg', alt: 'Gray Area' },
       },
       {
         name: 'NeurIPS 2026 · Creative AI Track',
@@ -178,20 +179,11 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
   },
 };
 
-const CREDITS: Record<Product, { context: string; tools: string[] }> = {
-  windchime: {
-    context: 'Shown at Gray Area, San Francisco; accepted to NeurIPS 2026 Creative AI, Sydney',
-    tools: ['monome', 'Strudel', 'p5.js', 'Three.js'],
-  },
-  lichtspiel: {
-    context: 'Built at a Music Hackspace hackathon, Berklee',
-    tools: ['Ableton Live', 'Max for Live', 'monome'],
-  },
-  hrnsxtn: {
-    context:
-      'Music Hackspace × MUTEK, Montréal 2026: 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab',
-    tools: ['Elk Stomp', 'JUCE', 'PyTorch', 'RTNeural'],
-  },
+/** Tool chips beside the credit line. The credit line itself is PROJECT_META.*.credit. */
+const TOOLS: Record<Product, string[]> = {
+  windchime: ['monome', 'Strudel', 'p5.js', 'Three.js'],
+  lichtspiel: ['Ableton Live', 'Max for Live', 'monome'],
+  hrnsxtn: ['Elk Stomp', 'JUCE', 'PyTorch', 'RTNeural'],
 };
 
 export async function getStaticPaths() {
@@ -204,7 +196,7 @@ const d = project.data;
 const slug = project.id as Product;
 const meta = PROJECT_META[slug];
 const diagram = DIAGRAMS[slug];
-const credit = CREDITS[slug];
+const tools = TOOLS[slug];
 const gallery = GALLERIES[slug] ?? {};
 const venues = VENUES[slug];
 const demoVideoId = 'demoVideoId' in meta ? meta.demoVideoId : undefined;
@@ -266,9 +258,9 @@ const idx = () => String(++n).padStart(2, '0');
               <p>{d.thesis}</p>
             </div>
             <div class="phero-credits">
-              <span class="credit-context">{credit.context}</span>
+              <span class="credit-context">{meta.credit}</span>
               <span class="credit-tools">
-                {credit.tools.map((t) => <span class="credit-chip">{t}</span>)}
+                {tools.map((t) => <span class="credit-chip">{t}</span>)}
               </span>
             </div>
           </div>
@@ -283,15 +275,19 @@ const idx = () => String(++n).padStart(2, '0');
         </div>
         {
           'partners' in meta && (
-            <div class="phero-partners" aria-label="Event and challenge partners">
+            <div class="phero-partners" aria-label="Venues, events and affiliations">
               {meta.partners.map((p) => (
-                <span class={`partner-chip${'dark' in p && p.dark ? ' partner-dark' : ''}`}>
+                <span
+                  class:list={['partner-chip', { 'partner-dark': 'dark' in p && p.dark }]}
+                  style={'scale' in p ? `--logo-scale: ${p.scale}` : undefined}
+                >
                   <img src={url(p.img)} alt={p.alt} loading="lazy" />
                 </span>
               ))}
             </div>
           )
         }
+        {'partnersNote' in meta && <p class="phero-partners-note">{meta.partnersNote}</p>}
         {
           hasAsset(meta?.art) && (
             <figure class="phero-media">
@@ -991,7 +987,13 @@ const idx = () => String(++n).padStart(2, '0');
     align-items: center;
     gap: 1rem;
     margin-top: 1.6rem;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+  }
+  .phero-partners-note {
+    margin-top: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: color-mix(in oklab, var(--accent) 75%, var(--muted));
   }
   .partner-chip {
     display: inline-flex;
@@ -1004,8 +1006,9 @@ const idx = () => String(++n).padStart(2, '0');
     background: #fff;
     flex: none;
   }
+  /* Per-logo height within the tile comes from PROJECT_META partners[].scale. */
   .partner-chip img {
-    height: 100%;
+    height: calc(100% * var(--logo-scale, 1));
     width: auto;
     max-width: 27rem;
     object-fit: contain;

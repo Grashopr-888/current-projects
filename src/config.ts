@@ -40,6 +40,8 @@ export const PROJECT_META = {
   windchime: {
     label: 'Windchime',
     kind: 'Voice conditioned audiovisual installation',
+    // One line credit: project hero and project card.
+    credit: 'Shown at Gray Area, San Francisco; accepted to NeurIPS 2026 Creative AI, Sydney',
     accent: 'var(--wc)',
     logo: '/img/windchime-mark.svg',
     art: '/img/windchime-hero.jpg',
@@ -51,13 +53,27 @@ export const PROJECT_META = {
     // Installation demo. Privacy-enhanced (nocookie) embed of youtu.be/j3XyW2ynH5Y.
     demoVideoId: 'j3XyW2ynH5Y',
     demoVideoTitle: 'Windchime installation demo',
-    // Venue marks in the hero credit strip (attribution, not endorsement). Official NeurIPS logo
-    // from https://neurips.cc/FAQ/Press (viewBox added so it scales; artwork unchanged).
-    partners: [{ img: '/img/logo-neurips.svg', alt: 'NeurIPS' }],
+    // `scale` sets a mark's height within its tile, so bold and thin wordmarks read at a similar weight.
+    // Venue and affiliation marks in the hero credit strip and on the project card (attribution,
+    // not endorsement). Sources: Gray Area media kit; NeurIPS press page (viewBox added so it
+    // scales, artwork unchanged); CCRMA site header; Stanford Block S from identity.stanford.edu
+    // (margin trimmed, mark unchanged). Owner decisions 2026-09-25 (log D13, D14).
+    partners: [
+      { img: '/img/logo-grayarea.svg', alt: 'Gray Area', scale: 0.8 },
+      { img: '/img/logo-neurips.svg', alt: 'NeurIPS' },
+      {
+        img: '/img/logo-ccrma.png',
+        alt: 'CCRMA, Center for Computer Research in Music and Acoustics',
+        scale: 0.62,
+      },
+      { img: '/img/logo-stanford-block-s.png', alt: 'Stanford University' },
+    ],
+    partnersNote: 'Paper coauthored with a researcher at CCRMA, Stanford University.',
   },
   lichtspiel: {
     label: 'Lichtspiel',
     kind: 'Live audiovisual assistant for Ableton',
+    credit: 'Built at a Music Hackspace hackathon, Berklee College of Music',
     accent: 'var(--ls)',
     logo: '/img/lichtspiel-mark.svg',
     art: '/img/lichtspiel-hero.jpg',
@@ -65,10 +81,18 @@ export const PROJECT_META = {
     // Hackathon demo. Privacy-enhanced (nocookie) embed of youtu.be/wW3QNNuzD9M.
     demoVideoId: 'wW3QNNuzD9M',
     demoVideoTitle: 'Lichtspiel hackathon demo',
+    // Event and host marks (attribution, not endorsement). Berklee logo from berklee.edu's site
+    // header; Music Hackspace logo as used on HRNSXTN. Owner decision 2026-09-25 (log D13).
+    partners: [
+      { img: '/img/logo-musichackspace.png', alt: 'Music Hackspace' },
+      { img: '/img/logo-berklee.svg', alt: 'Berklee College of Music', scale: 0.5 },
+    ],
   },
   hrnsxtn: {
     label: 'HRNSXTN x RDMSXN',
     kind: 'Neural audio instruments for a screenless pedal',
+    credit:
+      'Music Hackspace × MUTEK hackathon: 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab; presented at MUTEK Forum, Montréal 2026',
     accent: 'var(--hsx)',
     logo: '/img/hrnsxtn-mark.svg',
     // Project demo. Privacy-enhanced (nocookie) embed of youtu.be/gLobf3o0Qg0.
