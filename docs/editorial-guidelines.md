@@ -24,17 +24,31 @@ reading second.
 - Buzzword-stuff or inflate ("revolutionary", "cutting-edge", "10x").
 - Claim vague leadership ("led cross-functional teams") without evidence.
 - Write walls of text.
-- Dead-end on "confidential, can't say more" — summarize a level up instead.
+- Dead-end on "confidential, can't say more"; summarize a level up instead.
 - Name a collaborator without their consent.
 
 ## Structure conventions
 
-- **Projects** — thesis and problem up top; narrative in the body; typed records
-  (decisions/releases/incidents/research) below; outcomes last.
-- **Decisions** — context → options with honest trade-offs → decision → rationale →
+- **Projects:** a skim layer first (summary, thesis, at a glance, outcomes, architecture,
+  hardware, images), then detail one click away (story, roadmap, timeline, decisions).
+- **Decisions:** context → options with honest trade-offs → decision → rationale →
   consequences.
-- **Incidents** — impact → detection → root cause → fix → follow-through → blameless note.
-- **Releases** — frame by customer value and risk, not the diff.
+- **Incidents:** impact → detection → root cause → fix → follow-through → blameless note.
+- **Releases:** frame by customer value and risk, not the diff.
+
+## Style rules
+
+- **Say it once.** Each record renders in full in one place; each figure lives in one section of
+  a page. Elsewhere, link to it or refer to it without the number.
+- **Skim first.** Keep the visible layer to headings, visuals, the problem and measured outcomes;
+  put depth behind clearly labelled disclosures. Never hide images inside a collapsed section.
+- **No em dashes** (or spaced en dashes) in site text, titles, captions or alt text. Use a colon,
+  semicolon, comma or parentheses. Numeric ranges may keep an en dash (4–7%).
+- **No hyphenated words** in site text. Prefer an established closed form (hotplug, onscreen,
+  handoff), then a one word synonym, then the open form, then a rephrase. Proper names and
+  identifiers keep their spelling (faster-whisper, t-SNE, Cortex-A7).
+- **Short blocks.** Captions and page leads are one sentence; visible paragraphs stay short.
+- **Links:** whole-card links carry no underline; links inside sentences keep one.
 
 ## Numbers
 

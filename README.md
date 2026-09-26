@@ -1,7 +1,7 @@
 # Current Projects
 
-A public record of **how** two creative-technology products — **Windchime** and
-**Lichtspiel** — are being built: discovery, decisions, roadmap, releases, incidents, and
+A public record of **how** three creative technology products, **Windchime**, **Lichtspiel**
+and **HRNSXTN x RDMSXN**, are being built: discovery, decisions, roadmap, releases, incidents, and
 iteration. It exists to show technical-product-management and product-engineering practice
 **without exposing the products' private source code**.
 
@@ -11,9 +11,9 @@ are updated as the work progresses, and new projects will be added here as they 
 > **Live site:** `https://grashopr-888.github.io/current-projects/`
 > (Set your host in [`astro.config.mjs`](astro.config.mjs).)
 
-## What this is — and isn't
+## What this is, and isn't
 
-- **Is:** sanitized evidence — problem framing, trade-offs, roadmaps, release notes, blameless
+- **Is:** sanitized evidence: problem framing, trade-offs, roadmaps, release notes, blameless
   postmortems, research method, and outcomes.
 - **Isn't:** the products' source code, their private corpora/model weights, in-progress
   academic results, or anything a reader could use to reconstruct protected work.
@@ -66,12 +66,12 @@ Follow [`docs/publishing-checklist.md`](docs/publishing-checklist.md). At minimu
 
 ## Documentation
 
-- [Content model](docs/content-model.md) — the nine collections and their fields.
-- [Redaction policy](docs/redaction-policy.md) — what's public, what's private, and why.
-- [Editorial guidelines](docs/editorial-guidelines.md) — register and style.
-- [Admin](docs/admin.md) — branch protection, Pages setup, private→public rollout.
+- [Content model](docs/content-model.md): the nine collections, their fields, and where each renders.
+- [Redaction policy](docs/redaction-policy.md): what's public, what's private, and why.
+- [Editorial guidelines](docs/editorial-guidelines.md): register, structure and style rules.
+- [Admin](docs/admin.md): branch protection, Pages setup, private→public rollout.
 
 ## License
 
 Site code is MIT (see `LICENSE`). The **content** (writing, diagrams, screenshots) is
-&copy; the author, all rights reserved — it documents private products and is not for reuse.
+&copy; the author, all rights reserved; it documents private products and is not for reuse.

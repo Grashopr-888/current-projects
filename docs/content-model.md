@@ -2,10 +2,10 @@
 
 Everything on the site is typed data, defined in
 [`src/content.config.ts`](../src/content.config.ts) and stored as Markdown under
-`src/content/`. Cross-references are validated at build time — a dangling link fails the
+`src/content/`. Cross-references are validated at build time: a dangling link fails the
 build, so the narrative can't drift from the data.
 
-`product` is one of `windchime`, `lichtspiel`, `shared`. Add a project by adding its slug to
+`product` is one of `windchime`, `lichtspiel`, `hrnsxtn`, `shared`. Add a project by adding its slug to
 `PRODUCTS`.
 
 ## Collections
@@ -41,7 +41,26 @@ linked_incidents:
 
 ## How pages consume it
 
-Project pages query by `product`; the aggregate pages (Roadmap, Releases, Research,
-Incidents) query across products. Query helpers live in
-[`src/lib/content.ts`](../src/lib/content.ts); the sanitized git activity is read by
-[`src/lib/signals.ts`](../src/lib/signals.ts).
+Each record renders in full in one place, its project page, and is linked from everywhere else.
+
+- **Project pages** (`src/pages/projects/[slug].astro`) query by `product`. Releases, incidents
+  and research notes merge into one collapsible Timeline whose rows expand into the full record
+  (`toTimeline` in [`src/lib/content.ts`](../src/lib/content.ts), `Timeline.astro`,
+  `RecordBody.astro`). Decisions have their own section; milestones fill the Roadmap kanban.
+- **Aggregate pages** (Releases, Incidents, Research, Roadmap) query across products and list one
+  linked row per record, pointing at its anchor on the project page.
+- **Anchors** are built from file ids, so renaming a file breaks links: `#rel-<id>`,
+  `#inc-<id>`, `#res-<id>` (Timeline cards), `#ms-<id>` (kanban cards), `#rec-<id>` (decisions).
+
+| Field                                                                                                  | Renders on                                                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| releases: `summary`, `customer_value`, `included_work`, `notable_risks`                                | project Timeline card                                                                                                                                        |
+| incidents: `summary`, `impact`, `detection`, `root_cause`, `fix`, `followup_actions`, `blameless_note` | project Timeline card                                                                                                                                        |
+| research: `summary`, `insights`                                                                        | project Timeline card                                                                                                                                        |
+| decisions: `context`, `decision`, `rationale`, `consequences`                                          | project Decisions section                                                                                                                                    |
+| milestones: `summary`, `theme`, `status`, `confidence`                                                 | project Roadmap kanban (`/roadmap` rows show title, status, confidence)                                                                                      |
+| projects: `summary`                                                                                    | project hero and the `/projects` card                                                                                                                        |
+| titles, status, severity, dates                                                                        | Timeline rows and aggregate page rows                                                                                                                        |
+| not rendered                                                                                           | record bodies, `options_considered`, incident `response`, release `version_or_label` and `followups`, research `questions`, `implications`, `evidence_links` |
+
+The sanitized git activity is read by [`src/lib/signals.ts`](../src/lib/signals.ts).
