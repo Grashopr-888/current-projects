@@ -140,9 +140,47 @@ const GALLERIES: Partial<Record<Product, { program?: Gallery; prototype?: Galler
   },
 };
 
+/** Where a project has been shown or accepted, as cards (skim layer). */
+type Venue = {
+  name: string;
+  place: string;
+  detail: string;
+  logo?: { src: string; alt: string };
+  paper?: { title: string; summary: string };
+  link?: { label: string; href: string };
+};
+const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
+  windchime: {
+    label: 'Recognition',
+    title: 'San Francisco, then Sydney',
+    venues: [
+      {
+        name: 'Gray Area',
+        place: 'San Francisco, USA · Aug 5–7, 2026',
+        detail: 'Debuted at the Gray Area Cultural Incubator Showcase.',
+      },
+      {
+        name: 'NeurIPS 2026 · Creative AI Track',
+        place: 'Sydney, Australia · December 2026',
+        detail: 'Accepted artwork, under the track theme Agency.',
+        paper: {
+          title: 'Windchime: an Audiovisual Installation with Audio-Language Model implementations',
+          summary:
+            'It shows how agency splits three ways: the artist authors the corpus, the model shapes what is reachable, and the visitor’s speech drives each turn.',
+        },
+        logo: { src: '/img/logo-neurips.svg', alt: 'NeurIPS' },
+        link: {
+          label: 'Read it on OpenReview',
+          href: 'https://openreview.net/forum?id=KKLTKVVHkM',
+        },
+      },
+    ],
+  },
+};
+
 const CREDITS: Record<Product, { context: string; tools: string[] }> = {
   windchime: {
-    context: 'Shown at Gray Area, San Francisco',
+    context: 'Shown at Gray Area, San Francisco; accepted to NeurIPS 2026 Creative AI, Sydney',
     tools: ['monome', 'Strudel', 'p5.js', 'Three.js'],
   },
   lichtspiel: {
@@ -168,6 +206,7 @@ const meta = PROJECT_META[slug];
 const diagram = DIAGRAMS[slug];
 const credit = CREDITS[slug];
 const gallery = GALLERIES[slug] ?? {};
+const venues = VENUES[slug];
 const demoVideoId = 'demoVideoId' in meta ? meta.demoVideoId : undefined;
 const demoVideoTitle = 'demoVideoTitle' in meta ? meta.demoVideoTitle : 'Project demo';
 
@@ -316,6 +355,38 @@ const idx = () => String(++n).padStart(2, '0');
                 </li>
               ))}
             </ul>
+          </Section>
+        )
+      }
+
+      {
+        venues && (
+          <Section index={idx()} label={venues.label} title={venues.title} id="recognition">
+            <div class="venues">
+              {venues.venues.map((v) => (
+                <div class="venue">
+                  {v.logo && (
+                    <span class="venue-logo">
+                      <img src={url(v.logo.src)} alt={v.logo.alt} loading="lazy" />
+                    </span>
+                  )}
+                  <p class="venue-name">{v.name}</p>
+                  <p class="venue-place">{v.place}</p>
+                  <p class="venue-detail">{v.detail}</p>
+                  {v.paper && (
+                    <>
+                      <p class="venue-paper">“{v.paper.title}”</p>
+                      <p class="venue-detail">{v.paper.summary}</p>
+                    </>
+                  )}
+                  {v.link && (
+                    <a class="venue-link plain" href={v.link.href}>
+                      {v.link.label} <span aria-hidden="true">→</span>
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
           </Section>
         )
       }
@@ -959,6 +1030,77 @@ const idx = () => String(++n).padStart(2, '0');
   }
   .partner-chip.partner-featured img {
     max-width: 26rem;
+  }
+
+  /* Venue cards (Recognition). */
+  .venues {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-4);
+    align-items: start;
+  }
+  /* Two venues side by side on wide screens; the later, fuller card gets more room. */
+  @media (min-width: 52rem) {
+    .venues {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    }
+  }
+  .venue {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .venue-logo {
+    align-self: flex-start;
+    display: inline-flex;
+    height: 3.6rem;
+    padding: 0.55rem 0.9rem;
+    margin-bottom: var(--sp-3);
+    border-radius: 10px;
+    background: #fff;
+  }
+  .venue-logo img {
+    height: 100%;
+    width: auto;
+    display: block;
+  }
+  .venue-name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .venue-place {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .venue-detail {
+    margin-top: 0.3rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  .venue-paper {
+    margin-top: 0.4rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .venue-link {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .venue-link:hover {
+    text-decoration: underline;
   }
 
   /* Image sections (skim layer). */

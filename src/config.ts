@@ -51,6 +51,9 @@ export const PROJECT_META = {
     // Installation demo. Privacy-enhanced (nocookie) embed of youtu.be/j3XyW2ynH5Y.
     demoVideoId: 'j3XyW2ynH5Y',
     demoVideoTitle: 'Windchime installation demo',
+    // Venue marks in the hero credit strip (attribution, not endorsement). Official NeurIPS logo
+    // from https://neurips.cc/FAQ/Press (viewBox added so it scales; artwork unchanged).
+    partners: [{ img: '/img/logo-neurips.svg', alt: 'NeurIPS' }],
   },
   lichtspiel: {
     label: 'Lichtspiel',
