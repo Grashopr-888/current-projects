@@ -3,12 +3,13 @@
   "label": "hrnsxtn (elk port + platform)",
   "product": "hrnsxtn",
   "dir": "mutek-hackathon-elkaudio",
-  "commitCount": 5,
+  "commitCount": 12,
   "firstDate": "2026-08-25",
-  "lastDate": "2026-08-31",
+  "lastDate": "2026-09-17",
   "authors": 1,
   "months": {
-    "2026-08": 5
+    "2026-08": 6,
+    "2026-09": 6
   },
   "days": {
     "2026-08-25": {
@@ -20,12 +21,20 @@
       "subjects": ["MUTEK-2026-styled presentation deck: One Bar Late (Elk adaptation)"]
     },
     "2026-08-31": {
-      "count": 3,
-      "subjects": [
-        "Portfolio: official title HRNSXTN x RDMSXN, showcase date Aug 28, MUTEK…",
-        "Portfolio: single-file DOCX + PDF compilation of the portfolio docs",
-        "Portfolio docs: career-facing write-ups of the MUTEK hackathon work"
-      ]
+      "count": 4,
+      "subjects": []
+    },
+    "2026-09-02": {
+      "count": 1,
+      "subjects": []
+    },
+    "2026-09-03": {
+      "count": 1,
+      "subjects": []
+    },
+    "2026-09-17": {
+      "count": 4,
+      "subjects": []
     }
   },
   "tags": []

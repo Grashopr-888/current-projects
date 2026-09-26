@@ -73,7 +73,7 @@
         "feat(dev-ui): Demo mode operator controls + presentation; pin animation…",
         "feat(dev-ui): Demo mode (D1) - ✦ Demo toggle; pin animation; plan doc",
         "chore(phase7): A5 + C shipped - Phase 7 complete; pin animation+eval; d…",
-        "chore(phase7): B part-2 shipped - pin animation+livecode; update handof…"
+        "chore: bump animation pin -> Phase 7 B part-1 (right rail + latent viz)"
       ]
     },
     "2026-06-24": {
@@ -110,7 +110,6 @@
       "subjects": [
         "feat(dev-ui): wild-mode toggle; docs: confirmed audio diagnosis + fixes…",
         "chore: bump animation -> 67e5bb2, livecode -> 347d00a (resolving-led ar…",
-        "docs: audio feedback/death investigation handoff",
         "feat(dev-ui): SEQ menu + thinking-sequence controls + audio-unlock hard…"
       ]
     },
@@ -123,10 +122,7 @@
     },
     "2026-07-06": {
       "count": 2,
-      "subjects": [
-        "docs: audio-immediacy plan - silent-lead-in stems + the \"Immediate\" sou…",
-        "chore(soak): bump animation + livecode submodules"
-      ]
+      "subjects": ["chore(soak): bump animation + livecode submodules"]
     },
     "2026-07-07": {
       "count": 2,
@@ -220,9 +216,9 @@
       "count": 5,
       "subjects": [
         "chore: bump livecode and animation pins for the 2026-08-04 levelling wo…",
-        "docs: open-issues register + 2026-08-04 mic session handoff",
         "docs: corpus/sequence levelling and the retrieval tuning picture",
-        "docs(audio): AUDIO_CONTROLS.md + bump animation and livecode"
+        "docs(audio): AUDIO_CONTROLS.md + bump animation and livecode",
+        "feat(dev-ui): install-mode audio tuning panel + record/volume layout"
       ]
     },
     "2026-08-05": {

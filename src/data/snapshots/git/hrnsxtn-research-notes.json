@@ -1,0 +1,36 @@
+{
+  "note": "Sanitized aggregate - day-level counts only (no subjects or tags). Raw pull stays gitignored.",
+  "label": "hrnsxtn (research notes)",
+  "product": "hrnsxtn",
+  "dir": "hrnsxtn-research-notes",
+  "commitCount": 33,
+  "firstDate": "2026-09-14",
+  "lastDate": "2026-09-24",
+  "authors": 1,
+  "months": {
+    "2026-09": 33
+  },
+  "days": {
+    "2026-09-14": {
+      "count": 9,
+      "subjects": []
+    },
+    "2026-09-16": {
+      "count": 6,
+      "subjects": []
+    },
+    "2026-09-17": {
+      "count": 8,
+      "subjects": []
+    },
+    "2026-09-18": {
+      "count": 6,
+      "subjects": []
+    },
+    "2026-09-24": {
+      "count": 4,
+      "subjects": []
+    }
+  },
+  "tags": []
+}

@@ -53,7 +53,11 @@ function sanitizeSubject(subject: string, findings: Finding[]): string | null {
   // Anything that might reference a person or an address stays private.
   if (/co-authored|signed-off|merge branch|merge pull|@/i.test(subject)) return null;
   // In-progress research writing stays private: drop anything paper-adjacent.
-  if (/submission|camera.?ready|overleaf|neurips|\bpaper\b|\bvenue\b|manuscript/i.test(subject))
+  if (
+    /submission|camera.?ready|overleaf|neurips|ismir|\blbd\b|late.?breaking|\bpaper\b|\bvenue\b|manuscript|\bdraft\b|citation|bibtex|refs\.bib|reviewer|portfolio|handoff/i.test(
+      subject
+    )
+  )
     return null;
   const r = redact(subject, { hosts: true, emails: true });
   findings.push(...r.findings);
@@ -125,19 +129,24 @@ function main(): void {
       authors.add(c.author);
       const day = (days[c.date] ??= { count: 0, subjects: [] });
       day.count += 1;
-      if (day.subjects.length < MAX_DAY_SUBJECTS) {
+      const subjectsAllowed =
+        src.subjects !== false && (!src.subjectsUntil || c.date <= src.subjectsUntil);
+      if (subjectsAllowed && day.subjects.length < MAX_DAY_SUBJECTS) {
         const s = sanitizeSubject(c.subject, findings);
         if (s) day.subjects.push(s);
       }
     }
-    const tags = tagsRaw.map((t) => {
+    const tags = (src.subjects === false ? [] : tagsRaw).map((t) => {
       const r = redact(t.name, { hosts: true, emails: true });
       findings.push(...r.findings);
       return { name: r.text, date: t.date };
     });
 
     const snap: GitSnapshot = {
-      note: 'Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.',
+      note:
+        src.subjects === false
+          ? 'Sanitized aggregate - day-level counts only (no subjects or tags). Raw pull stays gitignored.'
+          : 'Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.',
       label: src.label,
       product: src.product,
       dir: src.dir,

@@ -22,6 +22,17 @@ export interface RepoSource {
    */
   path?: string;
   githubRepo?: string; // "owner/name", if you want GitHub metadata too
+  /**
+   * false: ship day-level counts only, never commit subjects or tag names. For repos that
+   * hold research writing still under review, where a subject line could name a venue,
+   * a draft or a finding.
+   */
+  subjects?: boolean;
+  /**
+   * Ship subjects only for commits on or before this date (YYYY-MM-DD); later commits count
+   * without subjects. For a repo whose later work feeds research that is still under review.
+   */
+  subjectsUntil?: string;
 }
 
 /** The private repos this showcase draws sanitized evidence from. */
@@ -62,9 +73,26 @@ export const REPOS: RepoSource[] = [
     label: 'hrnsxtn (elk port + platform)',
     product: 'hrnsxtn',
     dir: 'mutek-hackathon-elkaudio',
+    // After the hackathon this repo carries measurements for research under review.
+    subjectsUntil: '2026-08-31',
     githubRepo: 'Grashopr-888/elk-mutek',
   },
   { label: 'hrnsxtn (hackathon build)', product: 'hrnsxtn', dir: 'mutek-hackathon' },
+  // Research after the hackathon (Elk port study). Counts only: the writing is under review.
+  {
+    label: 'hrnsxtn (research code)',
+    product: 'hrnsxtn',
+    dir: 'hrnsxtn-research-code',
+    path: 'ISMIR_LBD_2026_submission',
+    subjects: false,
+  },
+  {
+    label: 'hrnsxtn (research notes)',
+    product: 'hrnsxtn',
+    dir: 'hrnsxtn-research-notes',
+    path: 'elkaudio-ISMIR26',
+    subjects: false,
+  },
 ];
 
 export function repoPath(src: RepoSource): string {

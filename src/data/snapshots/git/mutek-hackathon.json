@@ -31,10 +31,7 @@
     },
     "2026-08-19": {
       "count": 2,
-      "subjects": [
-        "perf(engine): memoise + persist the most-audible-window scan (offsets.j…",
-        "docs: LYDIA port plan, handoff 06, session 11 log, API re-check (Kumon …"
-      ]
+      "subjects": ["perf(engine): memoise + persist the most-audible-window scan (offsets.j…"]
     },
     "2026-08-20": {
       "count": 3,
