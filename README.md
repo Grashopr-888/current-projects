@@ -2,8 +2,10 @@
 
 A public record of **how** three creative technology products, **Windchime**, **Lichtspiel**
 and **HRNSXTN x RDMSXN**, are being built: discovery, decisions, roadmap, releases, incidents, and
-iteration. It exists to show technical-product-management and product-engineering practice
-**without exposing the products' private source code**.
+iteration. It also hosts **Probing the World for Groove**, the MSc thesis and ISMIR 2025
+Late-Breaking Demo, under `/projects/groove/` (ported from its own site; thesis assets in
+`public/groove/`, data in `src/data/groove/`). It exists to show technical-product-management
+and product-engineering practice **without exposing the products' private source code**.
 
 The site treats process as the artifact, and it is a **living site**: the project records
 are updated as the work progresses, and new projects will be added here as they start.
