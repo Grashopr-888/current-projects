@@ -91,6 +91,7 @@ const here = Astro.url.pathname;
     color: var(--muted);
     padding: 0.42rem 0.62rem;
     border-radius: var(--radius);
+    white-space: nowrap;
     transition:
       color 0.15s ease,
       background 0.15s ease;
@@ -108,6 +109,24 @@ const here = Astro.url.pathname;
     color: var(--accent);
     font-weight: 700;
   }
+  /* Project names are the long labels: only they may wrap, onto two balanced lines. */
+  @media (min-width: 1181px) {
+    .nav-link {
+      padding-inline: 0.52rem;
+    }
+    .nav-link[data-accent] {
+      white-space: normal;
+      text-wrap: balance;
+      min-width: 5.8rem;
+      max-width: 12.5rem;
+      line-height: 1.3;
+      text-align: center;
+    }
+    /* The longest name: wide enough for "Probing the World / for Groove" on two lines. */
+    .nav-link[data-accent='groove'] {
+      min-width: 9.2rem;
+    }
+  }
   .nav-link[data-accent]:hover {
     color: color-mix(in oklab, var(--accent) 65%, #fff);
     background: color-mix(in oklab, var(--accent) 12%, transparent);
@@ -117,8 +136,9 @@ const here = Astro.url.pathname;
     box-shadow: inset 0 -2px 0 var(--accent);
   }
 
-  /* mobile: collapse nav into a disclosure panel (no runtime JS needed) */
-  @media (max-width: 800px) {
+  /* Narrow screens: collapse nav into a disclosure panel. Four project names plus five
+     pages need about 1180px in one row, so the panel takes over below that. */
+  @media (max-width: 1180px) {
     .nav {
       display: block;
       position: relative;
@@ -163,7 +183,7 @@ const here = Astro.url.pathname;
       top: calc(100% + 0.6rem);
       flex-direction: column;
       align-items: stretch;
-      min-width: 13rem;
+      min-width: 17rem;
       padding: 0.4rem;
       background: var(--surface);
       border: var(--hair) solid var(--hairline);
