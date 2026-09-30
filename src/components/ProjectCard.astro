@@ -79,6 +79,20 @@ const partners = 'partners' in meta ? meta.partners : [];
       </div>
     )
   }
+  {
+    d.skills.length > 0 && (
+      <div class="pcard-langs">
+        <span class="pcard-langs-label">Core skills</span>
+        <span class="cluster">
+          {d.skills.map((t) => (
+            <span class="chip" data-product={slug}>
+              {t}
+            </span>
+          ))}
+        </span>
+      </div>
+    )
+  }
   <div class="pcard-foot">
     <span class="pcard-tf">{d.timeframe}</span>
     <span class="pcard-go">Explore <span class="arrow">→</span></span>

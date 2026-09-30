@@ -56,6 +56,7 @@ const projects = defineCollection({
       accent: z.string().optional(), // per-project accent color (hsl/hex)
       tech: z.array(z.string()).default([]),
       languages: z.array(z.string()).default([]), // exhaustive programming-language list
+      skills: z.array(z.string()).default([]), // core skills, shown under Languages on the card
       hero: image().optional(),
       related_research: z.array(reference('research')).default([]),
       related_decisions: z.array(reference('decisions')).default([]),

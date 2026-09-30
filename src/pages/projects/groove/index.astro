@@ -38,7 +38,7 @@ const idx = () => String(++n).padStart(2, '0');
     status={d.status}
     thesisLabel="The question"
     thesis={GROOVE.question}
-    tools={['PaSST', 'audiomentations', 'TensorFlow Datasets', 'Google Colab']}
+    tools={['PyTorch', 'CUDA', 'A100 / L4 GPUs', 'PaSST', 'audiomentations']}
   >
     <div class="g-actions">
       <a class="btn btn-primary" href={gpage('/experiments')}>Explore the results</a>
@@ -48,6 +48,77 @@ const idx = () => String(++n).padStart(2, '0');
       <a class="btn" href={LINKS.repo} rel="noopener">View code</a>
     </div>
   </ProjectHero>
+
+  <Section
+    index={idx()}
+    label="Model work"
+    title="Training and reshaping the models"
+    id="model-work"
+  >
+    <div class="skills" aria-label="Core skills">
+      {
+        d.skills.map((t) => (
+          <span class="chip" data-product="groove">
+            {t}
+          </span>
+        ))
+      }
+    </div>
+    <div class="g-grid2 mw-grid">
+      <article class="g-card mw">
+        <header>
+          <ModelBadge model="passt" size="md" />
+          <h3>Transformer modification</h3>
+        </header>
+        <p>
+          Froze the PaSST backbone, pretrained on AudioSet, and replaced both of its classifier
+          heads with custom MLP heads: 2 to 7 layers, two bottleneck shapes, time patchout on and
+          off.
+        </p>
+        <p class="mw-result">Best: 4 layer head, 0.8752 macro-F1 · 21 PaSST runs</p>
+      </article>
+      <article class="g-card mw">
+        <header>
+          <ModelBadge model="cnn" size="md" />
+          <h3>CNN architecture design</h3>
+        </header>
+        <p>
+          Built a VGG style CNN in PyTorch for drum audio: stacked 3 × 3 convolutions with max
+          pooling, depth tuned across 5, 7 and 9 layers.
+        </p>
+        <p class="mw-result">Best: 7 layers (16 to 192 channels), 0.908 macro-F1 · 13 CNN runs</p>
+      </article>
+      <article class="g-card mw">
+        <header>
+          <span class="mw-tag">CUDA</span>
+          <h3>Cloud GPU training</h3>
+        </header>
+        <p>
+          34 runs across 11 rounds on NVIDIA A100 and L4 GPUs in Google Colab, with CUDA device
+          placement and PyTorch Lightning for the PaSST runs. Adam, batch 16, up to 50 epochs, early
+          stopping.
+        </p>
+        <p class="mw-result">15 runs on A100, 15 on L4 · 3 to 8 hours each</p>
+      </article>
+      <article class="g-card mw">
+        <header>
+          <span class="mw-tag">torchaudio</span>
+          <h3>Inputs and augmentation</h3>
+        </header>
+        <p>
+          Two input pipelines from one set of clips: 16 kHz log mel spectrograms for the CNN, 32 kHz
+          audio padded to 10 s for PaSST. Gaussian noise, room simulation and time stretch, plus
+          three padding modes.
+        </p>
+        <p class="mw-result">Augmentation lifted the CNN; reflection padding lifted PaSST</p>
+      </article>
+    </div>
+    <p class="g-small g-gap">
+      Every run with its configuration, GPU and notebook is in the <a href={gpage('/experiments')}
+        >experiment explorer</a
+      >; the full protocol is on <a href={gpage('/method')}>Method</a>.
+    </p>
+  </Section>
 
   <Section index={idx()} label="Presentation" title="Watch the talk" id="demo">
     <div class="g-video">
@@ -309,6 +380,54 @@ const idx = () => String(++n).padStart(2, '0');
     .versus-div {
       display: none;
     }
+  }
+
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .skills .chip {
+    font-size: 0.78rem;
+    padding: 0.3em 0.8em;
+  }
+  .mw-grid {
+    align-items: stretch;
+  }
+  .mw {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .mw header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .mw h3 {
+    margin: 0;
+  }
+  .mw p {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .mw .mw-result {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+    border-top: var(--hair) solid var(--hairline);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--accent);
+  }
+  .mw-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0.25em 0.75em;
+    border: var(--hair) solid color-mix(in oklab, var(--accent) 45%, var(--hairline));
+    border-radius: 100px;
+    color: var(--accent);
+    background: var(--accent-soft);
   }
 
   .pub .g-actions {

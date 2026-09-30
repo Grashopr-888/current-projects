@@ -28,11 +28,24 @@ public_visibility_note: >-
 featured: true
 order: 4
 tech:
+  - PyTorch and PyTorch Lightning
+  - CUDA on NVIDIA A100 and L4 GPUs (Google Colab)
   - PaSST (frozen, pretrained on AudioSet)
   - VGG style CNN
+  - torchaudio
   - audiomentations
   - TensorFlow Datasets
-  - Google Colab (A100 / L4)
 languages:
   - Python
+# Evidence in the notebook archive: PyTorch in 40 of 45 notebooks, CUDA device code in 24,
+# Lightning in 24, custom classifier heads replacing PaSST's in 14, custom Conv2d CNNs in 16.
+skills:
+  - PyTorch
+  - PyTorch Lightning
+  - CUDA
+  - Cloud GPU training (A100, L4)
+  - Transformer modification (PaSST heads)
+  - CNN architecture design
+  - Transfer learning
+  - Audio augmentation
 ---
