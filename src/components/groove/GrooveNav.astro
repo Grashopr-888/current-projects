@@ -1,0 +1,66 @@
+---
+/** Section tabs for the thesis pages, sticky under the site header. */
+import { SUBNAV, gpage } from '../../lib/groove';
+interface Props {
+  /** The current page's path within the section, e.g. "/method". */
+  current: string;
+}
+const { current } = Astro.props;
+---
+
+<nav class="gnav" aria-label="Probing the World for Groove">
+  <div class="container gnav-inner">
+    {
+      SUBNAV.map((item) => (
+        <a
+          class="gnav-link plain"
+          href={gpage(item.path)}
+          aria-current={item.path === current ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>
+
+<style>
+  .gnav {
+    position: sticky;
+    top: 3.7rem;
+    z-index: 40;
+    background: color-mix(in oklab, var(--bg) 90%, transparent);
+    backdrop-filter: blur(10px) saturate(1.2);
+    border-bottom: var(--hair) solid var(--hairline);
+  }
+  .gnav-inner {
+    display: flex;
+    gap: 0.2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .gnav-inner::-webkit-scrollbar {
+    display: none;
+  }
+  .gnav-link {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.85rem 0.7rem;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+  }
+  .gnav-link:first-child {
+    padding-left: 0;
+  }
+  .gnav-link:hover {
+    color: var(--ink);
+  }
+  .gnav-link[aria-current='page'] {
+    color: var(--accent);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+</style>

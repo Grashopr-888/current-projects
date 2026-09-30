@@ -1,0 +1,61 @@
+---
+/** "Next project →" at the foot of every project page, in the next project's hue. */
+import { PROJECT_META, nextProject, type ProjectSlug } from '../config';
+import { url } from '../lib/url';
+
+interface Props {
+  slug: ProjectSlug;
+}
+const other = nextProject(Astro.props.slug);
+const meta = PROJECT_META[other];
+---
+
+<nav class="pnext" aria-label="Other project">
+  <div class="container">
+    <a class="pnext-link plain" href={url(`/projects/${other}`)} data-accent={other}>
+      <span class="label">Next project →</span>
+      <span class="pnext-name">{meta.label}</span>
+      <span class="pnext-kind">{meta.kind}</span>
+    </a>
+  </div>
+</nav>
+
+<style>
+  .pnext {
+    margin-top: var(--sp-7);
+    border-top: var(--hair) solid var(--hairline);
+    padding-block: var(--sp-7);
+  }
+  .pnext-link {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    text-decoration: none;
+    padding: var(--sp-4) var(--sp-5);
+    margin: calc(var(--sp-4) * -1) calc(var(--sp-5) * -1);
+    border-radius: var(--radius-lg);
+    transition: background 0.15s ease;
+  }
+  .pnext-link:hover {
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+  }
+  .pnext-link:hover .pnext-name {
+    color: var(--accent);
+  }
+  .pnext-link .label {
+    color: var(--accent);
+  }
+  .pnext-name {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 750;
+    font-stretch: var(--display-stretch);
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .pnext-kind {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+</style>

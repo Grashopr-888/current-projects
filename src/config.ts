@@ -6,8 +6,8 @@ export const SITE = {
   author: 'Trent Eriksen',
   role: 'Technical Product Manager / Product Engineer',
   description:
-    'Current projects by Trent Eriksen. Windchime, Lichtspiel, and HRNSXTN x RDMSXN: ML audio ' +
-    'research meeting interactive AV prototyping, documented in depth.',
+    'Current projects by Trent Eriksen. Windchime, Lichtspiel, HRNSXTN x RDMSXN and Probing the ' +
+    'World for Groove: ML audio research meeting interactive AV prototyping, documented in depth.',
   handle: 'Grashopr-888',
   githubUrl: 'https://github.com/Grashopr-888',
   repoUrl: 'https://github.com/Grashopr-888/current-projects',
@@ -22,12 +22,13 @@ export const SHOW_EMAIL = false;
 export const NAV: ReadonlyArray<{
   label: string;
   href: string;
-  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn';
+  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove';
 }> = [
   { label: 'Overview', href: '/' },
   { label: 'Windchime', href: '/projects/windchime', accent: 'windchime' },
   { label: 'Lichtspiel', href: '/projects/lichtspiel', accent: 'lichtspiel' },
   { label: 'HRNSXTN x RDMSXN', href: '/projects/hrnsxtn', accent: 'hrnsxtn' },
+  { label: 'Probing the World for Groove', href: '/projects/groove', accent: 'groove' },
   { label: 'How I Work', href: '/how-i-work' },
   { label: 'Releases', href: '/releases' },
   { label: 'Research', href: '/research' },
@@ -113,4 +114,38 @@ export const PROJECT_META = {
       { img: '/img/logo-musichackspace.png', alt: 'Music Hackspace' },
     ],
   },
+  groove: {
+    label: 'Probing the World for Groove',
+    kind: 'Transfer learning for drum audio style classification',
+    credit:
+      'ISMIR 2025 Late-Breaking Demo, Daejeon, South Korea; MSc thesis, Media Technology, Leiden University',
+    accent: 'var(--gr)',
+    logo: '/img/groove-mark.svg',
+    // Both models' t-SNE maps of the same test clips (CNN left, PaSST right), drawn from
+    // public/groove/data/embeddings-*.json on the site's dark ground.
+    art: '/img/groove-hero.svg',
+    artAlt:
+      'Two t-SNE maps of the same two bar drum clips, coloured by primary style: the CNN on the left, frozen PaSST on the right',
+    // The ISMIR 2025 talk. Privacy-enhanced (nocookie) embed of youtu.be/f_nIl5qMxlY.
+    demoVideoId: 'f_nIl5qMxlY',
+    demoVideoTitle: 'ISMIR 2025 LBD: Drum Audio Style Classification',
+    // Venue marks (attribution, not endorsement): the ISMIR 2025 conference mark from
+    // ismir2025.ismir.net (resized, artwork unchanged) and the society wordmark from ismir.net.
+    partners: [
+      { img: '/img/logo-ismir2025.png', alt: 'ISMIR 2025, Daejeon' },
+      {
+        img: '/img/logo-ismir.png',
+        alt: 'ISMIR, International Society for Music Information Retrieval',
+        scale: 0.55,
+      },
+    ],
+  },
 } as const;
+
+export type ProjectSlug = keyof typeof PROJECT_META;
+
+/** Reading order for the "Next project" link at the foot of every project page. */
+const PROJECT_ORDER: ProjectSlug[] = ['windchime', 'lichtspiel', 'hrnsxtn', 'groove'];
+export function nextProject(slug: ProjectSlug): ProjectSlug {
+  return PROJECT_ORDER[(PROJECT_ORDER.indexOf(slug) + 1) % PROJECT_ORDER.length];
+}

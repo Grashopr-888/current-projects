@@ -1,0 +1,2 @@
+# Minified t-SNE embeddings fetched at runtime by the Groove explorer; pretty printing would triple their size.
+public/groove/data/*.json

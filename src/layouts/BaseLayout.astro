@@ -13,7 +13,7 @@ import { url } from '../lib/url';
 interface Props {
   title?: string;
   description?: string;
-  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'shared' | 'brand';
+  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove' | 'shared' | 'brand';
 }
 const { title, description = SITE.description, accent } = Astro.props;
 
@@ -39,6 +39,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : As
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#121214" />
     <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

@@ -1,0 +1,120 @@
+---
+/** Ranked horizontal bars on one model's own axis (never shared across models). */
+interface Item {
+  label: string;
+  value: number;
+}
+interface Props {
+  title: string;
+  items: Item[];
+  model?: 'cnn' | 'passt';
+  unit?: string;
+  caption?: string;
+  source?: string;
+}
+const { title, items, model, unit = '', caption, source } = Astro.props;
+const max = Math.max(...items.map((i) => i.value));
+const color = model === 'cnn' ? 'var(--cnn)' : model === 'passt' ? 'var(--passt)' : 'var(--accent)';
+const fmt = (v: number) => (v >= 100 ? v.toFixed(0) : v.toFixed(1));
+---
+
+<figure class="rbars">
+  <figcaption class="rbars-title">{title}</figcaption>
+  <div class="rbars-rows" style={`--bar:${color}`}>
+    {
+      items.map((it) => (
+        <div class="rbars-row">
+          <span class="rbars-label">{it.label}</span>
+          <span class="rbars-track">
+            <span class="rbars-fill" style={`width:${(it.value / max) * 100}%`} />
+          </span>
+          <span class="rbars-val">
+            {fmt(it.value)}
+            {unit}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+  {
+    (caption || source) && (
+      <figcaption class="rbars-cap">
+        {caption}
+        {source && <span class="rbars-src"> · {source}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .rbars {
+    margin: 0;
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .rbars-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 700;
+    font-stretch: 110%;
+    line-height: 1.25;
+    margin-bottom: var(--sp-4);
+    text-wrap: balance;
+  }
+  .rbars-rows {
+    display: grid;
+    gap: 0.7rem;
+  }
+  .rbars-row {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr 3.4rem;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .rbars-label {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rbars-track {
+    height: 1.1rem;
+    background: var(--surface-2);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .rbars-fill {
+    display: block;
+    height: 100%;
+    background: var(--bar);
+    border-radius: 100px;
+  }
+  .rbars-val {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    text-align: right;
+  }
+  .rbars-cap {
+    margin-top: var(--sp-4);
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .rbars-src {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--faint);
+  }
+  @media (max-width: 480px) {
+    .rbars-row {
+      grid-template-columns: 6rem 1fr 2.8rem;
+    }
+  }
+</style>

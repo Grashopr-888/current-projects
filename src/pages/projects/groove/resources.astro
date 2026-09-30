@@ -1,0 +1,376 @@
+---
+import GrooveLayout from '../../../layouts/GrooveLayout.astro';
+import Section from '../../../components/Section.astro';
+import ModelBadge from '../../../components/groove/ModelBadge.astro';
+import AudioExamples from '../../../components/groove/AudioExamples.astro';
+import references from '../../../data/groove/references.json';
+import { LINKS, ASSETS, gpage, notebookUrl, type Model } from '../../../lib/groove';
+
+const downloads = [
+  { label: 'MSc thesis', meta: 'PDF · 57 pp', href: ASSETS.thesisPdf },
+  { label: 'ISMIR 2025 LBD paper', meta: 'PDF · 3 pp', href: ASSETS.lbdPdf },
+  { label: 'Poster', meta: 'PDF', href: ASSETS.posterPdf },
+  { label: 'Presentation video', meta: 'YouTube', href: LINKS.video },
+  { label: 'Experiment workbook', meta: 'XLSX · 17 sheets', href: ASSETS.workbook },
+  { label: 'Notebook archive', meta: 'GitHub', href: LINKS.archiveRepo },
+];
+
+// Curated notebook index: highlights per theme. Full archive linked separately.
+const notebookGroups: Array<{
+  title: string;
+  items: Array<{ nb: string; model: Model | null; exp: string; note: string }>;
+}> = [
+  {
+    title: 'Foundational and configuration',
+    items: [
+      {
+        nb: 'GMD_CNN_prototype3.ipynb',
+        model: 'cnn',
+        exp: '1.1',
+        note: 'Baseline CNN, rock styles',
+      },
+      { nb: 'PaSST_setup2.ipynb', model: 'passt', exp: '1.2', note: 'Baseline PaSST, rock styles' },
+      { nb: 'PaSST_setup4.ipynb', model: 'passt', exp: '2.2', note: 'PaSST configuration' },
+    ],
+  },
+  {
+    title: 'Dataset exploration (low data and full)',
+    items: [
+      { nb: 'GMD_CNN_prototype4.ipynb', model: 'cnn', exp: '3.1', note: 'GMD-mini (low data)' },
+      { nb: 'PaSST_setup5.ipynb', model: 'passt', exp: '3.2', note: 'GMD-mini (low data)' },
+      { nb: 'GMD_CNN_prototype5.ipynb', model: 'cnn', exp: '4.1', note: 'GMD-full' },
+      { nb: 'PaSST_setup6.ipynb', model: 'passt', exp: '4.2', note: 'GMD-full' },
+    ],
+  },
+  {
+    title: 'Model depth and patchout',
+    items: [
+      { nb: 'PaSST_setup6_4.ipynb', model: 'passt', exp: '6.1', note: 't-SNE and time patchout' },
+      {
+        nb: 'PaSST_setup6_8.ipynb',
+        model: 'passt',
+        exp: '8.3',
+        note: 'Best PaSST head (4 layer MLP)',
+      },
+      {
+        nb: 'GMD_CNN_prototype6_2.ipynb',
+        model: 'cnn',
+        exp: '9.2',
+        note: 'Best CNN depth (7 conv)',
+      },
+    ],
+  },
+  {
+    title: 'Augmentation and padding',
+    items: [
+      {
+        nb: 'GMD_CNN_prototype6_4.ipynb',
+        model: 'cnn',
+        exp: '10.1',
+        note: 'Final CNN, noise + room sim',
+      },
+      {
+        nb: 'PaSST_setup6_16.ipynb',
+        model: 'passt',
+        exp: '11.2',
+        note: 'Final PaSST, reflection padding',
+      },
+      {
+        nb: 'GMD_CNN_prototype6_6.ipynb',
+        model: 'cnn',
+        exp: '11.3',
+        note: 'CNN + reflection padding',
+      },
+    ],
+  },
+  {
+    title: 'Representation analysis',
+    items: [
+      {
+        nb: 'GMD_CNN_prototype5_3_tSNE.ipynb',
+        model: 'cnn',
+        exp: '',
+        note: 'CNN t-SNE and centroids',
+      },
+      {
+        nb: 'GMD_prototype_preprocessing.ipynb',
+        model: null,
+        exp: '',
+        note: 'Data preprocessing pipeline',
+      },
+    ],
+  },
+];
+
+let n = 0;
+const idx = () => String(++n).padStart(2, '0');
+---
+
+<GrooveLayout
+  current="/resources"
+  title="Resources"
+  description="Papers, data, the curated notebook index, dataset attribution, citation, and reproducibility notes."
+  label="Resources"
+  heading="Papers, data, notebooks and reproducibility"
+  lede="Everything needed to read, cite, inspect, or build on the work: the publication artifacts, the experiment workbook, and a curated index into the research notebooks."
+>
+  <Section index={idx()} label="Downloads and links" title="Publication artifacts">
+    <div class="dl-grid">
+      {
+        downloads.map((d) => (
+          <a class="dl plain" href={d.href} rel="noopener">
+            <span class="dl-label">{d.label}</span>
+            <span class="dl-meta">{d.meta}</span>
+            <span class="dl-arrow" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section index={idx()} label="Hear the data" title="Two bar grooves across styles">
+    <p class="g-lead">
+      A handful of rendered GMD clips, the same kind of two bar audio the models classify. Style and
+      tempo come from the dataset annotations; no model predictions are shown.
+    </p>
+    <div class="g-gap"><AudioExamples /></div>
+    <p class="g-small g-gap">
+      Excerpts from the Groove MIDI Dataset (Google / Magenta, CC BY 4.0), 16 kHz mono.
+    </p>
+  </Section>
+
+  <Section index={idx()} label="Curated notebook index" title="Read the experiments at the source">
+    <p class="g-lead">
+      Selected notebooks grouped by theme, each linking to the research repository. The <a
+        href={gpage('/experiments')}>Experiments explorer</a
+      > maps every one of the 34 experiments to its notebook.
+    </p>
+    <div class="nb-groups">
+      {
+        notebookGroups.map((g) => (
+          <div class="nb-group">
+            <h3>{g.title}</h3>
+            <ul>
+              {g.items.map((it) => (
+                <li>
+                  <a href={notebookUrl(it.nb)} rel="noopener" class="nb-name">
+                    {it.nb}
+                  </a>
+                  <span class="nb-tags">
+                    {it.model && <ModelBadge model={it.model} />}
+                    {it.exp && <span class="nb-exp">exp {it.exp}</span>}
+                  </span>
+                  <span class="nb-note">{it.note}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <p class="g-small g-gap">
+      Full archive: <a href={LINKS.archiveRepo} rel="noopener">all notebooks on GitHub →</a>
+    </p>
+  </Section>
+
+  <Section index={idx()} label="Attribution and reproducibility">
+    <div class="g-grid2 two">
+      <div>
+        <h3 class="sub-h">Groove MIDI Dataset</h3>
+        <p class="g-text">
+          All audio derives from the <a href={LINKS.gmd}>Groove MIDI Dataset</a> by Google / Magenta,
+          released under <strong>CC BY 4.0</strong>. Any audio examples on this site are short
+          excerpts used with attribution; the full dataset is not redistributed here.
+        </p>
+        <p class="g-small">
+          Gillick, J., Roberts, A., Engel, J., Eck, D., &amp; Bamman, D. (2019). Learning to Groove
+          with Inverse Sequence Transformations. ICML.
+        </p>
+      </div>
+      <div>
+        <h3 class="sub-h">How the work runs</h3>
+        <ul class="g-list">
+          <li>
+            Notebooks were developed and run in Google Colab on NVIDIA A100 or L4 GPUs (assigned by
+            runtime availability); each experiment took roughly 3 to 8 hours depending on GPU type.
+          </li>
+          <li>
+            Key libraries: <a href={LINKS.passt}>passt_hear21</a>, <a
+              href={LINKS.drumClassification}>DrumClassification</a
+            > (CNN basis), <a href={LINKS.audiomentations}>audiomentations</a>.
+          </li>
+          <li>
+            This site builds from <strong>saved notebook outputs</strong>, and never retrains models
+            or reexecutes notebooks.
+          </li>
+          <li>
+            Three notebooks were restored from local backups after surfacing as truncated in the
+            repo (see the audit log).
+          </li>
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Bibliography"
+    title="References cited in the thesis"
+    id="references"
+    collapsible
+    count={references.length}
+  >
+    <p class="g-small">
+      The works cited in <em>Probing the World for Groove</em>, each linked to the paper, preprint,
+      or repository.
+    </p>
+    {/* References are verbatim. */}
+    <ol class="refs">
+      {
+        references.map((r) => (
+          <li>
+            <span class="refs-a">{r.authors}.</span>{' '}
+            <a href={r.url} rel="noopener">
+              {r.title}
+            </a>
+            .{' '}
+            <span class="refs-v">
+              {r.venue}, {r.year}.
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+</GrooveLayout>
+
+<style>
+  .dl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  .dl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.2rem var(--sp-3);
+    padding: var(--sp-4) var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    color: var(--ink);
+    transition:
+      border-color 0.15s ease,
+      transform 0.15s ease,
+      background 0.15s ease;
+  }
+  .dl:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--hairline));
+    background: color-mix(in oklab, var(--accent) 4%, var(--surface));
+  }
+  .dl-label {
+    grid-column: 1;
+    font-weight: 600;
+  }
+  .dl-meta {
+    grid-column: 1;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .dl-arrow {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    color: var(--accent);
+    font-size: var(--step-1);
+  }
+
+  .nb-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+    gap: var(--sp-6);
+    margin-top: var(--sp-5);
+  }
+  .nb-group h3 {
+    padding-bottom: var(--sp-2);
+    margin-bottom: var(--sp-3);
+    border-bottom: var(--hair) solid var(--hairline-strong);
+    font-size: 0.86rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .nb-group ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .nb-group li {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .nb-name {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    word-break: break-all;
+  }
+  .nb-tags {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .nb-exp {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--faint);
+  }
+  .nb-note {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .two {
+    margin-top: 0;
+    gap: var(--sp-7);
+  }
+  .sub-h {
+    margin-bottom: var(--sp-3);
+    font-size: var(--step-1);
+  }
+
+  .refs {
+    columns: 2;
+    column-gap: var(--sp-7);
+    margin-top: var(--sp-5);
+    padding-left: 1.4em;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .refs li {
+    margin-bottom: var(--sp-3);
+    break-inside: avoid;
+    line-height: 1.5;
+  }
+  .refs li::marker {
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+  .refs-a {
+    color: var(--muted);
+  }
+  .refs-v {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--faint);
+  }
+  @media (max-width: 700px) {
+    .refs {
+      columns: 1;
+    }
+  }
+</style>

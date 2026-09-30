@@ -1,0 +1,269 @@
+---
+import GrooveLayout from '../../../layouts/GrooveLayout.astro';
+import Section from '../../../components/Section.astro';
+import Cite from '../../../components/groove/Cite.astro';
+import { PROJECT_META } from '../../../config';
+import { LINKS, ASSETS, PUBLICATION, gasset } from '../../../lib/groove';
+
+const meta = PROJECT_META.groove;
+
+// Citations and BibTeX are verbatim.
+const thesisBib = `@mastersthesis{eriksen2025probing,
+  title   = {Probing the World for Groove: A Comparative Study of
+             Transfer Learning for Drum Audio Style Classification},
+  author  = {Eriksen, Trent},
+  school  = {Leiden University},
+  type    = {{MSc} thesis, Media Technology},
+  address = {Leiden, The Netherlands},
+  year    = {2025},
+  month   = jun
+}`;
+
+const lbdBib = `@inproceedings{eriksen2025comparative,
+  title     = {A Comparative Study of Transfer Learning for
+               Drum Audio Style Classification},
+  author    = {Eriksen, Trent and van der Heide, Edwin and Saunders, Robert},
+  booktitle = {Extended Abstracts for the Late-Breaking/Demo Session of the
+               26th Int. Society for Music Information Retrieval Conf. (ISMIR)},
+  address   = {Daejeon, South Korea},
+  year      = {2025}
+}`;
+
+let n = 0;
+const idx = () => String(++n).padStart(2, '0');
+---
+
+<GrooveLayout
+  current="/publication"
+  title="ISMIR 2025"
+  description="The ISMIR 2025 Late-Breaking Demo: abstract, paper, poster, video, citation, and acknowledgements."
+  label="ISMIR 2025 · Late-Breaking Demo"
+  heading="From MSc thesis to ISMIR publication"
+  lede="The thesis was condensed into a Late-Breaking Demo presented at the 26th ISMIR conference in Daejeon, South Korea."
+>
+  <Section
+    index={idx()}
+    label="Daejeon, South Korea · September 2025"
+    title="Presented at the 26th ISMIR"
+  >
+    <div class="conf">
+      <img
+        class="conf-photo"
+        src={gasset('/figures/ismir-2025-author.webp')}
+        width="825"
+        height="1100"
+        alt="Trent Eriksen holding his ISMIR 2025 author badge in the conference hall, with the 26th ISMIR title screen behind him."
+        loading="lazy"
+        decoding="async"
+      />
+      <div>
+        <p class="g-lead">
+          The Late-Breaking Demo was presented at the 26th International Society for Music
+          Information Retrieval Conference. The trip was supported by an ISMIR First-time Authors
+          Grant and research grants from Leiden University.
+        </p>
+        <div class="g-actions">
+          <a class="btn" href={LINKS.ismir} rel="noopener">Official ISMIR 2025 page</a>
+          <a class="btn" href={LINKS.scholar} rel="noopener">Author on Google Scholar</a>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section index={idx()} label="Two distinct works">
+    <div class="g-grid2 works">
+      <article class="work">
+        <p class="work-kind">MSc Thesis</p>
+        <h2 class="work-title">{PUBLICATION.thesisTitle}</h2>
+        <dl class="meta">
+          <div><dt>Author</dt><dd>Trent Eriksen</dd></div>
+          <div><dt>Degree</dt><dd>{PUBLICATION.degree}</dd></div>
+          <div><dt>Supervisors</dt><dd>{PUBLICATION.supervisors.join(', ')}</dd></div>
+          <div><dt>Completed</dt><dd>{PUBLICATION.thesisDate}</dd></div>
+        </dl>
+        <div class="work-actions">
+          <a class="btn btn-primary" href={ASSETS.thesisPdf}>Read the thesis (PDF)</a>
+        </div>
+      </article>
+      <article class="work">
+        <p class="work-kind">ISMIR 2025 Late-Breaking Demo</p>
+        <h2 class="work-title">{PUBLICATION.lbdTitle}</h2>
+        <dl class="meta">
+          <div><dt>Authors</dt><dd>Trent Eriksen, Edwin van der Heide, Robert Saunders</dd></div>
+          <div><dt>Affiliation</dt><dd>Leiden University Media Technology</dd></div>
+          <div><dt>Venue</dt><dd>{PUBLICATION.venue}</dd></div>
+          <div><dt>Location</dt><dd>{PUBLICATION.venueLocation}</dd></div>
+          <div><dt>License</dt><dd>{PUBLICATION.license}</dd></div>
+        </dl>
+        <div class="work-actions">
+          <a class="btn btn-primary" href={ASSETS.lbdPdf}>LBD paper (PDF)</a>
+          <a class="btn" href={LINKS.ismir} rel="noopener">Official ISMIR page</a>
+        </div>
+      </article>
+    </div>
+    <p class="g-small g-gap">
+      These are separate citations. The Late-Breaking Demo is a short extended abstract derived
+      from, but not identical to, the full thesis.
+    </p>
+  </Section>
+
+  <Section index={idx()} label="Official abstract · ISMIR 2025 LBD">
+    {/* The official abstract, verbatim. */}
+    <p class="abstract">
+      Research in drum classification often trends in two key directions: (1) audio-based
+      single-instrument classification, or (2) automatic drum transcription, which makes exploration
+      of drum-audio <em>style</em> compelling, especially in comparison to a CNN trained on the GMD (Groove
+      MIDI Dataset) with a pretrained transformer-based model, PaSST (Patchout Audio Spectrogram Transformer),
+      with frozen general-audio embeddings from AudioSet. This comparison reveals the ways in which general
+      audio knowledge can affect drum-audio style classification. Experiments with model depth, augmentation,
+      and padding show that PaSST with these frozen embeddings reduces performance in terms of accuracy
+      but reveals a robust feature representation distinct from the CNN.
+    </p>
+  </Section>
+
+  <Section index={idx()} label="Presentation" title="Watch the demo">
+    <div class="g-video">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${meta.demoVideoId}?rel=0`}
+        title={meta.demoVideoTitle}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+    <p class="g-small">
+      Hosted on YouTube · also linked from the <a href={LINKS.ismir} rel="noopener"
+        >official ISMIR 2025 program page</a
+      >.
+    </p>
+  </Section>
+
+  <Section index={idx()} label="Cite this work" title="Citation and BibTeX">
+    <div class="cites">
+      <Cite
+        label="Thesis"
+        citation="Eriksen, T. (2025). Probing the World for Groove: A Comparative Study of Transfer Learning for Drum Audio Style Classification. MSc thesis, Media Technology, Leiden University."
+        bibtex={thesisBib}
+      />
+      <Cite
+        label="ISMIR 2025 LBD"
+        citation="Eriksen, T., van der Heide, E., & Saunders, R. (2025). A Comparative Study of Transfer Learning for Drum Audio Style Classification. Extended Abstracts for the Late-Breaking/Demo Session of the 26th ISMIR Conference, Daejeon, South Korea."
+        bibtex={lbdBib}
+      />
+    </div>
+  </Section>
+
+  <Section index={idx()} label="Acknowledgements and support" title="Grants">
+    <ul class="g-list">
+      <li><strong>ISMIR First-time Authors Grant</strong>, August 2025</li>
+      <li>
+        <strong>Creative Intelligence and Technology Grant</strong>, Leiden University, September
+        2025
+      </li>
+      <li><strong>Leiden University Fund Research Grant</strong>, October 2025</li>
+    </ul>
+    <p class="g-small g-gap">
+      With thanks to supervisors Edwin van der Heide and Robert Saunders, and to Leiden University
+      Media Technology.
+    </p>
+  </Section>
+</GrooveLayout>
+
+<style>
+  .conf {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--sp-6);
+    align-items: center;
+  }
+  .conf-photo {
+    display: block;
+    width: auto;
+    max-height: 360px;
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  @media (max-width: 720px) {
+    .conf {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--sp-4);
+    }
+    .conf-photo {
+      max-height: 300px;
+    }
+  }
+  .works {
+    align-items: stretch;
+    margin-top: 0;
+  }
+  .work {
+    display: flex;
+    flex-direction: column;
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .work-kind {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  /* Paper titles keep their own casing: set in the display face, not the uppercase h2 set. */
+  .work-title {
+    margin: var(--sp-2) 0 var(--sp-4);
+    font-size: var(--step-1);
+    text-transform: none;
+    font-stretch: 105%;
+    line-height: 1.25;
+  }
+  .meta {
+    flex: 1;
+    margin: 0 0 var(--sp-5);
+  }
+  .meta > div {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: var(--sp-3);
+    padding: 0.5rem 0;
+    border-bottom: var(--hair) solid var(--hairline);
+  }
+  .meta dt {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .meta dd {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  @media (max-width: 480px) {
+    .meta > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.1rem;
+    }
+  }
+  .work-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+  .abstract {
+    max-width: 62ch;
+    font-size: var(--step-1);
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .cites {
+    display: grid;
+    gap: var(--sp-5);
+    max-width: 56rem;
+  }
+</style>

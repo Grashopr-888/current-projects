@@ -1,0 +1,66 @@
+---
+/** Rendered GMD clips with their dataset annotations (no model predictions). */
+import examples from '../../data/groove/audio-examples.json';
+import { gasset } from '../../lib/groove';
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const label = (e: (typeof examples)[number]) =>
+  cap(e.primary) + (e.secondary ? ' · ' + e.secondary.replace(/-/g, ' ') : '');
+---
+
+<div class="ax-grid">
+  {
+    examples.map((e) => (
+      <figure class="ax">
+        <figcaption class="ax-head">
+          <span class="ax-style">{label(e)}</span>
+          <span class="ax-meta">
+            {e.bpm} BPM · {e.durationSec}s
+          </span>
+        </figcaption>
+        <audio controls preload="none" src={gasset(e.file)}>
+          Your browser does not support the audio element.
+        </audio>
+      </figure>
+    ))
+  }
+</div>
+
+<style>
+  .ax-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+  .ax {
+    margin: 0;
+    padding: var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .ax-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-3);
+  }
+  .ax-style {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 700;
+    font-stretch: 110%;
+  }
+  .ax-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  audio {
+    width: 100%;
+    height: 38px;
+    color-scheme: dark;
+  }
+</style>

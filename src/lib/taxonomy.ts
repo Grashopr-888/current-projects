@@ -8,6 +8,7 @@ export const STATUS_TONE: Record<string, Tone> = {
   exploring: 'info',
   active: 'positive',
   shipped: 'positive',
+  published: 'positive',
   maintained: 'neutral',
   archived: 'neutral',
   // release / milestone

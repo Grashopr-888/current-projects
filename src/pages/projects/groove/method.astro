@@ -1,0 +1,388 @@
+---
+import GrooveLayout from '../../../layouts/GrooveLayout.astro';
+import Section from '../../../components/Section.astro';
+import Disclosure from '../../../components/Disclosure.astro';
+import ModelBadge from '../../../components/groove/ModelBadge.astro';
+import ModelCard from '../../../components/groove/ModelCard.astro';
+import Note from '../../../components/groove/Note.astro';
+import Figure from '../../../components/groove/Figure.astro';
+import DotPlot from '../../../components/groove/DotPlot.astro';
+import experiments from '../../../data/groove/experiments.json';
+import aug from '../../../data/groove/augmentation-demo.json';
+import { LINKS, gasset, gpage, notebookUrl } from '../../../lib/groove';
+
+const f1 = (id: string) => experiments.find((e) => e.experimentId === id)!.f1;
+const cnnDepth = [
+  { label: '5 conv', value: f1('9.1'), model: 'cnn' as const },
+  { label: '7 conv', value: f1('9.2'), model: 'cnn' as const, sub: 'best' },
+  { label: '9 conv', value: f1('9.3'), model: 'cnn' as const },
+];
+const passtHead = [
+  { label: '2 layer', value: f1('8.4'), model: 'passt' as const },
+  { label: '3 layer', value: f1('7.1'), model: 'passt' as const },
+  { label: '4 layer', value: f1('8.3'), model: 'passt' as const, sub: 'best' },
+  { label: '5 layer', value: f1('8.1'), model: 'passt' as const },
+  { label: '6 layer', value: f1('8.5'), model: 'passt' as const },
+  { label: '7 layer', value: f1('8.2'), model: 'passt' as const },
+];
+const augEffect = [
+  { label: 'CNN baseline', value: f1('9.2'), model: 'cnn' as const },
+  { label: 'CNN + noise & room', value: f1('10.1'), model: 'cnn' as const, sub: 'best CNN' },
+  { label: 'CNN + time stretch', value: f1('10.4'), model: 'cnn' as const },
+  { label: 'PaSST baseline', value: f1('8.3'), model: 'passt' as const },
+  { label: 'PaSST + noise & room', value: f1('10.2'), model: 'passt' as const },
+  { label: 'PaSST + time stretch', value: f1('10.3'), model: 'passt' as const },
+];
+const padEffect = [
+  { label: 'PaSST zero', value: f1('8.3'), model: 'passt' as const },
+  { label: 'PaSST reflection', value: f1('11.2'), model: 'passt' as const, sub: 'best PaSST' },
+  { label: 'PaSST circular', value: f1('11.1'), model: 'passt' as const },
+  { label: 'CNN reflection', value: f1('11.4'), model: 'cnn' as const },
+  { label: 'CNN circular', value: f1('11.5'), model: 'cnn' as const },
+];
+
+let n = 0;
+const idx = () => String(++n).padStart(2, '0');
+---
+
+<GrooveLayout
+  current="/method"
+  title="Method"
+  description="Research question, dataset curation, the CNN and PaSST architectures, training protocol, and interpretability methods."
+  label="Method"
+  heading="How drum style was learned and measured"
+  lede="A baseline CNN trained from scratch on the Groove MIDI Dataset, compared against a frozen PaSST transformer pretrained on AudioSet, under identical data, splits, and evaluation."
+>
+  <Section index={idx()} label="Research question">
+    <blockquote class="rq">
+      What is the effect of pretrained general audio embeddings in PaSST when compared to a baseline
+      CNN for drum audio style classification?
+    </blockquote>
+    <p class="g-small">
+      The project began as an attempt to detect the <em>motorik</em> groove, the steady 4/4 pulse of 1970s
+      krautrock. Building a bespoke dataset would have required source separation, beat tracking, and
+      manual annotation, so the work instead adopted the Groove MIDI Dataset and broadened from a single
+      rock style to every style it contains.
+    </p>
+  </Section>
+
+  <Section index={idx()} label="The data" title="Groove MIDI, rendered to a 74 class audio task">
+    <div class="g-grid2">
+      <div class="prose">
+        <p>
+          The <a href={LINKS.gmd}>Groove MIDI Dataset</a> (GMD) collects performances by professional
+          drummers, each annotated with a primary and a secondary style and rich metadata (BPM, beat or
+          fill type, time signature). Rendering performances into <strong
+            >18,264 two bar clips</strong
+          > turns this into a supervised audio task.
+        </p>
+        <p>
+          Concatenating primary and secondary annotations yields <strong>74 style classes</strong>,
+          an intentionally fine grained target. It is also imbalanced: rock styles make up nearly
+          two thirds of the data, and 291 clips are labelled as fills rather than beats.
+        </p>
+      </div>
+      <dl class="g-spec">
+        <div><dt>Source</dt><dd>Groove MIDI Dataset (CC BY 4.0)</dd></div>
+        <div><dt>Clips</dt><dd>18,264 · two bars each</dd></div>
+        <div><dt>Labels</dt><dd>74 (primary ⊕ secondary)</dd></div>
+        <div><dt>Split</dt><dd>≈80 / 10 / 10, proportional class balancing</dd></div>
+        <div><dt>Metric</dt><dd>macro-F1 (+ accuracy, per class)</dd></div>
+      </dl>
+    </div>
+    <Disclosure label="Why two bar clips and concatenated labels?">
+      <p>
+        Drum style is a property of patterns over time, not of single onsets, but it is also largely
+        independent of tempo and overall track length. Two bars is long enough to express a
+        recognisable groove while keeping clips short and comparable. Concatenating the primary and
+        secondary annotations preserves the dataset's own stylistic granularity instead of
+        collapsing it to a handful of coarse genres.
+      </p>
+    </Disclosure>
+    <Disclosure label="How the clips and labels were built from GMD" meta="5 steps">
+      <p>
+        The audio comes from the Groove MIDI Dataset through <a href={LINKS.gmd}
+          >TensorFlow Datasets</a
+        >, using the <code>groove/2bar-16000hz</code> configuration. GMD already provides the two bar
+        segmentation and 16 kHz mono rendering, so no custom slicing or synthesis was needed; the build
+        mostly extracts, decodes, and organises what the dataset ships.
+      </p>
+      <ol>
+        <li>Stream each split (train / validation / test) from TensorFlow Datasets.</li>
+        <li>
+          For every segment, pull the audio array and its metadata: primary and secondary style,
+          BPM, drummer, time signature, and beat or fill type. Integer coded fields are decoded to
+          readable labels.
+        </li>
+        <li>
+          Write each clip to a WAV named by its segment id and record a metadata row linking the
+          file to its labels and split.
+        </li>
+        <li>Concatenate primary ⊕ secondary style into the 74 class target.</li>
+        <li>Merge the per split tables into one manifest shared by both models.</li>
+      </ol>
+      <p>
+        Full pipeline: <a href={notebookUrl('GMD_prototype_preprocessing.ipynb')} rel="noopener"
+          >GMD_prototype_preprocessing.ipynb</a
+        >.
+      </p>
+    </Disclosure>
+  </Section>
+
+  <Section index={idx()} label="Preprocessing" title="Two input pipelines, one for each model">
+    <p class="g-lead">
+      The two architectures expect different inputs, so each clip is prepared twice, and care is
+      taken that everything downstream (splits, labels, metric) stays identical.
+    </p>
+    <div class="g-grid2">
+      <ModelCard model="cnn">
+        <li>Audio at <strong>16 kHz mono</strong></li>
+        <li>Log mel spectrogram input</li>
+        <li>Fixed length, padded clips</li>
+      </ModelCard>
+      <ModelCard model="passt">
+        <li>Resampled to <strong>32 kHz mono</strong></li>
+        <li>Padded to a fixed <strong>10 s</strong> to match AudioSet</li>
+        <li>Fed to the pretrained patch embedding</li>
+      </ModelCard>
+    </div>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Architectures"
+    title="A task specific CNN versus frozen transfer learning"
+  >
+    <div class="g-grid2">
+      <div class="arch">
+        <h3><ModelBadge model="cnn" size="md" /> Baseline CNN</h3>
+        <p class="g-text">
+          A VGG style convolutional network adapted from a drum classification baseline, trained
+          from scratch on GMD. Stacked convolutional filters learn local spectrotemporal features
+          specific to drum timbre and rhythm. Network depth was tuned directly; the best
+          configuration used <strong>7 convolutional layers</strong>.
+        </p>
+      </div>
+      <div class="arch">
+        <h3><ModelBadge model="passt" size="md" /> PaSST transfer</h3>
+        <p class="g-text">
+          The Patchout Audio Spectrogram Transformer, pretrained on AudioSet and used with a <strong
+            >frozen backbone</strong
+          > (no finetuning) to isolate the value of its general embeddings. A multilayer perceptron head
+          is trained on top; depth and bottleneck shape were swept, with a <strong
+            >4 layer MLP</strong
+          > performing best.
+        </p>
+      </div>
+    </div>
+    <Disclosure label="Why freeze PaSST instead of finetuning it?">
+      <p>
+        Freezing the backbone is a deliberate probe: it measures what AudioSet pretraining already
+        encodes about drum style, rather than how well the transformer can be retrained on GMD. It
+        is also the data efficient setting most relevant to transfer learning. Finetuning is noted
+        as future work, and the frozen choice is one of the study's stated limitations.
+      </p>
+    </Disclosure>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Training protocol"
+    title="Identical optimisation for a fair comparison"
+  >
+    <dl class="g-specrow">
+      <div><dt>Optimizer</dt><dd>Adam</dd></div>
+      <div><dt>Learning rate</dt><dd>1 × 10⁻⁴</dd></div>
+      <div><dt>Batch size</dt><dd>16</dd></div>
+      <div><dt>Epochs</dt><dd>50</dd></div>
+      <div><dt>Early stopping</dt><dd>patience 10</dd></div>
+    </dl>
+    <dl class="g-specrow g-gap" style="--cols: 3">
+      <div><dt>GPU</dt><dd>A100 / L4</dd></div>
+      <div><dt>Compute</dt><dd>Google Colab</dd></div>
+      <div><dt>Training time</dt><dd>3 to 8 hours</dd></div>
+    </dl>
+    <p class="g-small g-gap">
+      Models were trained in Google Colab on NVIDIA A100 or L4 GPUs across April and May 2025; the
+      choice between the two followed runtime availability. Each run took roughly 3 to 8 hours
+      depending on GPU type and configuration.
+    </p>
+    <p class="g-small">
+      Augmentation (Gaussian noise, room simulation, time stretch via <a
+        href={LINKS.audiomentations}>audiomentations</a
+      >) and padding modes (zeros, reflection, circular) were introduced in later rounds to test
+      feature robustness, and affected the two model families differently.
+    </p>
+    <div class="g-grid2">
+      <Figure
+        src="/figures/cnn-training-curves.webp"
+        width={1389}
+        height={590}
+        alt="Training and validation loss falling and converging over 50 epochs, with validation accuracy rising to about 0.90."
+        caption="Final CNN (exp 10.1): loss converges, validation accuracy approaches 0.90."
+        source="GMD_CNN_prototype6_4.ipynb"
+      />
+      <Figure
+        src="/figures/passt-training-curves.webp"
+        width={1189}
+        height={590}
+        alt="Training and validation loss converging over epochs for the final PaSST model."
+        caption="Final PaSST (exp 11.2): training and validation loss converge over training."
+        source="PaSST_setup6_16.ipynb"
+      />
+    </div>
+  </Section>
+
+  <Section index={idx()} label="What the tuning revealed" title="The choices that moved the needle">
+    <p class="g-lead">
+      The most outcome relevant comparisons, all on the full 74 class task and a shared 0 to 1
+      macro-F1 axis. Depth helped both models up to a point, while augmentation and padding helped
+      the two families in opposite ways.
+    </p>
+    <div class="g-grid2">
+      <DotPlot
+        title="CNN: convolutional depth"
+        items={cnnDepth}
+        caption="Seven layers edged out five and nine."
+        source="workbook · Model depth"
+      />
+      <DotPlot
+        title="PaSST: classifier head depth"
+        items={passtHead}
+        caption="A 4 layer MLP head was the sweet spot; deeper heads lost ground."
+        source="workbook · Model depth"
+      />
+      <DotPlot
+        title="Augmentation helped the CNN, hurt PaSST"
+        items={augEffect}
+        caption="Gaussian noise and room simulation lifted the CNN to its best 0.908; the same transforms lowered PaSST."
+        source="workbook · Augmentations"
+      />
+      <DotPlot
+        title="Reflection padding was PaSST's best move"
+        items={padEffect}
+        caption="Reflection padding gave PaSST its top 0.8752, but did not help the CNN."
+        source="workbook · Padding"
+      />
+    </div>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Augmentation, visualized"
+    title="What the augmentations do to the audio"
+  >
+    <p class="g-lead">
+      The same two bar funk groove under each augmentation family. Gaussian noise raises the noise
+      floor, room simulation smears energy in time, and time stretch lengthens the groove. Listen
+      and compare.
+    </p>
+    <div class="g-gap">
+      <Figure
+        src={aug.spectrogram}
+        width={1415}
+        height={769}
+        alt="Four log mel spectrograms of one drum clip: original, plus Gaussian noise, plus room simulation, plus time stretch."
+        caption="Log mel spectrograms of one clip under each augmentation family."
+      />
+    </div>
+    <div class="aug-audio">
+      {
+        aug.variants.map((v) => (
+          <figure class="aug-ax">
+            <figcaption>{v.label}</figcaption>
+            <audio controls preload="none" src={gasset(v.file)}>
+              Your browser does not support audio.
+            </audio>
+          </figure>
+        ))
+      }
+    </div>
+    <p class="g-small">{aug.note}</p>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Evaluation and interpretability"
+    title="Beyond a single accuracy number"
+  >
+    <div class="g-grid2">
+      <div class="prose">
+        <p>
+          Macro-F1 is the primary metric: it weights every class equally, which matters under heavy
+          imbalance. Performance is read alongside per class reports and confusion matrices, which
+          expose <em>which</em> styles each model confuses (for instance jazz fast with dance breakbeat,
+          or funk with hip hop).
+        </p>
+        <p>
+          To compare what the models <em>learn</em>, embeddings are projected with t-SNE and
+          summarised by class centroids and how far those centroids move under augmentation and
+          padding.
+        </p>
+        <p>
+          <a class="g-more" href={gpage('/representations')}>See the representation analysis →</a>
+        </p>
+      </div>
+      <Note variant="warn" title="A measurement caveat">
+        <p>
+          CNN and PaSST embeddings occupy <strong
+            >different coordinate systems with different distance scales</strong
+          >. Raw centroid shift magnitudes are therefore not comparable across models, only within a
+          model, via ranks, normalized shifts, or shifts relative to baseline dispersion. The site
+          never plots one model's raw distances against the other's.
+        </p>
+      </Note>
+    </div>
+  </Section>
+</GrooveLayout>
+
+<style>
+  .rq {
+    max-width: 30ch;
+    padding-left: var(--sp-5);
+    margin: 0 0 var(--sp-5);
+    border-left: 3px solid var(--accent);
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .arch h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--step-1);
+    margin-bottom: var(--sp-3);
+  }
+  .aug-audio {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-3);
+    margin-top: var(--sp-5);
+  }
+  @media (max-width: 720px) {
+    .aug-audio {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .aug-ax {
+    margin: 0;
+    padding: var(--sp-3);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .aug-ax figcaption {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: var(--sp-2);
+  }
+  .aug-ax audio {
+    width: 100%;
+    height: 34px;
+    color-scheme: dark;
+  }
+</style>

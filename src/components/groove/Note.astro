@@ -1,0 +1,48 @@
+---
+/** A boxed aside. `warn` marks a methods caveat; `note` a reading hint. */
+interface Props {
+  variant?: 'note' | 'warn';
+  title?: string;
+}
+const { variant = 'note', title } = Astro.props;
+---
+
+<aside class={`gnote gnote-${variant}`}>
+  {title && <p class="gnote-title">{title}</p>}
+  <div class="gnote-body"><slot /></div>
+</aside>
+
+<style>
+  .gnote {
+    padding: var(--sp-4) var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-left: 3px solid var(--hairline-strong);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    background: var(--surface);
+  }
+  .gnote-warn {
+    border-left-color: var(--t-warn);
+    background: color-mix(in oklab, var(--t-warn) 7%, var(--surface));
+  }
+  .gnote-title {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 740;
+    font-stretch: 112%;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: var(--sp-2);
+  }
+  .gnote-warn .gnote-title {
+    color: var(--t-warn);
+  }
+  .gnote-body {
+    font-size: var(--step--1);
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .gnote-body :global(p + p) {
+    margin-top: var(--sp-3);
+  }
+</style>

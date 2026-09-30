@@ -1,0 +1,56 @@
+---
+/** CNN or PaSST, in its fixed model colour (tokens --cnn / --passt). */
+import { MODEL_LABEL, type Model } from '../../lib/groove';
+interface Props {
+  model: Model;
+  size?: 'sm' | 'md';
+}
+const { model, size = 'sm' } = Astro.props;
+---
+
+<span class={`mbadge mbadge-${model} mbadge-${size}`}>
+  <span class="mbadge-dot" aria-hidden="true"></span>{MODEL_LABEL[model]}
+</span>
+
+<style>
+  .mbadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border-radius: 100px;
+    white-space: nowrap;
+    border: var(--hair) solid transparent;
+  }
+  .mbadge-sm {
+    font-size: 0.7rem;
+    padding: 0.1em 0.6em;
+  }
+  .mbadge-md {
+    font-size: 0.8rem;
+    padding: 0.25em 0.75em;
+  }
+  .mbadge-dot {
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+  }
+  .mbadge-cnn {
+    background: var(--cnn-soft);
+    color: var(--cnn-strong);
+    border-color: color-mix(in oklab, var(--cnn) 35%, transparent);
+  }
+  .mbadge-cnn .mbadge-dot {
+    background: var(--cnn);
+  }
+  .mbadge-passt {
+    background: var(--passt-soft);
+    color: var(--passt-strong);
+    border-color: color-mix(in oklab, var(--passt) 35%, transparent);
+  }
+  .mbadge-passt .mbadge-dot {
+    background: var(--passt);
+  }
+</style>

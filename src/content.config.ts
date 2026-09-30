@@ -37,7 +37,11 @@ const projects = defineCollection({
     z.object({
       title: z.string(),
       summary: z.string(),
-      status: z.enum(['exploring', 'active', 'shipped', 'maintained', 'archived']),
+      status: z.enum(['exploring', 'active', 'shipped', 'published', 'maintained', 'archived']),
+      /** `lifecycle`: rendered by projects/[slug].astro from the records below.
+       *  `research`: a finished study with its own hand built pages under
+       *  src/pages/projects/<slug>/ and no lifecycle records; the entry supplies its card. */
+      layout: z.enum(['lifecycle', 'research']).default('lifecycle'),
       timeframe: z.string(), // e.g. "2025 – present"
       role: z.string(),
       collaborators: z.array(z.string()).default([]),

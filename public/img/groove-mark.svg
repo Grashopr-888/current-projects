@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Probing the World for Groove mark: the thesis site's ring mark (a drum
+       head seen from above, or a record groove), redrawn in the project gold
+       with dimensional shading to sit beside the other project marks. -->
+  <defs>
+    <linearGradient id="grvRing" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7dc92"/>
+      <stop offset=".45" stop-color="#e6b44c"/>
+      <stop offset="1" stop-color="#8a6420"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="43" stroke="url(#grvRing)" stroke-width="8"/>
+  <circle cx="50" cy="50" r="27" stroke="url(#grvRing)" stroke-width="8" opacity=".85"/>
+  <circle cx="50" cy="50" r="10" fill="url(#grvRing)"/>
+</svg>

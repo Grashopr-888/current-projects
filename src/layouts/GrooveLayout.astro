@@ -1,0 +1,127 @@
+---
+/**
+ * Frame for the Probing the World for Groove pages: the site layout in the project's
+ * accent, scholarly citation metadata, the section tabs, and the next project link.
+ * The overview passes the project hero in the `hero` slot; other pages get a page head.
+ */
+import BaseLayout from './BaseLayout.astro';
+import '../styles/groove.css';
+import GrooveNav from '../components/groove/GrooveNav.astro';
+import NextProject from '../components/NextProject.astro';
+import { GROOVE, PUBLICATION, gpage } from '../lib/groove';
+
+interface Props {
+  /** Page name for the <title>; the overview omits it. */
+  title?: string;
+  description?: string;
+  /** This page's path within the section ("/", "/method", ...). */
+  current: string;
+  /** Page head for the subpages. */
+  label?: string;
+  heading?: string;
+  lede?: string;
+}
+const { title, description = GROOVE.description, current, label, heading, lede } = Astro.props;
+const pageTitle = title ? `${title} · ${GROOVE.title}` : GROOVE.title;
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'ScholarlyArticle',
+  name: PUBLICATION.thesisTitle,
+  headline: GROOVE.question,
+  description: GROOVE.description,
+  author: GROOVE.authors.map((name) => ({ '@type': 'Person', name })),
+  datePublished: '2025-06-30',
+  publisher: { '@type': 'Organization', name: 'Leiden University' },
+  inLanguage: 'en',
+  url: Astro.site ? new URL(gpage('/'), Astro.site).href : gpage('/'),
+  keywords: [
+    'music information retrieval',
+    'transfer learning',
+    'drum classification',
+    'PaSST',
+    'CNN',
+    'deep learning',
+  ],
+};
+---
+
+<BaseLayout title={pageTitle} description={description} accent="groove">
+  <Fragment slot="head">
+    <meta name="citation_title" content={GROOVE.title} />
+    <meta name="citation_author" content="Eriksen, Trent" />
+    <meta name="citation_author" content="van der Heide, Edwin" />
+    <meta name="citation_author" content="Saunders, Robert" />
+    <meta name="citation_publication_date" content="2025" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+  </Fragment>
+  <article data-accent="groove">
+    <slot name="hero" />
+    {
+      heading && (
+        <header class="ghead">
+          <div class="container">
+            <a class="ghead-back plain" href={gpage('/')}>
+              ← {GROOVE.title}
+            </a>
+            {label && (
+              <p class="label ghead-label">
+                <span class="idx">✳</span> {label}
+              </p>
+            )}
+            <h1 class="ghead-title">{heading}</h1>
+            {lede && <p class="ghead-lede">{lede}</p>}
+          </div>
+        </header>
+      )
+    }
+    <GrooveNav current={current} />
+    <div class="container gbody">
+      <slot />
+    </div>
+    <NextProject slug="groove" />
+  </article>
+</BaseLayout>
+
+<style>
+  .ghead {
+    padding-block: var(--sp-7) var(--sp-6);
+    background:
+      radial-gradient(
+        60% 120% at 88% -10%,
+        color-mix(in oklab, var(--accent) 9%, transparent),
+        transparent 70%
+      ),
+      var(--bg);
+  }
+  .ghead-back {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+  .ghead-back:hover {
+    color: var(--accent);
+  }
+  .ghead-label {
+    display: flex;
+    margin-top: var(--sp-5);
+    color: var(--accent);
+  }
+  .ghead-label .idx {
+    color: var(--accent);
+  }
+  .ghead-title {
+    margin-top: var(--sp-3);
+    font-size: var(--step-5);
+    max-width: 22ch;
+  }
+  .ghead-lede {
+    margin-top: var(--sp-4);
+    max-width: 58ch;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+  .gbody {
+    padding-bottom: var(--sp-6);
+  }
+</style>

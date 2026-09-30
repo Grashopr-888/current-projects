@@ -1,0 +1,813 @@
+---
+import GrooveLayout from '../../../layouts/GrooveLayout.astro';
+import Section from '../../../components/Section.astro';
+import ModelBadge from '../../../components/groove/ModelBadge.astro';
+import experiments from '../../../data/groove/experiments.json';
+import rounds from '../../../data/groove/experiment-rounds.json';
+import { notebookUrl, f1fmt as fmt, type Model } from '../../../lib/groove';
+
+// strip plot geometry
+const W = 760,
+  padL = 96,
+  padR = 48,
+  top = 22,
+  rowH = 32,
+  bottom = 38;
+const H = top + 11 * rowH + bottom;
+const xf = (f1: number) => padL + f1 * (W - padL - padR);
+const byRound: Record<number, typeof experiments> = {};
+experiments.forEach((e) => (byRound[e.round] ||= []).push(e));
+const dots = experiments.map((e) => {
+  const arr = byRound[e.round];
+  const i = arr.indexOf(e),
+    n = arr.length;
+  const off = n > 1 ? (i / (n - 1) - 0.5) * (rowH * 0.55) : 0;
+  return { e, cx: xf(e.f1), cy: top + (e.round - 1) * rowH + rowH / 2 + off };
+});
+const ticks = [0, 0.25, 0.5, 0.75, 1];
+
+const FILTERS = [
+  {
+    key: 'model',
+    label: 'Model',
+    opts: [
+      ['cnn', 'CNN'],
+      ['passt', 'PaSST'],
+    ],
+  },
+  {
+    key: 'category',
+    label: 'Category',
+    opts: [
+      ['Configuration', 'Configuration'],
+      ['Dataset', 'Dataset'],
+      ['Model depth & patchout', 'Depth & patchout'],
+      ['Augmentation & padding', 'Aug & padding'],
+    ],
+  },
+  {
+    key: 'scope',
+    label: 'Dataset scope',
+    opts: [
+      ['gmd-full', 'GMD-full'],
+      ['gmd-mini', 'GMD-mini'],
+      ['rock-only', 'Rock only'],
+    ],
+  },
+  {
+    key: 'padding',
+    label: 'Padding',
+    opts: [
+      ['zero', 'Zero'],
+      ['reflection', 'Reflection'],
+      ['circular', 'Circular'],
+    ],
+  },
+  {
+    key: 'aug',
+    label: 'Augmentation',
+    opts: [
+      ['none', 'None'],
+      ['gaussian-noise', 'Gaussian'],
+      ['room-simulation', 'Room sim'],
+      ['time-stretch', 'Time stretch'],
+    ],
+  },
+  {
+    key: 'gpu',
+    label: 'GPU',
+    opts: [
+      ['A100', 'A100'],
+      ['L4', 'L4'],
+    ],
+  },
+];
+const dataAttrs = (e: (typeof experiments)[number]) => ({
+  'data-exp': e.experimentId,
+  'data-model': e.model,
+  'data-category': e.category,
+  'data-scope': e.datasetScope,
+  'data-padding': e.padding,
+  'data-aug': e.augmentation.length ? e.augmentation.join(',') : 'none',
+  'data-gpu': e.gpu ?? '',
+  'data-f1': String(e.f1),
+  'data-round': String(e.round),
+});
+---
+
+<GrooveLayout
+  current="/experiments"
+  title="Experiments"
+  description="An interactive explorer of all 34 experiments across 11 rounds: filter, sort, compare, and jump to the source notebooks."
+  label="Experiments"
+  heading="34 experiments, 11 rounds, 4 questions"
+  lede="The work progressed from a narrow proof of concept to the full 74 class benchmark. Read the curated progression below, then explore, filter, and compare every run."
+>
+  <Section index="01" label="The progression" title="How the study unfolded">
+    <ol class="rounds">
+      {
+        rounds.map((r) => (
+          <li class="rnd">
+            <div class="rnd-rail">
+              <span class="rnd-num">{r.round}</span>
+            </div>
+            <div class="rnd-body">
+              <div class="rnd-head">
+                <h3>{r.title}</h3>
+                <span class="rnd-cat">{r.category}</span>
+              </div>
+              <p class="rnd-q">{r.question}</p>
+              <div class="rnd-chips">
+                {experiments
+                  .filter((e) => e.round === r.round)
+                  .map((e) => (
+                    <a
+                      class="xchip plain"
+                      href={notebookUrl(e.notebook)}
+                      rel="noopener"
+                      title={e.description}
+                    >
+                      <ModelBadge model={e.model as Model} />
+                      <span class="xchip-id">{e.experimentId}</span>
+                      <span class:list={['xchip-f1', { 'is-headline': e.isHeadline }]}>
+                        {fmt(e.f1)}
+                      </span>
+                    </a>
+                  ))}
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+
+  <Section index="02" label="Explore" title="Every run, filterable">
+    <div class="filters" id="filters">
+      {
+        FILTERS.map((g) => (
+          <fieldset class="fgroup">
+            <legend>{g.label}</legend>
+            <div class="fopts">
+              {g.opts.map(([val, lab]) => (
+                <button
+                  type="button"
+                  class="fchip"
+                  data-filter={g.key}
+                  data-value={val}
+                  aria-pressed="false"
+                >
+                  {lab}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        ))
+      }
+      <button type="button" id="filters-reset" class="freset">Reset</button>
+    </div>
+
+    <p class="count" id="count" aria-live="polite"></p>
+
+    <figure class="strip">
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        role="img"
+        aria-label="Macro-F1 of every experiment, grouped by round and coloured by model."
+      >
+        {
+          ticks.map((t) => (
+            <g>
+              <line
+                x1={xf(t)}
+                y1={top - 6}
+                x2={xf(t)}
+                y2={H - bottom}
+                stroke="var(--hairline-strong)"
+                stroke-dasharray={t === 0 ? '0' : '2 3'}
+              />
+              <text
+                x={xf(t)}
+                y={H - bottom + 16}
+                text-anchor="middle"
+                fill="var(--faint)"
+                font-size="11"
+                font-family="var(--font-mono)"
+              >
+                {t}
+              </text>
+            </g>
+          ))
+        }
+        {
+          Array.from({ length: 11 }, (_, i) => i + 1).map((r) => (
+            <text
+              x={padL - 12}
+              y={top + (r - 1) * rowH + rowH / 2}
+              text-anchor="end"
+              dominant-baseline="middle"
+              fill="var(--faint)"
+              font-size="11"
+              font-family="var(--font-mono)"
+            >
+              R{r}
+            </text>
+          ))
+        }
+        {
+          dots.map((d) => (
+            <circle
+              class="dot"
+              {...dataAttrs(d.e)}
+              cx={d.cx}
+              cy={d.cy}
+              r={d.e.isHeadline ? 6 : 4.5}
+              fill={d.e.model === 'cnn' ? 'var(--cnn)' : 'var(--passt)'}
+              stroke={d.e.isHeadline ? 'var(--accent)' : 'none'}
+              stroke-width="2"
+            >
+              <title>{`exp ${d.e.experimentId} · ${d.e.model === 'cnn' ? 'CNN' : 'PaSST'} · F1 ${fmt(d.e.f1)}: ${d.e.description}`}</title>
+            </circle>
+          ))
+        }
+      </svg>
+      <figcaption>
+        Macro-F1 by round; <span class="k-cnn">●</span> CNN, <span class="k-passt">●</span> PaSST; ringed
+        dots are the headline results. Source: workbook · Overall.
+      </figcaption>
+    </figure>
+
+    <div class="g-table-wrap">
+      <table id="exp-table">
+        <thead>
+          <tr>
+            <th><button class="sort" data-sort="round">Round</button></th>
+            <th><button class="sort" data-sort="exp">Exp</button></th>
+            <th>Model</th>
+            <th>Dataset</th>
+            <th>Configuration</th>
+            <th class="num"><button class="sort" data-sort="f1">macro-F1 ▾</button></th>
+            <th><button class="sort" data-sort="gpu">GPU</button></th>
+            <th>Notebook</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            experiments.map((e) => (
+              <tr {...dataAttrs(e)} class={e.isHeadline ? 'is-headline' : ''}>
+                <td class="mono">{e.round}</td>
+                <td class="mono">{e.experimentId}</td>
+                <td>
+                  <ModelBadge model={e.model as Model} />
+                </td>
+                <td>{e.datasetScopeLabel}</td>
+                <td>{e.description}</td>
+                <td class="num mono">{fmt(e.f1)}</td>
+                <td>
+                  {e.gpu ? (
+                    <span class={`gpu gpu-${e.gpu.toLowerCase()}`}>{e.gpu}</span>
+                  ) : (
+                    <span class="gpu-na" title="GPU not recorded in this notebook">
+                      n/a
+                    </span>
+                  )}
+                </td>
+                <td>
+                  <a href={notebookUrl(e.notebook)} rel="noopener" class="nb">
+                    {e.notebook.replace('.ipynb', '')}
+                  </a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </Section>
+
+  <Section index="03" label="Compare" title="What changed between two runs?">
+    <div class="cmp-controls">
+      <label>A <select id="cmp-a"></select></label>
+      <label>B <select id="cmp-b"></select></label>
+    </div>
+    <div id="cmp-out" class="cmp-out"></div>
+  </Section>
+
+  <script is:inline type="application/json" id="exp-json" set:html={JSON.stringify(experiments)} />
+</GrooveLayout>
+
+<script>
+  type Exp = {
+    experimentId: string;
+    round: number;
+    model: 'cnn' | 'passt';
+    f1: number;
+    description: string;
+    datasetScopeLabel: string;
+    datasetScope: string;
+    padding: string;
+    augmentation: string[];
+    comparableWithFinal: boolean;
+    notebook: string;
+    gpu: string | null;
+  };
+  const data: Exp[] = JSON.parse(document.getElementById('exp-json')!.textContent || '[]');
+  const GROUPS = ['model', 'category', 'scope', 'padding', 'aug', 'gpu'];
+  const label = (m: string) => (m === 'cnn' ? 'CNN' : 'PaSST');
+  const words = (s: string) => s.replace(/-/g, ' ');
+
+  // ---------- filtering ----------
+  const activeFor = (g: string) =>
+    [...document.querySelectorAll<HTMLElement>(`[data-filter="${g}"][aria-pressed="true"]`)].map(
+      (b) => b.dataset.value!
+    );
+  const matches = (el: Element) =>
+    GROUPS.every((g) => {
+      const act = activeFor(g);
+      if (!act.length) return true;
+      const val = (el.getAttribute('data-' + g) || '').split(',');
+      return act.some((a) => val.includes(a));
+    });
+
+  const rows = [...document.querySelectorAll<HTMLTableRowElement>('#exp-table tbody tr')];
+  const dots = [...document.querySelectorAll<SVGElement>('.dot')];
+  const countEl = document.getElementById('count')!;
+  function apply() {
+    let n = 0;
+    rows.forEach((r) => {
+      const ok = matches(r);
+      r.hidden = !ok;
+      if (ok) n++;
+    });
+    dots.forEach((d) => (d.style.display = matches(d) ? '' : 'none'));
+    countEl.textContent = `Showing ${n} of ${data.length} experiments`;
+  }
+  document.querySelectorAll('.fchip').forEach((b) =>
+    b.addEventListener('click', () => {
+      const pressed = b.getAttribute('aria-pressed') === 'true';
+      b.setAttribute('aria-pressed', String(!pressed));
+      apply();
+    })
+  );
+  document.getElementById('filters-reset')!.addEventListener('click', () => {
+    document.querySelectorAll('.fchip').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    apply();
+  });
+
+  // ---------- sorting ----------
+  const tbody = document.querySelector('#exp-table tbody')!;
+  let sortKey = 'f1',
+    sortDir = -1;
+  function sortBy(key: string) {
+    sortDir = key === sortKey ? -sortDir : key === 'f1' ? -1 : 1;
+    sortKey = key;
+    [...rows]
+      .sort((a, b) => {
+        const av = a.getAttribute('data-' + key)!;
+        const bv = b.getAttribute('data-' + key)!;
+        const cmp =
+          key === 'f1' || key === 'round'
+            ? parseFloat(av) - parseFloat(bv)
+            : av.localeCompare(bv, undefined, { numeric: true });
+        return cmp * sortDir;
+      })
+      .forEach((r) => tbody.appendChild(r));
+  }
+  document
+    .querySelectorAll<HTMLElement>('.sort')
+    .forEach((b) => b.addEventListener('click', () => sortBy(b.dataset.sort!)));
+
+  // ---------- comparison ----------
+  const selA = document.getElementById('cmp-a') as HTMLSelectElement;
+  const selB = document.getElementById('cmp-b') as HTMLSelectElement;
+  const out = document.getElementById('cmp-out')!;
+  const opt = (e: Exp) =>
+    `exp ${e.experimentId} · ${label(e.model)} · ${e.f1.toFixed(4)}: ${e.description}`;
+  data.forEach((e, i) => {
+    selA.add(new Option(opt(e), String(i)));
+    selB.add(new Option(opt(e), String(i)));
+  });
+  selA.selectedIndex = data.findIndex((e) => e.experimentId === '10.1');
+  selB.selectedIndex = data.findIndex((e) => e.experimentId === '11.2');
+  function diffRow(name: string, a: string, b: string) {
+    return `<div class="dr ${a === b ? '' : 'dr-diff'}"><dt>${name}</dt><dd>${a}</dd><dd>${b}</dd></div>`;
+  }
+  function f1Chart(a: Exp, b: Exp) {
+    const W = 680,
+      padL = 128,
+      padR = 78,
+      top = 12,
+      rowH = 48,
+      bottom = 30;
+    const H = top + 2 * rowH + bottom,
+      plotW = W - padL - padR;
+    const x = (v: number) => padL + v * plotW;
+    const col = (m: string) => (m === 'cnn' ? 'var(--cnn)' : 'var(--passt)');
+    const grid = [0, 0.25, 0.5, 0.75, 1]
+      .map(
+        (t) =>
+          `<line x1="${x(t)}" y1="${top}" x2="${x(t)}" y2="${H - bottom}" stroke="var(--hairline-strong)" ${t ? 'stroke-dasharray="2 3"' : ''}/>` +
+          `<text x="${x(t)}" y="${H - bottom + 16}" text-anchor="middle" fill="var(--faint)" font-size="10" font-family="var(--font-mono)">${t}</text>`
+      )
+      .join('');
+    const row = (e: Exp, tag: string, i: number) => {
+      const cy = top + i * rowH + rowH / 2,
+        c = col(e.model);
+      return (
+        `<text x="${padL - 12}" y="${cy - 3}" text-anchor="end" dominant-baseline="middle" fill="var(--ink)" font-size="13" font-weight="700">${tag}</text>` +
+        `<text x="${padL - 12}" y="${cy + 12}" text-anchor="end" fill="var(--faint)" font-size="10" font-family="var(--font-mono)">exp ${e.experimentId} · ${label(e.model)}</text>` +
+        `<line x1="${x(0)}" y1="${cy}" x2="${x(e.f1)}" y2="${cy}" stroke="${c}" stroke-width="2.5" opacity="0.4"/>` +
+        `<circle cx="${x(e.f1)}" cy="${cy}" r="7" fill="${c}"/>` +
+        `<text x="${x(e.f1) + 13}" y="${cy}" dominant-baseline="middle" fill="var(--ink)" font-size="13" font-weight="600" font-family="var(--font-mono)">${e.f1.toFixed(4)}</text>`
+      );
+    };
+    return (
+      `<figure class="cmp-chart"><figcaption>macro-F1 · full 0 to 1 scale</figcaption>` +
+      `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="macro-F1 of run A ${a.f1.toFixed(4)} versus run B ${b.f1.toFixed(4)}">${grid}${row(a, 'A', 0)}${row(b, 'B', 1)}</svg></figure>`
+    );
+  }
+  function compare() {
+    const a = data[+selA.value],
+      b = data[+selB.value];
+    if (!a || !b) return;
+    const delta = b.f1 - a.f1;
+    const comparable =
+      a.comparableWithFinal && b.comparableWithFinal && a.datasetScope === b.datasetScope;
+    const warn = !comparable
+      ? `<p class="cmp-warn">⚠ These runs are not directly comparable: they differ in dataset scope (${a.datasetScopeLabel} vs ${b.datasetScopeLabel}). Compare macro-F1 across runs only within the same scope.</p>`
+      : `<p class="cmp-ok">✓ Same dataset scope (${a.datasetScopeLabel}); directly comparable.</p>`;
+    out.innerHTML = `
+      ${warn}
+      ${f1Chart(a, b)}
+      <dl class="diff">
+        <div class="dr dr-head"><dt></dt><dd>A · exp ${a.experimentId}</dd><dd>B · exp ${b.experimentId}</dd></div>
+        ${diffRow('Model', label(a.model), label(b.model))}
+        ${diffRow('Dataset', a.datasetScopeLabel, b.datasetScopeLabel)}
+        ${diffRow('Padding', a.padding, b.padding)}
+        ${diffRow('Augmentation', words(a.augmentation.join(', ')) || 'none', words(b.augmentation.join(', ')) || 'none')}
+        ${diffRow('Configuration', a.description, b.description)}
+        ${diffRow('GPU', a.gpu || 'n/a', b.gpu || 'n/a')}
+        <div class="dr dr-f1"><dt>macro-F1</dt><dd>${a.f1.toFixed(4)}</dd><dd>${b.f1.toFixed(4)} <span class="delta ${delta >= 0 ? 'up' : 'down'}">${delta >= 0 ? '+' : ''}${delta.toFixed(4)}</span></dd></div>
+      </dl>`;
+  }
+  selA.addEventListener('change', compare);
+  selB.addEventListener('change', compare);
+  apply();
+  compare();
+</script>
+
+<style>
+  /* progression */
+  .rounds {
+    list-style: none;
+    padding: 0;
+  }
+  .rnd {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    gap: var(--sp-4);
+    padding-bottom: var(--sp-5);
+  }
+  .rnd-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .rnd-num {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    border: var(--hair) solid color-mix(in oklab, var(--accent) 50%, transparent);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    flex: none;
+  }
+  .rnd:not(:last-child) .rnd-rail::after {
+    content: '';
+    flex: 1;
+    width: 2px;
+    margin-top: 0.4rem;
+    background: var(--hairline);
+  }
+  .rnd-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-3);
+    flex-wrap: wrap;
+    padding-top: 0.35rem;
+  }
+  .rnd-head h3 {
+    font-size: var(--step-1);
+  }
+  .rnd-cat {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .rnd-q {
+    margin: var(--sp-2) 0 var(--sp-3);
+    max-width: 60ch;
+    color: var(--ink-soft);
+  }
+  .rnd-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .xchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.25rem 0.65rem 0.25rem 0.3rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: 100px;
+    background: var(--surface);
+    color: var(--ink);
+    transition: border-color 0.15s ease;
+  }
+  .xchip:hover {
+    border-color: var(--accent);
+  }
+  .xchip-id {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .xchip-f1 {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 500;
+  }
+  .xchip-f1.is-headline {
+    color: var(--accent);
+  }
+
+  /* filters */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+    align-items: flex-end;
+  }
+  .fgroup {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  .fgroup legend {
+    padding: 0;
+    margin-bottom: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .fopts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .fchip {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    padding: 0.32rem 0.75rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: 100px;
+    background: var(--surface);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .fchip:hover {
+    border-color: var(--accent);
+  }
+  .fchip[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #121214;
+  }
+  .freset {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 0.35rem;
+  }
+  .freset:hover {
+    text-decoration: underline;
+  }
+  .count {
+    margin-top: var(--sp-4);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+
+  /* strip plot */
+  .strip {
+    margin: var(--sp-3) 0 var(--sp-5);
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .strip svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .strip figcaption {
+    margin-top: var(--sp-3);
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .k-cnn {
+    color: var(--cnn);
+  }
+  .k-passt {
+    color: var(--passt);
+  }
+
+  /* table */
+  #exp-table td.num,
+  #exp-table th.num {
+    text-align: right;
+  }
+  #exp-table tr.is-headline td {
+    background: color-mix(in oklab, var(--accent) 9%, transparent);
+  }
+  .sort {
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .sort:hover {
+    color: var(--accent);
+  }
+  td.mono {
+    font-family: var(--font-mono);
+  }
+  .nb {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+  .gpu {
+    display: inline-block;
+    padding: 0.08rem 0.5rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: 100px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .gpu-a100 {
+    border-color: color-mix(in oklab, var(--accent) 50%, var(--hairline-strong));
+    color: var(--accent);
+  }
+  .gpu-na {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--faint);
+  }
+
+  /* compare */
+  .cmp-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-4);
+  }
+  .cmp-controls label {
+    display: grid;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--faint);
+  }
+  .cmp-controls select {
+    max-width: min(90vw, 30rem);
+    padding: 0.55rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  .cmp-out {
+    margin-top: var(--sp-5);
+  }
+  /* The comparison is injected with innerHTML, so its styles are global. */
+  :global(.cmp-chart) {
+    margin: var(--sp-4) 0;
+    padding: var(--sp-4) var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  :global(.cmp-chart figcaption) {
+    margin-bottom: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  :global(.cmp-chart svg) {
+    display: block;
+    width: 100%;
+    max-width: 46rem;
+    height: auto;
+    overflow: visible;
+  }
+  :global(.cmp-warn) {
+    padding: var(--sp-3) var(--sp-4);
+    border-left: 3px solid var(--t-warn);
+    border-radius: var(--radius);
+    background: color-mix(in oklab, var(--t-warn) 10%, var(--surface));
+    color: var(--t-warn);
+    font-size: var(--step--1);
+  }
+  :global(.cmp-ok) {
+    color: var(--t-positive);
+    font-size: var(--step--1);
+  }
+  :global(.diff) {
+    margin-top: var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  :global(.dr) {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--sp-3);
+    padding: 0.6rem var(--sp-4);
+    border-bottom: var(--hair) solid var(--hairline);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    align-items: start;
+  }
+  :global(.dr:last-child) {
+    border-bottom: none;
+  }
+  :global(.dr dt) {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+  :global(.dr dd) {
+    margin: 0;
+  }
+  :global(.dr-head) {
+    background: var(--surface-2);
+  }
+  :global(.dr-head dd) {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink);
+  }
+  :global(.dr-diff) {
+    background: color-mix(in oklab, var(--accent) 7%, transparent);
+  }
+  :global(.dr-f1) {
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--surface-2);
+  }
+  :global(.delta.up) {
+    color: var(--t-positive);
+  }
+  :global(.delta.down) {
+    color: var(--t-warn);
+  }
+  @media (max-width: 560px) {
+    :global(.dr) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.1rem;
+    }
+  }
+</style>

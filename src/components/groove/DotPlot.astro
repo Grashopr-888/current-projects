@@ -1,0 +1,194 @@
+---
+/**
+ * Honest horizontal dot plot for F1 comparisons.
+ * Full [0,1] domain by default; no truncated axes. A hidden table carries the values.
+ */
+interface Item {
+  label: string;
+  value: number;
+  model?: 'cnn' | 'passt';
+  sub?: string;
+}
+interface Props {
+  title: string;
+  items: Item[];
+  caption?: string;
+  source?: string;
+  metric?: string;
+  domain?: [number, number];
+}
+const { title, items, caption, source, metric = 'macro-F1', domain = [0, 1] } = Astro.props;
+
+const W = 720;
+const padL = 176,
+  padR = 64,
+  top = 16,
+  rowH = 46,
+  bottom = 34;
+const H = top + items.length * rowH + bottom;
+const plotW = W - padL - padR;
+const [dmin, dmax] = domain;
+const x = (v: number) => padL + ((v - dmin) / (dmax - dmin)) * plotW;
+const ticks = [0, 0.25, 0.5, 0.75, 1].filter((t) => t >= dmin && t <= dmax);
+const colorFor = (m?: string) =>
+  m === 'cnn' ? 'var(--cnn)' : m === 'passt' ? 'var(--passt)' : 'var(--accent)';
+const fmt = (v: number) =>
+  v
+    .toFixed(v < 1 ? 4 : 3)
+    .replace(/0+$/, '')
+    .replace(/\.$/, '');
+const titleId = 'dp-' + Math.abs([...title].reduce((a, c) => a * 31 + c.charCodeAt(0), 7) % 1e6);
+---
+
+<figure class="dotplot">
+  <figcaption class="dotplot-title">{title}</figcaption>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${titleId}-t`}>
+    <title id={`${titleId}-t`}>{title}</title>
+    {
+      ticks.map((t) => (
+        <g>
+          <line
+            x1={x(t)}
+            y1={top}
+            x2={x(t)}
+            y2={H - bottom}
+            stroke="var(--hairline-strong)"
+            stroke-width="1"
+            stroke-dasharray={t === 0 ? '0' : '2 3'}
+          />
+          <text
+            x={x(t)}
+            y={H - bottom + 18}
+            text-anchor="middle"
+            fill="var(--faint)"
+            font-size="12"
+            font-family="var(--font-mono)"
+          >
+            {t}
+          </text>
+        </g>
+      ))
+    }
+    {
+      items.map((it, i) => {
+        const cy = top + i * rowH + rowH / 2;
+        const c = colorFor(it.model);
+        return (
+          <g>
+            <text
+              x={padL - 14}
+              y={cy - 2}
+              text-anchor="end"
+              dominant-baseline="middle"
+              fill="var(--ink)"
+              font-size="15"
+              font-weight="600"
+              font-family="var(--font-body)"
+            >
+              {it.label}
+            </text>
+            {it.sub && (
+              <text
+                x={padL - 14}
+                y={cy + 14}
+                text-anchor="end"
+                fill="var(--faint)"
+                font-size="11"
+                font-family="var(--font-mono)"
+              >
+                {it.sub}
+              </text>
+            )}
+            <line
+              x1={x(dmin)}
+              y1={cy}
+              x2={x(it.value)}
+              y2={cy}
+              stroke={c}
+              stroke-width="2.5"
+              opacity="0.4"
+            />
+            <circle cx={x(it.value)} cy={cy} r="7" fill={c} />
+            <text
+              x={x(it.value) + 14}
+              y={cy}
+              dominant-baseline="middle"
+              fill="var(--ink)"
+              font-size="14"
+              font-weight="600"
+              font-family="var(--font-mono)"
+            >
+              {fmt(it.value)}
+            </text>
+          </g>
+        );
+      })
+    }
+  </svg>
+
+  <div class="visually-hidden">
+    <table>
+      <caption>{title} ({metric})</caption>
+      <thead><tr><th>Series</th><th>{metric}</th></tr></thead>
+      <tbody>
+        {
+          items.map((it) => (
+            <tr>
+              <td>
+                {it.label}
+                {it.sub ? ` (${it.sub})` : ''}
+              </td>
+              <td>{fmt(it.value)}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  {
+    (caption || source) && (
+      <figcaption class="dotplot-cap">
+        {caption}
+        {source && <span class="dotplot-src"> · Source: {source}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .dotplot {
+    margin: 0;
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .dotplot-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 700;
+    font-stretch: 110%;
+    line-height: 1.25;
+    margin-bottom: var(--sp-4);
+    text-wrap: balance;
+  }
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-variant-numeric: tabular-nums;
+  }
+  .dotplot-cap {
+    margin-top: var(--sp-4);
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .dotplot-src {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--faint);
+  }
+</style>

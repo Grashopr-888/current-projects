@@ -1,0 +1,295 @@
+---
+/** The project page hero, shared by projects/[slug].astro and the research pages
+ *  (projects/groove/). Identity, credit line and venue marks come from PROJECT_META;
+ *  the default slot adds anything a page needs under the credits (for example links). */
+import Badge from './Badge.astro';
+import { PROJECT_META, type ProjectSlug } from '../config';
+import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
+import { url } from '../lib/url';
+import { existsSync } from 'node:fs';
+
+interface Props {
+  slug: ProjectSlug;
+  title: string;
+  summary: string;
+  status: string;
+  /** Label over the highlighted statement ("Thesis" on product pages). */
+  thesisLabel?: string;
+  thesis: string;
+  tools: string[];
+}
+const { slug, title, summary, status, thesisLabel = 'Thesis', thesis, tools } = Astro.props;
+const meta = PROJECT_META[slug];
+
+/* A secondary hero image (top right), where a project defines one. */
+const aside = 'aside' in meta ? meta.aside : undefined;
+const asideAlt = 'asideAlt' in meta ? meta.asideAlt : '';
+const asideCaption = 'asideCaption' in meta ? meta.asideCaption : undefined;
+/* Only render an image that actually exists, so a not-yet-added asset degrades
+   to no image rather than a broken one. `public/` is served from the root. */
+const hasAsset = (p?: string): boolean =>
+  !!p && existsSync(new URL(`../../public${p}`, import.meta.url));
+---
+
+<header class="phero">
+  <div class="container">
+    <a class="phero-back plain" href={url('/projects')}>← All projects</a>
+    <div class="phero-cols">
+      <div class="phero-main">
+        <div class="phero-top">
+          <span class="phero-kind">{meta.kind}</span>
+          <Badge tone={STATUS_TONE[status] ?? 'neutral'}>{lbl(status)}</Badge>
+        </div>
+        <div class="phero-idrow">
+          {meta.logo && <img class="phero-logo" src={url(meta.logo)} alt="" aria-hidden="true" />}
+          <h1 class="phero-title">{title}</h1>
+        </div>
+        <p class="phero-summary">{summary}</p>
+        <div class="phero-thesis">
+          <span class="label"><span class="idx">✳</span> {thesisLabel}</span>
+          <p>{thesis}</p>
+        </div>
+        <div class="phero-credits">
+          <span class="credit-context">{meta.credit}</span>
+          <span class="credit-tools">
+            {tools.map((t) => <span class="credit-chip">{t}</span>)}
+          </span>
+        </div>
+        <slot />
+      </div>
+      {
+        hasAsset(aside) && (
+          <figure class="phero-aside">
+            <img src={url(aside!)} alt={asideAlt} loading="lazy" />
+            {asideCaption && <figcaption>{asideCaption}</figcaption>}
+          </figure>
+        )
+      }
+    </div>
+    {
+      'partners' in meta && (
+        <div class="phero-partners" aria-label="Venues, events and affiliations">
+          {meta.partners.map((p) => (
+            <span
+              class:list={['partner-chip', { 'partner-dark': 'dark' in p && p.dark }]}
+              style={'scale' in p ? `--logo-scale: ${p.scale}` : undefined}
+            >
+              <img src={url(p.img)} alt={p.alt} loading="lazy" />
+            </span>
+          ))}
+        </div>
+      )
+    }
+    {'partnersNote' in meta && <p class="phero-partners-note">{meta.partnersNote}</p>}
+    {
+      hasAsset(meta.art) && (
+        <figure class="phero-media">
+          <img src={url(meta.art)} alt={meta.artAlt} loading="lazy" />
+        </figure>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .phero {
+    padding-block: var(--sp-8) var(--sp-6);
+    border-bottom: var(--hair) solid var(--hairline);
+    background:
+      radial-gradient(
+        60% 120% at 88% -10%,
+        color-mix(in oklab, var(--accent) 9%, transparent),
+        transparent 70%
+      ),
+      var(--bg);
+  }
+  .phero-back {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--muted);
+  }
+  .phero-back:hover {
+    color: var(--accent);
+  }
+  .phero-top {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    margin-top: var(--sp-5);
+  }
+  .phero-kind {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .phero-idrow {
+    margin-top: var(--sp-3);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+  }
+  .phero-logo {
+    width: clamp(3rem, 6vw, 4.4rem);
+    height: clamp(3rem, 6vw, 4.4rem);
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .phero-title {
+    font-size: var(--step-6);
+  }
+  /* Hero: text column, with a secondary image pinned top-right on wide screens. */
+  .phero-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+    align-items: start;
+  }
+  .phero-aside {
+    margin: 0;
+    justify-self: start;
+    max-width: 26rem;
+  }
+  .phero-aside img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+  }
+  .phero-aside figcaption {
+    margin-top: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+  }
+  @media (min-width: 60rem) {
+    .phero-cols {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+      gap: var(--sp-7);
+    }
+    .phero-aside {
+      justify-self: end;
+      margin-top: var(--sp-5);
+    }
+  }
+
+  .phero-media {
+    margin: var(--sp-6) 0 0;
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    max-width: 56rem;
+    background: var(--surface-2);
+  }
+  /* Show the full frame: this is the project's signature image, so it is not
+     cropped to a banner strip. */
+  .phero-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .phero-summary {
+    margin-top: var(--sp-4);
+    max-width: 54ch;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+  .phero-thesis {
+    margin-top: var(--sp-5);
+    padding-left: var(--sp-4);
+    border-left: 2px solid var(--accent);
+    max-width: 60ch;
+  }
+  .phero-thesis p {
+    margin-top: 0.4rem;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 500;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .phero-credits {
+    margin-top: var(--sp-6);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3) var(--sp-4);
+    flex-wrap: wrap;
+  }
+  .credit-context {
+    font-weight: 600;
+    font-size: var(--step--1);
+    color: var(--accent);
+  }
+  .credit-context::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--accent);
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+  .credit-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .credit-chip {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    padding: 0.2rem 0.6rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: 100px;
+  }
+
+  /* Partner marks in the hero: attribution strip, not decoration. */
+  .phero-partners {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.6rem;
+    flex-wrap: wrap;
+  }
+  .phero-partners-note {
+    margin-top: var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: color-mix(in oklab, var(--accent) 75%, var(--muted));
+  }
+  .partner-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 5.4rem;
+    padding: 0.65rem 1.1rem;
+    border: var(--hair) solid var(--hairline);
+    border-radius: 12px;
+    background: #fff;
+    flex: none;
+  }
+  /* Per-logo height within the tile comes from PROJECT_META partners[].scale. */
+  .partner-chip img {
+    height: calc(100% * var(--logo-scale, 1));
+    width: auto;
+    max-width: 27rem;
+    object-fit: contain;
+    display: block;
+  }
+  .partner-chip.partner-dark {
+    background: #161a1d;
+  }
+  @media (max-width: 720px) {
+    .partner-chip {
+      height: 3.4rem;
+      padding: 0.45rem 0.8rem;
+    }
+  }
+</style>

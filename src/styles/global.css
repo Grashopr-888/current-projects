@@ -66,6 +66,16 @@
   --ls-soft: #2e1c10;
   --hsx: #8f97e8; /* HRNSXTN — chrome violet, from the MUTEK 2026 deck */
   --hsx-soft: #201d3c;
+  --gr: #e6b44c; /* Probing the World for Groove: cymbal brass, after the thesis site's copper */
+  --gr-soft: #2d2410;
+  /* The thesis's two model colours, used for every CNN and PaSST mark on its pages
+     (the thesis site's own dark mode values). */
+  --cnn: #4fb3a8;
+  --cnn-strong: #79c9c0;
+  --cnn-soft: #14302d;
+  --passt: #a98bd8;
+  --passt-strong: #c0a9e6;
+  --passt-soft: #241a35;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow: 0 8px 28px -12px rgba(0, 0, 0, 0.7);
@@ -294,6 +304,11 @@ hr {
   border-color: color-mix(in oklab, var(--hsx) 45%, var(--hairline));
   background: color-mix(in oklab, var(--hsx-soft) 55%, var(--surface));
 }
+.chip[data-product='groove'] {
+  color: var(--gr);
+  border-color: color-mix(in oklab, var(--gr) 45%, var(--hairline));
+  background: color-mix(in oklab, var(--gr-soft) 55%, var(--surface));
+}
 
 /* per-project accent binding */
 [data-accent='windchime'] {
@@ -307,6 +322,10 @@ hr {
 [data-accent='hrnsxtn'] {
   --accent: var(--hsx);
   --accent-soft: var(--hsx-soft);
+}
+[data-accent='groove'] {
+  --accent: var(--gr);
+  --accent-soft: var(--gr-soft);
 }
 [data-accent='shared'],
 [data-accent='brand'] {

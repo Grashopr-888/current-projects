@@ -1,0 +1,73 @@
+---
+/** One model's spec card: badge, optional tag, bulleted facts in the default slot. */
+import ModelBadge from './ModelBadge.astro';
+import type { Model } from '../../lib/groove';
+interface Props {
+  model: Model;
+  tag?: string;
+}
+const { model, tag } = Astro.props;
+---
+
+<article class={`mcard mcard-${model}`}>
+  <header>
+    <ModelBadge model={model} size="md" />
+    {tag && <span class="mcard-tag">{tag}</span>}
+  </header>
+  <ul><slot /></ul>
+</article>
+
+<style>
+  .mcard {
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .mcard-cnn {
+    border-top: 3px solid var(--cnn);
+  }
+  .mcard-passt {
+    border-top: 3px solid var(--passt);
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-4);
+  }
+  .mcard-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  ul :global(li) {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  ul :global(li)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+  }
+  .mcard-cnn ul :global(li)::before {
+    background: var(--cnn);
+  }
+  .mcard-passt ul :global(li)::before {
+    background: var(--passt);
+  }
+</style>

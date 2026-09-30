@@ -1,0 +1,317 @@
+---
+import { getEntry } from 'astro:content';
+import GrooveLayout from '../../../layouts/GrooveLayout.astro';
+import ProjectHero from '../../../components/ProjectHero.astro';
+import Section from '../../../components/Section.astro';
+import StatTile from '../../../components/StatTile.astro';
+import ModelBadge from '../../../components/groove/ModelBadge.astro';
+import ModelCard from '../../../components/groove/ModelCard.astro';
+import DotPlot from '../../../components/groove/DotPlot.astro';
+import Note from '../../../components/groove/Note.astro';
+import { PROJECT_META } from '../../../config';
+import { GROOVE, LINKS, ASSETS, KEY_FACTS, HEADLINE, LOWDATA, gpage } from '../../../lib/groove';
+
+const project = (await getEntry('projects', 'groove'))!;
+const d = project.data;
+const meta = PROJECT_META.groove;
+
+const flow = [
+  'GMD performances',
+  'two bar clips',
+  '16 kHz / 32 kHz mono',
+  'primary ⊕ secondary labels',
+  '74 style classes',
+  'CNN vs PaSST',
+  'macro-F1',
+];
+
+let n = 0;
+const idx = () => String(++n).padStart(2, '0');
+---
+
+<GrooveLayout current="/" description={d.summary}>
+  <ProjectHero
+    slot="hero"
+    slug="groove"
+    title={d.title}
+    summary={d.summary}
+    status={d.status}
+    thesisLabel="The question"
+    thesis={GROOVE.question}
+    tools={['PaSST', 'audiomentations', 'TensorFlow Datasets', 'Google Colab']}
+  >
+    <div class="g-actions">
+      <a class="btn btn-primary" href={gpage('/experiments')}>Explore the results</a>
+      <a class="btn" href={ASSETS.thesisPdf}>Read the thesis</a>
+      <a class="btn" href={ASSETS.lbdPdf}>ISMIR paper</a>
+      <a class="btn" href={LINKS.video} rel="noopener">Watch the talk</a>
+      <a class="btn" href={LINKS.repo} rel="noopener">View code</a>
+    </div>
+  </ProjectHero>
+
+  <Section index={idx()} label="Presentation" title="Watch the talk" id="demo">
+    <div class="g-video">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${meta.demoVideoId}?rel=0`}
+        title={meta.demoVideoTitle}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+  </Section>
+
+  <Section index={idx()} label="At a glance" id="glance">
+    <div class="g-metrics">
+      {KEY_FACTS.map((f) => <StatTile value={f.value} label={f.label} note={f.note} />)}
+    </div>
+  </Section>
+
+  <Section index={idx()} label="The finding">
+    <p class="g-claim">
+      A drum specific <ModelBadge model="cnn" size="md" /> trained from scratch reached the strongest
+      aggregate score on the full 74 class task, yet frozen <ModelBadge model="passt" size="md" /> transfer
+      learning won under data scarcity and organized drum style into a more stable, hierarchical representation.
+    </p>
+    <p class="g-text">
+      Transfer learning helped, but its value depended on data availability, classifier design, and
+      how well general AudioSet pretraining aligned with fine grained drum style distinctions. The
+      story is not “one model beat the other.”
+    </p>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Why drum style?"
+    title="Not a single hit. Not a transcription. A whole groove."
+  >
+    <div class="g-grid3">
+      <div class="g-card">
+        <h3>Single hit classification</h3>
+        <p>Is this one sound a snare, a kick, a cymbal? Timbre of an isolated onset.</p>
+      </div>
+      <div class="g-card">
+        <h3>Drum transcription</h3>
+        <p>Notate every onset into MIDI: a symbolic event sequence, no style label.</p>
+      </div>
+      <div class="g-card g-card-accent">
+        <h3>Drum pattern <em>style</em></h3>
+        <p>
+          Read an entire two bar performance and name its style: a higher level task, close to
+          genre, that this thesis investigates directly from audio.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="The data"
+    title="From professional grooves to a 74 class audio task"
+  >
+    <p class="g-lead">
+      To avoid building a dataset from scratch, the project adopted the <strong
+        >Groove MIDI Dataset</strong
+      > (professional drummer performances with primary and secondary style annotations) and rendered
+      <strong>18,264</strong> two bar audio clips.
+    </p>
+    <ol class="flow" aria-label="Data processing pipeline">
+      {
+        flow.map((step, i) => (
+          <li class="flow-step">
+            <span class="flow-num">{i + 1}</span>
+            <span>{step}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="g-small">
+      Clips are mono, padded to a fixed length, split ≈80 / 10 / 10 with proportional class
+      balancing. Concatenating primary and secondary annotations yields the 74 classes, an
+      intentionally fine grained, imbalanced target (rock styles alone make up nearly two thirds of
+      the data).
+    </p>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Two ways to hear a groove"
+    title="A task specific CNN versus a pretrained transformer"
+  >
+    <div class="versus">
+      <ModelCard model="cnn" tag="learned from scratch">
+        <li>Log mel spectrogram input at 16 kHz</li>
+        <li>Stacked local convolutional filters</li>
+        <li>VGG style, adapted for drums</li>
+        <li>Best configuration: <strong>7 convolutional layers</strong></li>
+        <li>Captures local spectrotemporal, drum specific cues</li>
+      </ModelCard>
+      <div class="versus-div" aria-hidden="true">vs</div>
+      <ModelCard model="passt" tag="transfer learning">
+        <li>Audio resampled to 32 kHz, padded to 10 s</li>
+        <li>Patchout Audio Spectrogram Transformer</li>
+        <li><strong>Frozen</strong> backbone, pretrained on AudioSet</li>
+        <li>Best head: <strong>4 layer MLP</strong> classifier</li>
+        <li>Brings broad general audio knowledge to the task</li>
+      </ModelCard>
+    </div>
+  </Section>
+
+  <Section index={idx()} label="The evidence" title="Two charts carry the argument">
+    <div class="g-grid2">
+      <DotPlot
+        title="On the full 74 class task, the CNN edges ahead"
+        items={[
+          { label: 'CNN', value: HEADLINE.cnn.f1, model: 'cnn', sub: `exp ${HEADLINE.cnn.exp}` },
+          {
+            label: 'PaSST',
+            value: HEADLINE.passt.f1,
+            model: 'passt',
+            sub: `exp ${HEADLINE.passt.exp}`,
+          },
+        ]}
+        caption="Best configuration per model, GMD-full, 74 classes, a directly comparable pair."
+        source="Thesis Experiment results.xlsx · Overall"
+      />
+      <DotPlot
+        title="But under data scarcity, the ranking reverses"
+        items={[
+          { label: 'PaSST', value: LOWDATA.passt, model: 'passt', sub: 'exp 3.2' },
+          { label: 'CNN', value: LOWDATA.cnn, model: 'cnn', sub: 'exp 3.1' },
+        ]}
+        caption={`${LOWDATA.scope}: frozen transfer features give PaSST the advantage when data is limited.`}
+        source="Thesis Experiment results.xlsx · Dataset Exploration"
+      />
+    </div>
+    <p class="g-small g-gap">
+      The early rock only experiment scored a higher 0.9204, but on a narrower, easier label set, so
+      it belongs to the <a href={gpage('/experiments')}>experiment history</a>, not the headline.
+    </p>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="What the models learned"
+    title="Accuracy isn’t the whole story: the representations differ"
+  >
+    <div class="g-grid2">
+      <div>
+        <p class="g-text">
+          Beyond F1, the two models organize drum style differently. PaSST shows tighter clustering
+          by primary style and smaller mean centroid shifts under perturbation, evidence of a more
+          hierarchical embedding. The CNN leans on local features and is more sensitive to class
+          imbalance.
+        </p>
+        <p class="g-text">
+          <a class="g-more" href={gpage('/representations')}>See the representation analysis →</a>
+        </p>
+      </div>
+      <Note variant="warn" title="Methods note">
+        <p>
+          The CNN and PaSST embeddings live in <strong>different coordinate systems</strong>. Raw
+          centroid shift magnitudes are not comparable across models (PaSST 8.32 vs CNN 94.66 under
+          reflection padding). Comparisons here use within model ranks and normalized shifts only.
+        </p>
+      </Note>
+    </div>
+  </Section>
+
+  <Section index={idx()} label="Read with care" title="Limitations">
+    <ul class="g-list g-list-2">
+      <li>Labels derive from dataset style tags, with ambiguous, overlapping genre boundaries.</li>
+      <li>The 74 class target is imbalanced; rock dominates.</li>
+      <li>Two bar clips omit longer musical structure.</li>
+      <li>PaSST was used <strong>frozen</strong>, not finetuned, which limits task adaptation.</li>
+      <li>Results are specific to GMD and its rendering conditions.</li>
+      <li>t-SNE is exploratory, not proof of semantic separation.</li>
+    </ul>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="ISMIR 2025 · Late-Breaking Demo"
+    title="Read, cite, and watch the work"
+  >
+    <div class="pub">
+      <p class="g-lead">
+        Daejeon, South Korea. The full thesis, the Late-Breaking Demo paper, the poster, and the
+        recorded presentation are all one click away.
+      </p>
+      <div class="g-actions">
+        <a class="btn" href={ASSETS.thesisPdf}>Thesis (PDF)</a>
+        <a class="btn" href={ASSETS.lbdPdf}>LBD paper (PDF)</a>
+        <a class="btn" href={ASSETS.posterPdf}>Poster</a>
+        <a class="btn" href={LINKS.video} rel="noopener">Video</a>
+        <a class="btn btn-primary" href={gpage('/publication')}>Publication details →</a>
+      </div>
+    </div>
+  </Section>
+</GrooveLayout>
+
+<style>
+  .flow {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--sp-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.9rem 0.4rem 0.4rem;
+    border: var(--hair) solid var(--hairline-strong);
+    border-radius: 100px;
+    background: var(--surface);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    margin-left: 0.4rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .flow-num {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    flex: none;
+  }
+
+  .versus {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: var(--sp-4);
+    align-items: stretch;
+  }
+  .versus-div {
+    align-self: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: var(--display-stretch);
+    text-transform: uppercase;
+    color: var(--faint);
+    font-size: var(--step-1);
+  }
+  @media (max-width: 760px) {
+    .versus {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .versus-div {
+      display: none;
+    }
+  }
+
+  .pub .g-actions {
+    margin-top: var(--sp-5);
+  }
+</style>
