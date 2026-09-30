@@ -77,6 +77,20 @@
       "commitCount": 33,
       "firstDate": "2026-09-14",
       "lastDate": "2026-09-24"
+    },
+    {
+      "label": "groove (thesis notebooks)",
+      "product": "groove",
+      "commitCount": 92,
+      "firstDate": "2025-02-21",
+      "lastDate": "2025-08-27"
+    },
+    {
+      "label": "groove (research repo)",
+      "product": "groove",
+      "commitCount": 15,
+      "firstDate": "2025-08-03",
+      "lastDate": "2025-08-03"
     }
   ]
 }

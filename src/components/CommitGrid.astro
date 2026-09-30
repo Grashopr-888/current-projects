@@ -4,17 +4,19 @@
  * rows, cell intensity by commit count. Hovering a day shows date, count, and
  * the sanitized subject lines for that day (native title tooltip, no JS).
  */
-import type { DayActivity } from '../lib/signals';
+import type { DayActivity, SignalProduct } from '../lib/signals';
 
 interface Props {
   label: string;
-  accent: 'windchime' | 'lichtspiel' | 'hrnsxtn';
+  accent: SignalProduct;
+  /** Optional line under the label, for example a period or a note on the source. */
+  note?: string;
   days: Record<string, DayActivity>;
   /** ISO dates bounding the shared time axis so multiple grids align. */
   first: string;
   last: string;
 }
-const { label, accent, days, first, last } = Astro.props;
+const { label, accent, note, days, first, last } = Astro.props;
 
 const DAY_MS = 86_400_000;
 const toUTC = (iso: string) => new Date(`${iso}T00:00:00Z`);
@@ -76,6 +78,7 @@ while (cursor.getTime() <= end.getTime() || cursor.getUTCDay() !== 0) {
     <span class="cg-dot" aria-hidden="true"></span>
     <span class="cg-label">{label}</span>
   </div>
+  {note && <p class="cg-note">{note}</p>}
   <div class="cg-scroll">
     <div class="cg-months" style={`--weeks: ${weeks.length}`}>
       {monthLabels.map((m) => <span style={`grid-column: ${m.index + 1}`}>{m.label}</span>)}
@@ -116,6 +119,16 @@ while (cursor.getTime() <= end.getTime() || cursor.getUTCDay() !== 0) {
   }
   .cg[data-accent='hrnsxtn'] {
     --cg-c: var(--hsx);
+  }
+  .cg[data-accent='groove'] {
+    --cg-c: var(--gr);
+  }
+  .cg-note {
+    margin: calc(var(--sp-2) * -1) 0 var(--sp-3);
+    max-width: 62ch;
+    font-size: var(--step--1);
+    line-height: 1.5;
+    color: var(--muted);
   }
   .cg-head {
     display: flex;

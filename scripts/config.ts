@@ -1,7 +1,7 @@
 import os from 'node:os';
 import path from 'node:path';
 
-export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn';
+export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove';
 
 /**
  * Source repos live as siblings under this root. Resolved from $HOME at runtime,
@@ -33,6 +33,11 @@ export interface RepoSource {
    * without subjects. For a repo whose later work feeds research that is still under review.
    */
   subjectsUntil?: string;
+  /**
+   * Count only commits on or before this date (YYYY-MM-DD); later commits are left out of the
+   * snapshot entirely. For a finished project whose repo kept receiving housekeeping commits.
+   */
+  until?: string;
 }
 
 /** The private repos this showcase draws sanitized evidence from. */
@@ -91,6 +96,27 @@ export const REPOS: RepoSource[] = [
     product: 'hrnsxtn',
     dir: 'hrnsxtn-research-notes',
     path: 'elkaudio-ISMIR26',
+    subjects: false,
+  },
+  // Probing the World for Groove: the 2025 thesis and ISMIR 2025 publication work only.
+  // Colab does not sync to git, so the notebook archive's history was rebuilt from Google
+  // Drive revision dates, one commit per real edit day (see that repo's README).
+  {
+    label: 'groove (thesis notebooks)',
+    product: 'groove',
+    dir: 'groove-thesis-notebooks',
+    path: 'thesis-github-pages/drum-style-thesis-notebooks',
+    until: '2025-12-31',
+    githubRepo: 'Grashopr-888/drum-style-thesis-notebooks',
+  },
+  // Publication uploads (thesis PDF, slides, notebooks). Counts only: the upload subjects
+  // carry file names with a student number. The 2026 restore commit falls after `until`.
+  {
+    label: 'groove (research repo)',
+    product: 'groove',
+    dir: 'groove-research',
+    path: 'thesis-github-pages/research',
+    until: '2025-12-31',
     subjects: false,
   },
 ];

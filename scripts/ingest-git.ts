@@ -11,6 +11,7 @@
  * that drops anything mentioning people or addresses). Aggregates and (redacted)
  * tag names ship as before.
  */
+import fs from 'node:fs';
 import path from 'node:path';
 import { REPOS, repoPath, PATHS, type Product } from './config';
 import { git, isGitRepo, exists, writeJson, header, log, warn } from './lib/util';
@@ -101,7 +102,13 @@ function main(): void {
     Pick<GitSnapshot, 'label' | 'product' | 'commitCount' | 'firstDate' | 'lastDate'>
   > = [];
 
-  for (const src of REPOS) {
+  // `--only <product>` refreshes one product's snapshots and leaves the others untouched.
+  const onlyArg = process.argv.indexOf('--only');
+  const only = onlyArg > -1 ? process.argv[onlyArg + 1] : undefined;
+  const sources = only ? REPOS.filter((r) => r.product === only) : REPOS;
+  if (only && !sources.length) warn(`--only ${only}: no repos configured for that product`);
+
+  for (const src of sources) {
     const repo = repoPath(src);
     if (!exists(repo) || !isGitRepo(repo)) {
       warn(`skip ${src.label} — not a git repo at ${src.dir}`);
@@ -109,8 +116,8 @@ function main(): void {
     }
     header(`${src.label}`);
 
-    const commits = readCommits(repo);
-    const tagsRaw = readTags(repo);
+    const commits = readCommits(repo).filter((c) => !src.until || c.date <= src.until);
+    const tagsRaw = readTags(repo).filter((t) => !src.until || t.date <= src.until);
 
     // RAW (gitignored) — keep everything for local inspection.
     writeJson(path.join(PATHS.raw, 'git', `${src.dir}.raw.json`), {
@@ -169,9 +176,18 @@ function main(): void {
     log(`${commits.length} commits · ${authors.size} author(s) · ${tags.length} tag(s)`);
   }
 
-  writeJson(path.join(PATHS.snapshots, 'git', 'index.json'), {
+  // A partial run keeps the index entries of the repos it did not touch, in config order.
+  const indexPath = path.join(PATHS.snapshots, 'git', 'index.json');
+  const kept =
+    only && exists(indexPath)
+      ? (JSON.parse(fs.readFileSync(indexPath, 'utf8')).repos as typeof index).filter(
+          (r) => r.product !== only
+        )
+      : [];
+  const order = (label: string) => REPOS.findIndex((r) => r.label === label);
+  writeJson(indexPath, {
     note: 'Per-repo sanitized git activity index.',
-    repos: index,
+    repos: [...kept, ...index].sort((a, b) => order(a.label) - order(b.label)),
   });
 
   const summary = summarize(findings);

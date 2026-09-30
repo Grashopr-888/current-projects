@@ -5,13 +5,26 @@ import CommitGrid from '../components/CommitGrid.astro';
 import Disclosure from '../components/Disclosure.astro';
 import { url } from '../lib/url';
 import { fmtMonth } from '../lib/format';
-import { gitSignals } from '../lib/signals';
+import { gitSignals, spanUnion, type Span } from '../lib/signals';
 
 const sig = gitSignals();
-const span =
-  sig.firstDate && sig.lastDate
-    ? `${fmtMonth(new Date(sig.firstDate))} to ${fmtMonth(new Date(sig.lastDate))}`
-    : 'n/a';
+/* The current projects share one time axis. The thesis keeps its own 2025 window, so
+   its year does not stretch the 2026 grids (and theirs does not stretch it). */
+const current = spanUnion([
+  sig.spanByProduct.windchime,
+  sig.spanByProduct.lichtspiel,
+  sig.spanByProduct.hrnsxtn,
+]);
+const thesis = sig.spanByProduct.groove;
+/** "May to Sep 2026", or "Dec 2025 to Jan 2026" across a year boundary. */
+const fmtSpan = ({ first, last }: Span): string => {
+  if (!first || !last) return 'n/a';
+  const a = new Date(first),
+    b = new Date(last);
+  return a.getUTCFullYear() === b.getUTCFullYear()
+    ? `${fmtMonth(a).split(' ')[0]} to ${fmtMonth(b)}`
+    : `${fmtMonth(a)} to ${fmtMonth(b)}`;
+};
 
 type ArtifactLink = { label: string; href: string };
 const loop: Array<{ step: string; line: string; artifacts: ArtifactLink[] }> = [
@@ -275,8 +288,8 @@ const practices = [
             </p>
             <p class="signal-note">
               Ingested from {sig.repoCount} repos, most of them private: day level counts plus
-              redacted, truncated subject lines (research repos give counts only), all through the
-              redaction gate. See the <a href={url('/about')}>note on the source code</a>.
+              redacted, truncated subject lines (most research repos give counts only), all through
+              the redaction gate. See the <a href={url('/about')}>note on the source code</a>.
             </p>
           </div>
           <div class="signal-stats">
@@ -289,8 +302,9 @@ const practices = [
               <span class="sstat-l">repositories</span>
             </div>
             <div class="sstat">
-              <span class="sstat-v">{span}</span>
+              <span class="sstat-v">{fmtSpan(current)}</span>
               <span class="sstat-l">active span</span>
+              {thesis.first && <span class="sstat-sub">Thesis: {fmtSpan(thesis)}</span>}
             </div>
             <div class="sstat">
               <span class="sstat-v">
@@ -303,33 +317,48 @@ const practices = [
                 <span class="chip" data-product="hrnsxtn">
                   HRNSXTN {sig.byProduct.hrnsxtn}
                 </span>
+                {sig.byProduct.groove > 0 && (
+                  <span class="chip" data-product="groove">
+                    Probing the World for Groove {sig.byProduct.groove}
+                  </span>
+                )}
               </span>
               <span class="sstat-l">commits by project</span>
             </div>
           </div>
-          {sig.firstDate && sig.lastDate && (
+          {current.first && current.last && (
             <div class="grids">
               <CommitGrid
                 label="Windchime"
                 accent="windchime"
                 days={sig.daysByProduct.windchime}
-                first={sig.firstDate}
-                last={sig.lastDate}
+                first={current.first}
+                last={current.last}
               />
               <CommitGrid
                 label="Lichtspiel"
                 accent="lichtspiel"
                 days={sig.daysByProduct.lichtspiel}
-                first={sig.firstDate}
-                last={sig.lastDate}
+                first={current.first}
+                last={current.last}
               />
               <CommitGrid
                 label="HRNSXTN x RDMSXN"
                 accent="hrnsxtn"
                 days={sig.daysByProduct.hrnsxtn}
-                first={sig.firstDate}
-                last={sig.lastDate}
+                first={current.first}
+                last={current.last}
               />
+              {thesis.first && thesis.last && (
+                <CommitGrid
+                  label="Probing the World for Groove"
+                  accent="groove"
+                  note={`The 2025 thesis and its ISMIR publication, ${fmtSpan(thesis)}. Colab does not sync to git, so the notebook history was rebuilt from Google Drive revision dates, one commit per edit day.`}
+                  days={sig.daysByProduct.groove}
+                  first={thesis.first}
+                  last={thesis.last}
+                />
+              )}
             </div>
           )}
           <p class="grids-hint">Hover a day for its commit detail.</p>
@@ -560,6 +589,11 @@ const practices = [
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--muted);
+  }
+  .sstat-sub {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--gr);
   }
   .grids {
     margin-top: var(--sp-6);

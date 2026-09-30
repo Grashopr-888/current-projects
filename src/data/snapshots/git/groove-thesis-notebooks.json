@@ -1,0 +1,236 @@
+{
+  "note": "Sanitized aggregate - day-level counts plus redacted, truncated subject lines. Raw pull stays gitignored.",
+  "label": "groove (thesis notebooks)",
+  "product": "groove",
+  "dir": "groove-thesis-notebooks",
+  "commitCount": 92,
+  "firstDate": "2025-02-21",
+  "lastDate": "2025-08-27",
+  "authors": 1,
+  "months": {
+    "2025-02": 4,
+    "2025-03": 1,
+    "2025-04": 27,
+    "2025-05": 45,
+    "2025-06": 12,
+    "2025-08": 3
+  },
+  "days": {
+    "2025-02-21": {
+      "count": 1,
+      "subjects": ["Add GMD_prototype_preprocessing.ipynb"]
+    },
+    "2025-02-22": {
+      "count": 1,
+      "subjects": ["Update GMD_prototype_preprocessing.ipynb"]
+    },
+    "2025-02-23": {
+      "count": 1,
+      "subjects": ["Update GMD_prototype_preprocessing.ipynb"]
+    },
+    "2025-02-24": {
+      "count": 1,
+      "subjects": ["Update GMD_prototype_preprocessing.ipynb"]
+    },
+    "2025-03-05": {
+      "count": 1,
+      "subjects": ["Update GMD_prototype_preprocessing.ipynb"]
+    },
+    "2025-04-08": {
+      "count": 1,
+      "subjects": ["Add PaSST_test.ipynb"]
+    },
+    "2025-04-09": {
+      "count": 1,
+      "subjects": ["Add PaSST_setup.ipynb"]
+    },
+    "2025-04-10": {
+      "count": 2,
+      "subjects": ["Add PaSST_setup2.ipynb", "Update PaSST_setup.ipynb"]
+    },
+    "2025-04-16": {
+      "count": 2,
+      "subjects": ["Update PaSST_setup2.ipynb", "Add GMD_CNN_prototype3.ipynb"]
+    },
+    "2025-04-17": {
+      "count": 1,
+      "subjects": ["Update GMD_CNN_prototype3.ipynb"]
+    },
+    "2025-04-19": {
+      "count": 2,
+      "subjects": ["Update PaSST_setup2.ipynb", "Add PaSST_setup3.ipynb"]
+    },
+    "2025-04-20": {
+      "count": 2,
+      "subjects": ["Add PaSST_setup4.ipynb", "Update PaSST_setup3.ipynb"]
+    },
+    "2025-04-23": {
+      "count": 3,
+      "subjects": [
+        "Add GMD_Data_Preprocessing.ipynb",
+        "Update PaSST_setup4.ipynb",
+        "Add PaSST_setup5.ipynb"
+      ]
+    },
+    "2025-04-24": {
+      "count": 1,
+      "subjects": ["Add GMD_CNN_prototype4.ipynb"]
+    },
+    "2025-04-25": {
+      "count": 3,
+      "subjects": [
+        "Update GMD_CNN_prototype4.ipynb",
+        "Update GMD_Data_Preprocessing.ipynb",
+        "Add GMD_CNN_prototype5.ipynb"
+      ]
+    },
+    "2025-04-26": {
+      "count": 4,
+      "subjects": [
+        "Update GMD_CNN_prototype4.ipynb",
+        "Update GMD_CNN_prototype5.ipynb",
+        "Add PaSST_setup6.ipynb",
+        "Update PaSST_setup5.ipynb"
+      ]
+    },
+    "2025-04-28": {
+      "count": 1,
+      "subjects": ["Update PaSST_setup6.ipynb"]
+    },
+    "2025-04-29": {
+      "count": 2,
+      "subjects": ["Add PaSST_setup6_umap.ipynb", "Update PaSST_setup6.ipynb"]
+    },
+    "2025-04-30": {
+      "count": 2,
+      "subjects": ["Add GMD_CNN_prototype5_2.ipynb", "Add PaSST_setup6_2.ipynb"]
+    },
+    "2025-05-01": {
+      "count": 1,
+      "subjects": ["Update GMD_CNN_prototype5_2.ipynb"]
+    },
+    "2025-05-02": {
+      "count": 4,
+      "subjects": [
+        "Add GMD_CNN_prototype5_3.ipynb",
+        "Update GMD_CNN_prototype5_2.ipynb",
+        "Update PaSST_setup6_2.ipynb",
+        "Add PaSST_setup6_3.ipynb"
+      ]
+    },
+    "2025-05-04": {
+      "count": 2,
+      "subjects": ["Update PaSST_setup6_2.ipynb", "Add PaSST_setup6_tSNE.ipynb"]
+    },
+    "2025-05-05": {
+      "count": 6,
+      "subjects": [
+        "Add PaSST_setup6_5.ipynb",
+        "Add GMD_CNN_prototype4_tSNE.ipynb",
+        "Add GMD_CNN_prototype5_3_tSNE.ipynb",
+        "Update PaSST_setup5.ipynb"
+      ]
+    },
+    "2025-05-06": {
+      "count": 6,
+      "subjects": [
+        "Add PaSST_setup6_6.ipynb",
+        "Update PaSST_setup6_5.ipynb",
+        "Add PaSST_setup6_tSNE_eval.ipynb",
+        "Update PaSST_setup6_tSNE.ipynb"
+      ]
+    },
+    "2025-05-07": {
+      "count": 4,
+      "subjects": [
+        "Add PaSST_setup6_9.ipynb",
+        "Add PaSST_setup6_7.ipynb",
+        "Add PaSST_setup6_8.ipynb",
+        "Update PaSST_setup6_6.ipynb"
+      ]
+    },
+    "2025-05-08": {
+      "count": 2,
+      "subjects": ["Add PaSST_setup6_10.ipynb", "Update PaSST_setup6_9.ipynb"]
+    },
+    "2025-05-09": {
+      "count": 3,
+      "subjects": [
+        "Add GMD_CNN_prototype6.ipynb",
+        "Add PaSST_setup6_12.ipynb",
+        "Add PaSST_setup6_11.ipynb"
+      ]
+    },
+    "2025-05-10": {
+      "count": 1,
+      "subjects": ["Add GMD_CNN_prototype6_2.ipynb"]
+    },
+    "2025-05-11": {
+      "count": 1,
+      "subjects": ["Add GMD_CNN_prototype6_3.ipynb"]
+    },
+    "2025-05-12": {
+      "count": 1,
+      "subjects": ["Add GMD_CNN_prototype6_4.ipynb"]
+    },
+    "2025-05-13": {
+      "count": 1,
+      "subjects": ["Add PaSST_setup6_13.ipynb"]
+    },
+    "2025-05-20": {
+      "count": 2,
+      "subjects": ["Update PaSST_setup6_13.ipynb", "Add PaSST_setup6_14.ipynb"]
+    },
+    "2025-05-22": {
+      "count": 1,
+      "subjects": ["Add GMD_CNN_prototype6_5.ipynb"]
+    },
+    "2025-05-23": {
+      "count": 1,
+      "subjects": ["Update GMD_CNN_prototype6_5.ipynb"]
+    },
+    "2025-05-24": {
+      "count": 5,
+      "subjects": [
+        "Add PaSST_setup6_16.ipynb",
+        "Update PaSST_setup6_8.ipynb",
+        "Update PaSST_setup6_13.ipynb",
+        "Update PaSST_setup6_14.ipynb"
+      ]
+    },
+    "2025-05-25": {
+      "count": 1,
+      "subjects": ["Add GMD_CNN_prototype6_6.ipynb"]
+    },
+    "2025-05-26": {
+      "count": 2,
+      "subjects": ["Add GMD_CNN_prototype6_8.ipynb", "Add GMD_CNN_prototype6_7.ipynb"]
+    },
+    "2025-05-27": {
+      "count": 1,
+      "subjects": ["Update PaSST_setup6_16.ipynb"]
+    },
+    "2025-06-04": {
+      "count": 1,
+      "subjects": ["Add PaSST_setup6_tSNE_eval2.ipynb"]
+    },
+    "2025-06-05": {
+      "count": 10,
+      "subjects": [
+        "Update PaSST_setup6_tSNE_eval2.ipynb",
+        "Add GMD_CNN_prototype6_tSNE_eval.ipynb",
+        "Update GMD_CNN_prototype6_8.ipynb",
+        "Update GMD_CNN_prototype6_7.ipynb"
+      ]
+    },
+    "2025-06-06": {
+      "count": 1,
+      "subjects": ["Update GMD_CNN_prototype6_tSNE_eval.ipynb"]
+    },
+    "2025-08-27": {
+      "count": 3,
+      "subjects": ["Add README", "Update GMD_CNN_prototype6_4.ipynb", "Update PaSST_setup6_8.ipynb"]
+    }
+  },
+  "tags": []
+}
