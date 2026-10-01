@@ -17,7 +17,9 @@ import { url } from '../lib/url';
         I'm {SITE.author}, a technical product manager and product engineer working in creative
         technology, where interfaces, live performance, audio, and machine learning meet. I work the
         way an early stage product and engineering lead does. I stay close to the user, make the
-        roadmap calls, design and ship, then own what happens after release.
+        roadmap calls, design and ship, then own what happens after release. Alongside the product
+        work I do practice based research in audio ML, accepted at NeurIPS 2026 (Creative AI) and at
+        ISMIR in 2025 and 2026.
       </p>
       <p>
         This site is a running, public view of my current projects. It documents the product work in
@@ -25,7 +27,9 @@ import { url } from '../lib/url';
         validated steps, and how a bug becomes a postmortem and then a better system.
         <a href={url('/projects/windchime')}>Windchime</a>,
         <a href={url('/projects/lichtspiel')}>Lichtspiel</a>, and
-        <a href={url('/projects/hrnsxtn')}>HRNSXTN x RDMSXN</a> are the current projects.
+        <a href={url('/projects/hrnsxtn')}>HRNSXTN x RDMSXN</a> are the current projects;
+        <a href={url('/projects/groove')}>Probing the World for Groove</a> is my MSc thesis, published
+        at ISMIR 2025. The <a href={url('/research')}>research page</a> lists every publication.
       </p>
     </div>
 
@@ -33,8 +37,9 @@ import { url } from '../lib/url';
       <span class="label">On the source code</span>
       <p>
         This site documents process in depth (decisions, releases, incidents, and research method)
-        while the implementation and the audio corpus stay private. Where a detail is sensitive, it
-        is described at a higher level rather than shown.
+        while most of the implementation and the audio corpora stay private. The research code
+        behind the ISMIR papers is public and linked from each project. Where a detail is sensitive,
+        it is described at a higher level rather than shown.
       </p>
     </div>
 
@@ -52,6 +57,10 @@ import { url } from '../lib/url';
         <a class="guide-item plain" href={url('/incidents')}>
           <span class="guide-k">Judge the reliability</span>
           <span class="guide-v">The postmortems say more than the feature lists do.</span>
+        </a>
+        <a class="guide-item plain" href={url('/research')}>
+          <span class="guide-k">Read the research</span>
+          <span class="guide-v">Publications at NeurIPS and ISMIR, and the notes behind them.</span>
         </a>
       </div>
     </div>
@@ -130,6 +139,18 @@ import { url } from '../lib/url';
     text-wrap: pretty;
   }
 
+  .about-disclaimer {
+    margin-top: var(--sp-6);
+    max-width: var(--measure);
+    padding-left: var(--sp-4);
+    border-left: 2px solid var(--hairline-strong);
+  }
+  .about-disclaimer p {
+    margin-top: 0.4rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
   .about-guide {
     margin-top: var(--sp-7);
   }

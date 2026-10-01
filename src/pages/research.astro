@@ -3,23 +3,109 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import IndexRow from '../components/IndexRow.astro';
 import { allResearch, recordPath } from '../lib/content';
 import { label as lbl } from '../lib/taxonomy';
+import { url } from '../lib/url';
+import { PROJECT_META, type ProjectSlug } from '../config';
+import { ASSETS } from '../lib/groove';
 
 const notes = await allResearch();
+
+/** Published and accepted work, newest first. Titles are verbatim. */
+const PUBLICATIONS: Array<{
+  venue: string;
+  status: string;
+  place: string;
+  title: string;
+  authors: string;
+  project: ProjectSlug;
+  page: string;
+  link: { label: string; href: string };
+}> = [
+  {
+    venue: 'ISMIR 2026 · Late-Breaking Demo',
+    status: 'Accepted',
+    place: 'Abu Dhabi, UAE · November 2026',
+    title: 'Neural Codec Latent Distillation for Corpus Retrieval Synthesis on the Elk Stomp',
+    authors: 'Trent Eriksen, Jazz Segovia, Dennison Blackett',
+    project: 'hrnsxtn',
+    page: '/projects/hrnsxtn#recognition',
+    link: {
+      label: 'Paper and code',
+      href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
+    },
+  },
+  {
+    venue: 'NeurIPS 2026 · Creative AI Track',
+    status: 'Accepted',
+    place: 'Sydney, Australia · December 2026',
+    title: 'Windchime: an Audiovisual Installation with Audio-Language Model implementations',
+    authors: 'Trent Eriksen, Celeste Betancur',
+    project: 'windchime',
+    page: '/projects/windchime#recognition',
+    link: { label: 'OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
+  },
+  {
+    venue: 'ISMIR 2025 · Late-Breaking Demo',
+    status: 'Presented',
+    place: 'Daejeon, South Korea · September 2025',
+    title: 'A Comparative Study of Transfer Learning for Drum Audio Style Classification',
+    authors: 'Trent Eriksen, Edwin van der Heide, Robert Saunders',
+    project: 'groove',
+    page: '/projects/groove/publication',
+    link: { label: 'ISMIR 2025 page', href: 'https://ismir2025program.ismir.net/lbd_456.html' },
+  },
+  {
+    venue: 'MSc thesis · Leiden University',
+    status: 'Completed',
+    place: 'Leiden, the Netherlands · June 2025',
+    title:
+      'Probing the World for Groove: A Comparative Study of Transfer Learning for Drum Audio Style Classification',
+    authors: 'Trent Eriksen; supervised by Edwin van der Heide and Robert Saunders',
+    project: 'groove',
+    page: '/projects/groove',
+    link: { label: 'Thesis (PDF)', href: ASSETS.thesisPdf },
+  },
+];
 ---
 
 <BaseLayout
   title="Research"
-  description="How the thinking is tested: discovery, market scans, and the research process behind the work."
+  description="Publications at NeurIPS and ISMIR, and the research notes behind each project."
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Research</p>
     <h1>How the thinking is tested.</h1>
     <p class="lead measure">
-      A sanitized archive of discovery, market scans, and experiments, including how product work
-      turns into academic contribution. Where results are still under review, the method is shown
-      and the findings are held back.
+      Publications first, then the research notes behind each project: discovery, market scans and
+      experiments. Where results are still under review, the method is shown and the findings are
+      held back.
     </p>
 
+    <h2 class="sub">Publications</h2>
+    <div class="pubs">
+      {
+        PUBLICATIONS.map((p) => (
+          <article class="pub" data-accent={p.project}>
+            <div class="pub-top">
+              <span class="pub-venue">{p.venue}</span>
+              <span class="pub-status">{p.status}</span>
+            </div>
+            <p class="pub-title">{p.title}</p>
+            <p class="pub-authors">{p.authors}</p>
+            <p class="pub-place">{p.place}</p>
+            <div class="pub-links">
+              <a class="plain pub-link" href={p.link.href} rel="noopener">
+                {p.link.label} <span aria-hidden="true">↗</span>
+              </a>
+              <a class="plain pub-link pub-project" href={url(p.page)}>
+                {PROJECT_META[p.project].label} <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <h2 class="sub">Research notes</h2>
     <div class="list">
       {
         notes.map((n) => (
@@ -50,8 +136,80 @@ const notes = await allResearch();
     font-size: var(--step-1);
     color: var(--ink-soft);
   }
+  .sub {
+    margin-top: var(--sp-8);
+    font-size: var(--step-2);
+  }
+  .pubs {
+    margin-top: var(--sp-5);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+  .pub {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: var(--sp-5);
+    border: var(--hair) solid var(--hairline);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .pub-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-3);
+  }
+  .pub-venue {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .pub-status {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--t-positive);
+    white-space: nowrap;
+  }
+  .pub-title {
+    margin-top: 0.2rem;
+    font-weight: 650;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .pub-authors {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .pub-place {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .pub-links {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+  }
+  .pub-link {
+    font-weight: 600;
+    font-size: var(--step--1);
+    color: var(--accent);
+  }
+  .pub-link:hover {
+    text-decoration: underline;
+  }
+  .pub-project {
+    color: var(--ink-soft);
+  }
   .list {
-    margin-top: var(--sp-7);
+    margin-top: var(--sp-5);
     display: flex;
     flex-direction: column;
     gap: var(--sp-3);
