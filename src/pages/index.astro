@@ -21,7 +21,7 @@ const comparison = [
     dimension: 'Origin',
     windchime: 'Built on Live Muse; Gray Area, SF; NeurIPS 2026.',
     lichtspiel: 'Berklee College of Music hackathon, Boston, 2026.',
-    hrnsxtn: 'Two podiums, MUTEK hackathon, Montréal 2026.',
+    hrnsxtn: 'Two podiums at MUTEK, Montréal; ISMIR 2026.',
   },
   {
     dimension: 'AI approach',
@@ -67,20 +67,16 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
       <p class="hero-sub reveal measure" style="--d: 2">
         ML audio research meeting interactive AV prototyping, documented in depth.
       </p>
-      <div class="hero-cta reveal" style="--d: 3">
-        <a class="btn btn-primary" href={url('/projects/windchime')}>Windchime</a>
-        <a class="btn btn-primary" href={url('/projects/lichtspiel')}>Lichtspiel</a>
-        <a class="btn btn-primary" href={url('/projects/hrnsxtn')}>HRNSXTN x RDMSXN</a>
-        <a class="btn btn-primary" href={url('/projects/groove')}>Probing the World for Groove</a>
-        <a class="btn" href={url('/how-i-work')}>How I work</a>
-      </div>
     </div>
   </section>
 
   <section class="container block" id="projects">
     <header class="block-head">
-      <p class="label"><span class="idx">01</span> · The projects</p>
-      <h2>Three applications and a study, shared discipline.</h2>
+      <p class="label">The projects</p>
+      <h2>Audio ML, audiovisual installations, practice based research.</h2>
+      <p class="block-lead measure">
+        Accepted at top conferences: NeurIPS 2026, ISMIR 2026 and ISMIR 2025.
+      </p>
     </header>
     <div class="pgrid">
       {projects.map((project) => <ProjectCard project={project} compact />)}
@@ -89,15 +85,14 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
 
   <section class="container block band-work">
     <header class="block-head">
-      <p class="label"><span class="idx">02</span> · How I work</p>
+      <p class="label">How I work</p>
       <h2>The loop behind all three.</h2>
       <p class="block-lead measure">Each step leaves an artifact you can read on this site.</p>
     </header>
     <div class="loop">
       {
-        loop.map((step, i) => (
+        loop.map((step) => (
           <a class="loop-step plain" href={url('/how-i-work')}>
-            <span class="loop-idx">{String(i + 1).padStart(2, '0')}</span>
             <span class="loop-step-name">{step}</span>
           </a>
         ))
@@ -110,7 +105,7 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
 
   <section class="container block">
     <header class="block-head">
-      <p class="label"><span class="idx">03</span> · How they relate</p>
+      <p class="label">How they relate</p>
       <h2>Shared lineage, different problems.</h2>
       <p class="block-lead measure">
         Lichtspiel started from Windchime's visual runtime; HRNSXTN carries the same discipline onto
@@ -190,12 +185,6 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
     color: var(--ink-soft);
     max-width: 58ch;
   }
-  .hero-cta {
-    margin-top: var(--sp-6);
-    display: flex;
-    gap: var(--sp-3);
-    flex-wrap: wrap;
-  }
   .hero-note {
     margin-top: var(--sp-5);
     font-family: var(--font-mono);
@@ -230,11 +219,6 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
   }
   .loop-step:hover {
     background: color-mix(in oklab, var(--brand) 4%, var(--surface));
-  }
-  .loop-idx {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--brand);
   }
   .loop-step-name {
     font-family: var(--font-display);
