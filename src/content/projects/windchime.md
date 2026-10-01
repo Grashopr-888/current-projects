@@ -5,8 +5,9 @@ summary: >-
   them as live coded sound, generative visuals and monome light.
 status: active
 timeframe: May 2026 to present
-role: Solo (product, engineering, and research)
-collaborators: []
+role: Built solo (product, engineering and research); the NeurIPS paper is coauthored
+collaborators:
+  - Celeste Betancur (CCRMA, Stanford University), coauthor of the NeurIPS 2026 paper
 thesis: >-
   Retrieval, not generation, is the honest interface between a voice and a sound library:
   answer with real material, in real time, and never go silent.

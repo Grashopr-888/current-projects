@@ -69,7 +69,7 @@ export const PROJECT_META = {
       },
       { img: '/img/logo-stanford-block-s.png', alt: 'Stanford University' },
     ],
-    partnersNote: 'Paper coauthored with a researcher at CCRMA, Stanford University.',
+    partnersNote: 'Paper coauthored with Celeste Betancur, CCRMA, Stanford University.',
   },
   lichtspiel: {
     label: 'Lichtspiel',
