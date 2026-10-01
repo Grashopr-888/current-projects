@@ -211,9 +211,39 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
 
 /** Tool chips beside the credit line. The credit line itself is PROJECT_META.*.credit. */
 const TOOLS: Record<Product, string[]> = {
-  windchime: ['monome', 'Strudel', 'p5.js', 'Three.js'],
-  lichtspiel: ['Ableton Live', 'Max for Live', 'monome'],
-  hrnsxtn: ['Elk Stomp', 'JUCE', 'PyTorch', 'RTNeural'],
+  windchime: [
+    'Audio language models (CLAP, CLaMP 3)',
+    'faster-whisper ASR',
+    'FAISS',
+    'Python',
+    'FastAPI',
+    'Strudel',
+    'p5.js',
+    'Three.js',
+    'monome',
+  ],
+  lichtspiel: [
+    'TypeScript',
+    'p5.js',
+    'Vite',
+    'Node WebSocket bridge',
+    'Max for Live',
+    'Ableton Live',
+    'Python / FastAPI',
+    'CLAP + librosa',
+    'Claude (authoring time)',
+    'monome',
+  ],
+  hrnsxtn: [
+    'Elk Stomp',
+    'Elk Audio OS / SUSHI',
+    'C++ / JUCE 8',
+    'RTNeural',
+    'ARM NEON',
+    'PyTorch',
+    'music2latent',
+    'Docker cross build',
+  ],
 };
 
 export async function getStaticPaths() {

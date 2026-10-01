@@ -38,7 +38,22 @@ const idx = () => String(++n).padStart(2, '0');
     status={d.status}
     thesisLabel="The question"
     thesis={GROOVE.question}
-    tools={['PyTorch', 'CUDA', 'A100 / L4 GPUs', 'PaSST', 'audiomentations']}
+    tools={[
+      'Python',
+      'PyTorch',
+      'PyTorch Lightning',
+      'CUDA',
+      'A100 / L4 GPUs (Google Colab)',
+      'PaSST (hear21passt)',
+      'torchaudio',
+      'audiomentations',
+      'TensorFlow Datasets',
+      'scikit-learn',
+      'pandas',
+      'NumPy',
+      'matplotlib / seaborn',
+      'Plotly',
+    ]}
   >
     <div class="g-actions">
       <a class="btn btn-primary" href={gpage('/experiments')}>Explore the results</a>

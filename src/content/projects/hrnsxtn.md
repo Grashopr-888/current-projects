@@ -62,6 +62,15 @@ languages:
   - Python
   - TypeScript
   - Shell
+skills:
+  - Knowledge distillation
+  - Neural audio codecs (music2latent)
+  - Embedded realtime C++ (JUCE)
+  - On device inference (RTNeural)
+  - ARM NEON int8 search
+  - Cross compilation (Docker, 32 bit ARM)
+  - Granular synthesis
+  - Evaluation design
 ---
 
 ## The opportunity

@@ -37,10 +37,10 @@ public_visibility_note: >-
 featured: true
 order: 1
 tech:
+  - Audio language models (CLAP family, CLaMP 3)
   - Python
   - FastAPI
   - faster-whisper ASR
-  - Audio language models (CLAP family, CLaMP 3)
   - FAISS
   - Strudel live coding
   - p5.js
@@ -55,6 +55,14 @@ languages:
   - Strudel (pattern DSL)
   - HTML/CSS
   - Shell
+skills:
+  - Audio language models (CLAP, CLaMP 3)
+  - Speech recognition (faster-whisper)
+  - Vector retrieval (FAISS)
+  - Live coded audio (Strudel)
+  - Generative visuals (p5.js, Three.js)
+  - Hardware control (monome)
+  - Offline, unattended deployment
 ---
 
 ## The idea

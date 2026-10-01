@@ -55,6 +55,13 @@ languages:
   - Python
   - Max (Max for Live patching)
   - HTML/CSS
+skills:
+  - Ableton Live integration (Max for Live)
+  - Realtime WebSocket bridge (Node)
+  - Generative visuals (p5.js)
+  - LLM authoring behind validation gates
+  - Audio analysis (CLAP, librosa)
+  - Hardware control (monome)
 ---
 
 ## The opportunity: not another VJ plugin
