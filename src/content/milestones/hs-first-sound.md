@@ -1,14 +1,14 @@
 ---
 title: First sound from the pedal
 product: hrnsxtn
-horizon: now
-target: September 2026
-status: in-progress
+horizon: shipped
+date: 2026-09-02
+status: shipped
 summary: >-
-  Cross compile the instrument for the board's 32 bit ARM target and hear the answer
-  bar from the pedal itself. The toolchain path is field proven; the remaining gate
-  is the vendor SDK handoff, then an estimated half day session.
+  Cross built for the board's 32 bit ARM target and loaded under SUSHI without the vendor
+  SDK; the answer bar now comes from the pedal's own output jacks.
 theme: No laptop on stage
 confidence: high
+linked_releases: [hs-on-pedal]
 order: 2
 ---

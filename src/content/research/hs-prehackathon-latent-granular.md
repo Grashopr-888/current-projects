@@ -22,7 +22,7 @@ evidence_links:
     note: Two voices over one corpus map — 16,945 grains from 38 files
 tags: [granular, latent-space, prototyping]
 provenance: Distilled from the build repository's session logs and experiment protocols
-redaction_status: sanitized
+redaction_status: clean
 ---
 
 Thirteen documented sessions, four formal experiments, 95 tests. Built for the Roland

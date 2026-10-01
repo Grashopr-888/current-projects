@@ -20,7 +20,7 @@ evidence_links:
     note: Average 6.8% of the callback budget, peak 1302% — the "peak, not average" rule
 tags: [platform, embedded, knowledge-base]
 provenance: Distilled from the project repository's cited platform chapters
-redaction_status: sanitized
+redaction_status: clean
 ---
 
 Built in a day by four parallel research agents sweeping docs, vendor source, literature,

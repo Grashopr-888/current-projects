@@ -93,7 +93,7 @@ export const PROJECT_META = {
     label: 'HRNSXTN x RDMSXN',
     kind: 'Neural audio instruments for a screenless pedal',
     credit:
-      'Music Hackspace × MUTEK hackathon: 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab; presented at MUTEK Forum, Montréal 2026',
+      'Music Hackspace × MUTEK hackathon: 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab; presented at MUTEK Forum, Montréal 2026; ISMIR 2026 Late-Breaking Demo, Abu Dhabi',
     accent: 'var(--hsx)',
     logo: '/img/hrnsxtn-mark.svg',
     // Project demo. Privacy-enhanced (nocookie) embed of youtu.be/gLobf3o0Qg0.
@@ -112,6 +112,14 @@ export const PROJECT_META = {
       { img: '/img/logo-elk.png', alt: 'Elk Audio' },
       { img: '/img/logo-rfdl.jpg', alt: 'Roland Future Design Lab' },
       { img: '/img/logo-musichackspace.png', alt: 'Music Hackspace' },
+      // ISMIR 2026 conference mark from ismir2026.ismir.net (artwork unchanged) and the society
+      // wordmark, as on the thesis project. Owner request 2026-09-30.
+      { img: '/img/logo-ismir2026.png', alt: 'ISMIR 2026, Abu Dhabi' },
+      {
+        img: '/img/logo-ismir.png',
+        alt: 'ISMIR, International Society for Music Information Retrieval',
+        scale: 0.55,
+      },
     ],
   },
   groove: {

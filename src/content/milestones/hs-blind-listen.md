@@ -2,7 +2,7 @@
 title: Blind listening verdict
 product: hrnsxtn
 horizon: next
-target: September 2026
+target: Autumn 2026
 status: planned
 summary: >-
   The metrics say the student preserves the instrument's taste; ears decide. Nine

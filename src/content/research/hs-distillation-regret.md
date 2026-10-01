@@ -21,7 +21,7 @@ evidence_links:
     note: 102,976 vs 58M parameters — 560× smaller, 0.1 M MACs per frame
 tags: [distillation, evaluation, embedded-ml]
 provenance: Distilled from the A/B study's metrics and memo in the project repository
-redaction_status: sanitized
+redaction_status: clean
 ---
 
 Method over vibes: train on held-out material, evaluate per corpus character, sweep the

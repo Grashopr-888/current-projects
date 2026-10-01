@@ -77,8 +77,8 @@ const HARDWARE: Record<Product, string> = {
   hrnsxtn:
     'The Elk Stomp development board is the whole interface: eight pots, four endless ' +
     'encoders, four footswitches and a small OLED that the instrument deliberately ignores. ' +
-    'Five shaping controls, grain size, wet and randomness map straight onto the pots, so ' +
-    'the corpus is played by feel, the way the challenge asked.',
+    'Shaping controls, grain size, wet and randomness sit on the pots and the rotary switches ' +
+    'between five sound worlds live, so the corpus is played by feel, the way the challenge asked.',
 };
 
 /** Image sections shown in the skim layer, so screenshots are never hidden in the story. */
@@ -92,7 +92,7 @@ type Gallery = { label: string; title: string; lead?: string; figures: Figure[] 
 const GALLERIES: Partial<Record<Product, { program?: Gallery; prototype?: Gallery }>> = {
   hrnsxtn: {
     program: {
-      label: 'Recognition',
+      label: 'At MUTEK',
       title: 'On the official program',
       figures: [
         {
@@ -146,11 +146,40 @@ type Venue = {
   name: string;
   place: string;
   detail: string;
-  logo?: { src: string; alt: string };
+  logo?: { src: string; alt: string; dark?: boolean };
   paper?: { title: string; summary: string };
   link?: { label: string; href: string };
 };
 const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
+  hrnsxtn: {
+    label: 'Recognition',
+    title: 'Montréal, then Abu Dhabi',
+    venues: [
+      {
+        name: 'Music Hackspace × MUTEK',
+        place: 'Montréal, Canada · August 2026',
+        detail:
+          '1st place, Elk Audio Challenge; 2nd place, Roland Future Design Lab Challenge. Presented at the Winners Showcase, MUTEK Forum, August 28.',
+        logo: { src: '/img/logo-mutek.svg', alt: 'MUTEK', dark: true },
+      },
+      {
+        name: 'ISMIR 2026 · Late-Breaking Demo',
+        place: 'Abu Dhabi, UAE · November 8–12, 2026',
+        detail:
+          'Accepted at the 27th ISMIR, with Jazz Segovia and Dennison Blackett. Code, board logs and notebooks are public.',
+        paper: {
+          title: 'Neural Codec Latent Distillation for Corpus Retrieval Synthesis on the Elk Stomp',
+          summary:
+            'A 103k parameter student distilled from the 58M parameter music2latent encoder keeps its similarity ordering (Spearman ρ .83) and runs on the pedal at about 1% of each 93 ms analysis.',
+        },
+        logo: { src: '/img/logo-ismir2026.png', alt: 'ISMIR 2026, Abu Dhabi' },
+        link: {
+          label: 'Paper, code and measurements on GitHub',
+          href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
+        },
+      },
+    ],
+  },
   windchime: {
     label: 'Recognition',
     title: 'San Francisco, then Sydney',
@@ -298,7 +327,7 @@ const idx = () => String(++n).padStart(2, '0');
               {venues.venues.map((v) => (
                 <div class="venue">
                   {v.logo && (
-                    <span class="venue-logo">
+                    <span class:list={['venue-logo', { 'venue-logo-dark': v.logo.dark }]}>
                       <img src={url(v.logo.src)} alt={v.logo.alt} loading="lazy" />
                     </span>
                   )}
@@ -743,6 +772,9 @@ const idx = () => String(++n).padStart(2, '0');
     margin-bottom: var(--sp-3);
     border-radius: 10px;
     background: #fff;
+  }
+  .venue-logo-dark {
+    background: #161a1d;
   }
   .venue-logo img {
     height: 100%;

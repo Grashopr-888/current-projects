@@ -37,15 +37,16 @@ constraints:
   - The embedded C++ must reproduce the Python research instrument exactly; its selections are the sound
 outcomes:
   - '1st place, Elk Audio Challenge; 2nd place, Roland Future Design Lab Challenge (Music Hackspace × MUTEK, Montréal 2026)'
-  - 58M parameter codec replaced at the input by a distilled 103k parameter student (560× smaller) running at 1–2% of one core
-  - "The instrument runs end to end under Elk's own audio engine on desktop, validated by golden parity: 200/200 identical grain selections against the Python reference"
-  - Worker cadence p99 under 99 ms against a 93.3 ms target, zero drops; audio thread cost 0.09% average
+  - 'Accepted to the ISMIR 2026 Late-Breaking Demo session (Abu Dhabi, November 2026); code, board logs and notebooks are public'
+  - 58M parameter codec replaced at the input by a distilled 103k parameter student (560× smaller) that keeps its similarity ordering (Spearman ρ .83)
+  - 'Runs on the Elk Stomp itself, no laptop in the signal path: the student takes about 1% of each 93 ms analysis, and every analysis finished on time'
+  - An 8 bit matching table made the corpus search 2.6 to 3.1 times faster with the ordering unchanged; golden parity held at 200/200 identical grain selections
   - The team's posthackathon fix put five harmony voices on the pedal at 0.59× of the deadline (a ~50× per voice saving, and it follows the player's intonation)
   - Two latent defects found in the platform's open source audio engine by reading its source
 public_visibility_note: >-
-  Source and corpora stay private. Shown here: the architecture, the measured
-  numbers, and the process records. Event and sponsor marks appear for
-  attribution and imply no endorsement.
+  The research code, board logs and notebooks behind the ISMIR 2026 paper are
+  public; the team's hackathon source and the corpora stay private. Event,
+  sponsor and venue marks appear for attribution and imply no endorsement.
 featured: true
 order: 3
 tech:
@@ -90,11 +91,11 @@ nothing the ear could keep. Third, equivalence over elegance: the C++ port is he
 bit identical grain selection against the Python reference, and the one divergence the parity
 harness caught was resolved in the reference's favor, because its quirk is part of the sound.
 
-## Proven before the hardware, honest about what is not
+## Proven before the hardware, then on it
 
 The riskiest question, whether cheap matching still feels like the big model's taste, was answered before any hardware was touched. The finding that reframed it: at performance
 settings the original instrument agrees with itself on only 2.6% of picks across seeds, so
 the right measure is regret, and the student lands in the teacher's top 4–7% of candidates
-(a raw MFCC baseline fails outright at 15–18%). What remains open is stated plainly in the
-roadmap: cross compiling to the board itself, onboard benchmarks, and a blind listening
-verdict. The prototyping before the hackathon (the studio interface with its live map of 17,000 grains) is in the research notes below.
+(a raw MFCC baseline fails outright at 15–18%). In September the instrument went onto the pedal
+itself, every analysis stage was timed on the board, and the study became a Late-Breaking Demo
+accepted at ISMIR 2026. What remains open is a blind listening verdict. The prototyping before the hackathon (the studio interface with its live map of 17,000 grains) is in the research notes below.
