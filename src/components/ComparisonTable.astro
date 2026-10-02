@@ -11,17 +11,17 @@ interface Props {
 const { rows } = Astro.props;
 ---
 
-<div class="cmp" role="table" aria-label="Windchime, Lichtspiel, and HRNSXTN x RDMSXN compared">
+<div class="cmp" role="table" aria-label="Windchime, HRNSXTN x RDMSXN, and Lichtspiel compared">
   <div class="cmp-row cmp-head" role="row">
     <span class="cmp-dim" role="columnheader"></span>
     <span class="cmp-name" data-accent="windchime" role="columnheader">
       <span class="cmp-dot" aria-hidden="true"></span>Windchime
     </span>
-    <span class="cmp-name" data-accent="lichtspiel" role="columnheader">
-      <span class="cmp-dot" aria-hidden="true"></span>Lichtspiel
-    </span>
     <span class="cmp-name" data-accent="hrnsxtn" role="columnheader">
       <span class="cmp-dot" aria-hidden="true"></span>HRNSXTN x RDMSXN
+    </span>
+    <span class="cmp-name" data-accent="lichtspiel" role="columnheader">
+      <span class="cmp-dot" aria-hidden="true"></span>Lichtspiel
     </span>
   </div>
   {
@@ -36,17 +36,17 @@ const { rows } = Astro.props;
           </span>
           {r.windchime}
         </span>
-        <span class="cmp-cell" data-accent="lichtspiel" role="cell">
-          <span class="cmp-tag" aria-hidden="true">
-            LS
-          </span>
-          {r.lichtspiel}
-        </span>
         <span class="cmp-cell" data-accent="hrnsxtn" role="cell">
           <span class="cmp-tag" aria-hidden="true">
             HS
           </span>
           {r.hrnsxtn}
+        </span>
+        <span class="cmp-cell" data-accent="lichtspiel" role="cell">
+          <span class="cmp-tag" aria-hidden="true">
+            LS
+          </span>
+          {r.lichtspiel}
         </span>
       </div>
     ))

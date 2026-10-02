@@ -110,7 +110,7 @@ const here = Astro.url.pathname;
     font-weight: 700;
   }
   /* Project names are the long labels: only they may wrap, onto two balanced lines. */
-  @media (min-width: 1181px) {
+  @media (min-width: 981px) {
     .nav-link {
       padding-inline: 0.52rem;
     }
@@ -136,9 +136,9 @@ const here = Astro.url.pathname;
     box-shadow: inset 0 -2px 0 var(--accent);
   }
 
-  /* Narrow screens: collapse nav into a disclosure panel. Four project names plus five
-     pages need about 1180px in one row, so the panel takes over below that. */
-  @media (max-width: 1180px) {
+  /* Narrow screens: collapse nav into a disclosure panel. Four project names plus two
+     pages need about 980px in one row, so the panel takes over below that. */
+  @media (max-width: 980px) {
     .nav {
       display: block;
       position: relative;

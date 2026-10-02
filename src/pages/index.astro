@@ -5,6 +5,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import Disclosure from '../components/Disclosure.astro';
 import { url } from '../lib/url';
+import { SITE } from '../config';
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
@@ -56,8 +57,6 @@ const inherits = [
   'All three fence the model behind validation.',
   'All three keep the same decision, release and incident records.',
 ];
-
-const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
 ---
 
 <BaseLayout>
@@ -72,7 +71,7 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
 
   <section class="container block" id="projects">
     <header class="block-head">
-      <p class="label">The projects</p>
+      <p class="label home-name">{SITE.author}</p>
       <h2>Audio ML, audiovisual installations, practice based research.</h2>
       <p class="block-lead measure">
         Accepted at top conferences: NeurIPS 2026, ISMIR 2026 and ISMIR 2025.
@@ -81,26 +80,6 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
     <div class="pgrid">
       {projects.map((project) => <ProjectCard project={project} compact />)}
     </div>
-  </section>
-
-  <section class="container block band-work">
-    <header class="block-head">
-      <p class="label">How I work</p>
-      <h2>The loop behind all three.</h2>
-      <p class="block-lead measure">Each step leaves an artifact you can read on this site.</p>
-    </header>
-    <div class="loop">
-      {
-        loop.map((step) => (
-          <a class="loop-step plain" href={url('/how-i-work')}>
-            <span class="loop-step-name">{step}</span>
-          </a>
-        ))
-      }
-    </div>
-    <a class="loop-more plain" href={url('/how-i-work')}>
-      See the full operating system, with templates &nbsp;&rarr;
-    </a>
   </section>
 
   <section class="container block">
@@ -192,41 +171,6 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
     color: var(--faint);
   }
 
-  /* ---- operating loop ---- */
-  .band {
-    padding-block: var(--sp-6);
-  }
-  .loop {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    border: var(--hair) solid var(--hairline);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: var(--surface);
-  }
-  .loop-step {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: var(--sp-5);
-    border-left: var(--hair) solid var(--hairline);
-    text-decoration: none;
-    transition: background 0.15s ease;
-  }
-  .loop-step:first-child {
-    border-left: none;
-  }
-  .loop-step:hover {
-    background: color-mix(in oklab, var(--brand) 4%, var(--surface));
-  }
-  .loop-step-name {
-    font-family: var(--font-display);
-    font-size: var(--step-1);
-    font-weight: 520;
-    color: var(--ink);
-  }
-
   /* ---- blocks ---- */
   .block {
     padding-block: var(--sp-8);
@@ -241,6 +185,10 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
   .block-head h2 {
     margin-top: var(--sp-3);
     font-size: var(--step-4);
+  }
+  .home-name {
+    font-size: 1.05rem;
+    color: var(--ink);
   }
   .block-lead {
     margin-top: var(--sp-4);
@@ -307,38 +255,5 @@ const loop = ['Discover', 'Decide', 'Ship', 'Learn'];
     font-weight: 600;
     color: var(--ink);
     max-width: 26ch;
-  }
-  .band-work {
-    background: var(--bg-tint);
-  }
-  .loop-more {
-    display: inline-block;
-    margin-top: var(--sp-4);
-    font-weight: 600;
-    color: var(--brand);
-  }
-
-  @media (max-width: 760px) {
-    .loop {
-      grid-template-columns: 1fr 1fr;
-    }
-    .loop-step:nth-child(3) {
-      border-left: none;
-    }
-    .loop-step:nth-child(n + 3) {
-      border-top: var(--hair) solid var(--hairline);
-    }
-  }
-  @media (max-width: 460px) {
-    .loop {
-      grid-template-columns: 1fr;
-    }
-    .loop-step {
-      border-left: none;
-      border-top: var(--hair) solid var(--hairline);
-    }
-    .loop-step:first-child {
-      border-top: none;
-    }
   }
 </style>

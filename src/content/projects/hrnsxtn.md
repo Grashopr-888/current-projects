@@ -48,7 +48,7 @@ public_visibility_note: >-
   public; the team's hackathon source and the corpora stay private. Event,
   sponsor and venue marks appear for attribution and imply no endorsement.
 featured: true
-order: 3
+order: 2
 tech:
   - Elk Stomp (STM32MP157)
   - Elk Audio OS / SUSHI

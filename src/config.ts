@@ -26,14 +26,12 @@ export const NAV: ReadonlyArray<{
 }> = [
   { label: 'Overview', href: '/' },
   { label: 'Windchime', href: '/projects/windchime', accent: 'windchime' },
-  { label: 'Lichtspiel', href: '/projects/lichtspiel', accent: 'lichtspiel' },
   { label: 'HRNSXTN x RDMSXN', href: '/projects/hrnsxtn', accent: 'hrnsxtn' },
+  { label: 'Lichtspiel', href: '/projects/lichtspiel', accent: 'lichtspiel' },
   { label: 'Probing the World for Groove', href: '/projects/groove', accent: 'groove' },
-  { label: 'How I Work', href: '/how-i-work' },
+  // How I Work and Incidents live as collapsed sections on Releases; About sits in the footer.
   { label: 'Releases', href: '/releases' },
   { label: 'Research', href: '/research' },
-  { label: 'Incidents', href: '/incidents' },
-  { label: 'About', href: '/about' },
 ];
 
 /** Canonical per-project metadata shared across surfaces. */
@@ -153,7 +151,7 @@ export const PROJECT_META = {
 export type ProjectSlug = keyof typeof PROJECT_META;
 
 /** Reading order for the "Next project" link at the foot of every project page. */
-const PROJECT_ORDER: ProjectSlug[] = ['windchime', 'lichtspiel', 'hrnsxtn', 'groove'];
+const PROJECT_ORDER: ProjectSlug[] = ['windchime', 'hrnsxtn', 'lichtspiel', 'groove'];
 export function nextProject(slug: ProjectSlug): ProjectSlug {
   return PROJECT_ORDER[(PROJECT_ORDER.indexOf(slug) + 1) % PROJECT_ORDER.length];
 }

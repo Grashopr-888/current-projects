@@ -17,10 +17,11 @@ const year = new Date().getFullYear();
 
     <nav class="footer-links" aria-label="Footer">
       <span class="label"><span class="idx">↳</span> Elsewhere</span>
-      <a class="plain" href={SITE.githubUrl} rel="me noopener" target="_blank">GitHub ↗</a>
       <a class="plain" href={url('/about')}>About</a>
-      <a class="plain" href={url('/how-i-work')}>How I Work</a>
       <a class="plain" href={url('/glossary')}>Glossary</a>
+      <a class="plain" href={url('/how-i-work')}>How I Work</a>
+      <a class="plain" href={url('/incidents')}>Incidents</a>
+      <a class="plain" href={SITE.githubUrl} rel="me noopener" target="_blank">GitHub ↗</a>
       {
         SHOW_EMAIL && (
           <a class="plain" href={`mailto:${SITE.email}`}>

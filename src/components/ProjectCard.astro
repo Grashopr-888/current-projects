@@ -1,20 +1,24 @@
 ---
+/**
+ * Project card, images first: the art, the mark and title, and the venue and host marks are
+ * visible; the credit line, summary, languages, core skills and timeframe wait behind Details.
+ * Image and title link to the project page, as does Explore.
+ */
 import type { CollectionEntry } from 'astro:content';
 import { url } from '../lib/url';
 import { PROJECT_META } from '../config';
-import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
-import Badge from './Badge.astro';
 import { existsSync } from 'node:fs';
 
 interface Props {
   project: CollectionEntry<'projects'>;
-  /** Skim card: kind, title, status, stack and timeframe, without the summary paragraph. */
+  /** Home card: Details leaves out the summary paragraph. */
   compact?: boolean;
 }
 const { project, compact = false } = Astro.props;
 const d = project.data;
 const slug = project.id;
 const meta = PROJECT_META[slug as keyof typeof PROJECT_META];
+const href = url(`/projects/${slug}`);
 
 /* Use the project's main art, falling back to its secondary image while an
    asset is still missing, so the card never renders a broken image. */
@@ -27,24 +31,20 @@ const cardAlt = has(meta?.art) ? meta.artAlt : asideArtAlt;
 const partners = 'partners' in meta ? meta.partners : [];
 ---
 
-<a class="pcard card plain" href={url(`/projects/${slug}`)} data-accent={slug}>
+<article class="pcard card" data-accent={slug}>
   <span class="pcard-spine" aria-hidden="true"></span>
   {
     cardArt && (
-      <div class="pcard-media">
+      <a class="pcard-media plain" href={href} tabindex="-1" aria-hidden="true">
         <img src={url(cardArt)} alt={cardAlt} loading="lazy" />
-      </div>
+      </a>
     )
   }
-  <div class="pcard-top">
-    <span class="pcard-kind">{meta?.kind ?? d.role}</span>
-    <Badge tone={STATUS_TONE[d.status] ?? 'neutral'}>{lbl(d.status)}</Badge>
-  </div>
-  <div class="pcard-idrow">
+  <span class="pcard-kind">{meta?.kind ?? d.role}</span>
+  <a class="pcard-idrow plain" href={href}>
     {meta?.logo && <img class="pcard-logo" src={url(meta.logo)} alt="" aria-hidden="true" />}
     <h3 class="pcard-title">{d.title}</h3>
-  </div>
-  {!compact && <p class="pcard-summary">{d.summary}</p>}
+  </a>
   {
     partners.length > 0 && (
       <div class="pcard-partners" aria-label="Venues, events and affiliations">
@@ -59,47 +59,203 @@ const partners = 'partners' in meta ? meta.partners : [];
       </div>
     )
   }
-  {
-    'credit' in meta && (
-      <p class="pcard-credit">
-        {meta.credit}
-        {'partnersNote' in meta && <span class="pcard-credit-note">{meta.partnersNote}</span>}
-      </p>
-    )
-  }
-  {
-    d.languages.length > 0 && (
-      <div class="pcard-langs">
-        <span class="pcard-langs-label">Languages</span>
-        <span class="cluster">
-          {d.languages.map((t) => (
-            <span class="chip">{t}</span>
-          ))}
-        </span>
-      </div>
-    )
-  }
-  {
-    d.skills.length > 0 && (
-      <div class="pcard-langs">
-        <span class="pcard-langs-label">Core skills</span>
-        <span class="cluster">
-          {d.skills.map((t) => (
-            <span class="chip" data-product={slug}>
-              {t}
-            </span>
-          ))}
-        </span>
-      </div>
-    )
-  }
   <div class="pcard-foot">
-    <span class="pcard-tf">{d.timeframe}</span>
-    <span class="pcard-go">Explore <span class="arrow">→</span></span>
+    <details class="pcard-more">
+      <summary class="pcard-more-toggle">
+        <span class="pcard-more-icon" aria-hidden="true">+</span> Details
+      </summary>
+      <div class="pcard-more-body">
+        {
+          'credit' in meta && (
+            <p class="pcard-credit">
+              {meta.credit}
+              {'partnersNote' in meta && <span class="pcard-credit-note">{meta.partnersNote}</span>}
+            </p>
+          )
+        }
+        {!compact && <p class="pcard-summary">{d.summary}</p>}
+        {
+          d.languages.length > 0 && (
+            <div class="pcard-langs">
+              <span class="pcard-langs-label">Languages</span>
+              <span class="cluster">
+                {d.languages.map((t) => (
+                  <span class="chip">{t}</span>
+                ))}
+              </span>
+            </div>
+          )
+        }
+        {
+          d.skills.length > 0 && (
+            <div class="pcard-langs">
+              <span class="pcard-langs-label">Core skills</span>
+              <span class="cluster">
+                {d.skills.map((t) => (
+                  <span class="chip" data-product={slug}>
+                    {t}
+                  </span>
+                ))}
+              </span>
+            </div>
+          )
+        }
+        <span class="pcard-tf">{d.timeframe}</span>
+      </div>
+    </details>
+    <a class="pcard-go plain" href={href}>Explore <span class="arrow">→</span></a>
   </div>
-</a>
+</article>
 
 <style>
+  .pcard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    padding: var(--sp-5);
+    padding-left: calc(var(--sp-5) + 3px);
+    overflow: hidden;
+    transition:
+      box-shadow 0.2s ease,
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+  .pcard:hover {
+    box-shadow: var(--shadow);
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--hairline));
+    background: color-mix(in oklab, var(--accent) 4%, var(--surface));
+  }
+  .pcard-spine {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0.85;
+    z-index: 1;
+  }
+  .pcard-media {
+    display: block;
+    margin: calc(var(--sp-5) * -1) calc(var(--sp-5) * -1) 0 calc(var(--sp-5) * -1 - 3px);
+    aspect-ratio: 16 / 8;
+    overflow: hidden;
+    border-bottom: var(--hair) solid var(--hairline);
+    background: var(--surface-2);
+  }
+  .pcard-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .pcard:hover .pcard-media img {
+    transform: scale(1.025);
+  }
+  .pcard-kind {
+    margin-top: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .pcard-idrow {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+  }
+  .pcard-idrow:hover .pcard-title {
+    color: var(--accent);
+  }
+  .pcard-logo {
+    width: 2.2rem;
+    height: 2.2rem;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .pcard-title {
+    font-size: var(--step-3);
+    text-transform: uppercase;
+    font-stretch: var(--display-stretch);
+    transition: color 0.15s ease;
+  }
+
+  /* Venue and host marks: the card's second image row, sized to be read. */
+  .pcard-partners {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .pcard-partner {
+    display: inline-flex;
+    align-items: center;
+    height: 4.6rem;
+    padding: 0.6rem 0.95rem;
+    border-radius: 10px;
+    background: #fff;
+    border: var(--hair) solid var(--hairline);
+  }
+  .pcard-partner-dark {
+    background: #161a1d;
+  }
+  .pcard-partner img {
+    height: calc(100% * var(--logo-scale, 1));
+    width: auto;
+    max-width: 16rem;
+    object-fit: contain;
+    display: block;
+  }
+  @media (max-width: 560px) {
+    .pcard-partner {
+      height: 3.6rem;
+      padding: 0.45rem 0.7rem;
+    }
+  }
+
+  /* Details, collapsed by default, beside the Explore link. */
+  .pcard-foot {
+    margin-top: auto;
+    padding-top: var(--sp-4);
+    border-top: var(--hair) solid var(--hairline);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--sp-3);
+  }
+  .pcard-more-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--muted);
+    transition: color 0.15s ease;
+  }
+  .pcard-more-toggle::-webkit-details-marker {
+    display: none;
+  }
+  .pcard-more-toggle:hover {
+    color: var(--ink);
+  }
+  .pcard-more-icon {
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+  .pcard-more[open] .pcard-more-icon {
+    transform: rotate(45deg);
+  }
+  .pcard-more-body {
+    margin-top: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
   .pcard-credit {
     display: flex;
     flex-direction: column;
@@ -115,105 +271,6 @@ const partners = 'partners' in meta ? meta.partners : [];
     font-size: 0.7rem;
     color: color-mix(in oklab, var(--accent) 75%, var(--muted));
   }
-  .pcard-partners {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .pcard-partner {
-    display: inline-flex;
-    align-items: center;
-    height: 3.2rem;
-    padding: 0.45rem 0.75rem;
-    border-radius: 8px;
-    background: #fff;
-    border: var(--hair) solid var(--hairline);
-  }
-  .pcard-partner-dark {
-    background: #161a1d;
-  }
-  .pcard-partner img {
-    height: calc(100% * var(--logo-scale, 1));
-    width: auto;
-    max-width: 12rem;
-    object-fit: contain;
-    display: block;
-  }
-  .pcard {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-3);
-    padding: var(--sp-5);
-    padding-left: calc(var(--sp-5) + 3px);
-    overflow: hidden;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease,
-      border-color 0.2s ease,
-      background 0.2s ease;
-  }
-  .pcard:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-    border-color: color-mix(in oklab, var(--accent) 45%, var(--hairline));
-    background: color-mix(in oklab, var(--accent) 4%, var(--surface));
-  }
-  .pcard-spine {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 3px;
-    background: var(--accent);
-    opacity: 0.85;
-    z-index: 1;
-  }
-  .pcard-media {
-    margin: calc(var(--sp-5) * -1) calc(var(--sp-5) * -1) 0 calc(var(--sp-5) * -1 - 3px);
-    aspect-ratio: 21 / 9;
-    overflow: hidden;
-    border-bottom: var(--hair) solid var(--hairline);
-    background: var(--surface-2);
-  }
-  .pcard-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  .pcard:hover .pcard-media img {
-    transform: scale(1.025);
-  }
-  .pcard-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--sp-3);
-  }
-  .pcard-kind {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .pcard-idrow {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-3);
-  }
-  .pcard-logo {
-    width: 2.2rem;
-    height: 2.2rem;
-    object-fit: contain;
-    flex-shrink: 0;
-  }
-  .pcard-title {
-    font-size: var(--step-3);
-    text-transform: uppercase;
-    font-stretch: var(--display-stretch);
-  }
   .pcard-summary {
     color: var(--muted);
     font-size: var(--step--1);
@@ -224,7 +281,6 @@ const partners = 'partners' in meta ? meta.partners : [];
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    margin-top: 0.2rem;
   }
   .pcard-langs-label {
     font-family: var(--font-mono);
@@ -233,27 +289,22 @@ const partners = 'partners' in meta ? meta.partners : [];
     letter-spacing: 0.08em;
     color: var(--faint);
   }
-  .pcard-foot {
-    margin-top: auto;
-    padding-top: var(--sp-4);
-    border-top: var(--hair) solid var(--hairline);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+  .pcard-tf {
     font-family: var(--font-mono);
     font-size: 0.76rem;
-  }
-  .pcard-tf {
     color: var(--muted);
   }
   .pcard-go {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
     color: var(--accent);
+    white-space: nowrap;
   }
   .arrow {
     display: inline-block;
     transition: transform 0.2s ease;
   }
-  .pcard:hover .arrow {
+  .pcard-go:hover .arrow {
     transform: translateX(3px);
   }
 </style>

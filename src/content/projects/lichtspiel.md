@@ -37,7 +37,7 @@ public_visibility_note: >-
   What's shown is process (the decisions, the consolidation, and the delivery
   discipline), not implementation.
 featured: true
-order: 2
+order: 3
 tech:
   - TypeScript
   - p5.js
