@@ -8,12 +8,15 @@ import ModelBadge from '../../../components/groove/ModelBadge.astro';
 import ModelCard from '../../../components/groove/ModelCard.astro';
 import DotPlot from '../../../components/groove/DotPlot.astro';
 import Note from '../../../components/groove/Note.astro';
+import Timeline from '../../../components/Timeline.astro';
+import { projectBundle, toTimeline } from '../../../lib/content';
 import { PROJECT_META } from '../../../config';
 import { GROOVE, LINKS, ASSETS, KEY_FACTS, HEADLINE, LOWDATA, gpage } from '../../../lib/groove';
 
 const project = (await getEntry('projects', 'groove'))!;
 const d = project.data;
 const meta = PROJECT_META.groove;
+const timeline = toTimeline(await projectBundle('groove'));
 
 const flow = [
   'GMD performances',
@@ -311,6 +314,17 @@ const idx = () => String(++n).padStart(2, '0');
       <li>Results are specific to GMD and its rendering conditions.</li>
       <li>t-SNE is exploratory, not proof of semantic separation.</li>
     </ul>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Timeline"
+    title="What happened, in order"
+    id="timeline"
+    collapsible
+    count={timeline.length}
+  >
+    <Timeline events={timeline} />
   </Section>
 
   <Section

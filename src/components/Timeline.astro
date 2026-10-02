@@ -8,6 +8,9 @@ interface Props {
   events: TimelineEvent[];
 }
 const { events } = Astro.props;
+/* Day and month are enough within one year; a timeline spanning years shows the year too. */
+const spansYears = new Set(events.map((e) => e.date.getUTCFullYear())).size > 1;
+const label = (d: Date) => (spansYears ? fmtDate(d) : fmtDay(d));
 ---
 
 <ol class="tl">
@@ -15,7 +18,7 @@ const { events } = Astro.props;
     events.map((e) => (
       <li class="tl-item">
         <time class="tl-date" datetime={isoDate(e.date)} title={fmtDate(e.date)}>
-          {fmtDay(e.date)}
+          {label(e.date)}
         </time>
         {e.type === 'milestone' ? (
           <div class="tl-card" data-tone={e.tone ?? 'neutral'}>

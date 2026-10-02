@@ -124,7 +124,7 @@ export const PROJECT_META = {
     label: 'Probing the World for Groove',
     kind: 'Transfer learning for drum audio style classification',
     credit:
-      'ISMIR 2025 Late-Breaking Demo, Daejeon, South Korea; MSc thesis, Media Technology, Leiden University',
+      'ISMIR 2025 Late-Breaking Demo, KAIST, Daejeon; MSc thesis, LIACS, Leiden University, defended at Kunstinstituut Melly, Rotterdam',
     accent: 'var(--gr)',
     logo: '/img/groove-mark.svg',
     // Both models' t-SNE maps of the same test clips (CNN left, PaSST right), drawn from
@@ -135,15 +135,21 @@ export const PROJECT_META = {
     // The ISMIR 2025 talk. Privacy-enhanced (nocookie) embed of youtu.be/f_nIl5qMxlY.
     demoVideoId: 'f_nIl5qMxlY',
     demoVideoTitle: 'ISMIR 2025 LBD: Drum Audio Style Classification',
-    // Venue marks (attribution, not endorsement): the ISMIR 2025 conference mark from
-    // ismir2025.ismir.net (resized, artwork unchanged) and the society wordmark from ismir.net.
+    // Venue and institution marks (attribution, not endorsement): ISMIR 2025 (ismir2025.ismir.net,
+    // resized) and the society wordmark (ismir.net); KAIST, the ISMIR 2025 host (kaist.ac.kr UI
+    // page); Leiden University (official brand portal SVG) and LIACS (edu.liacs.nl); Kunstinstituut
+    // Melly, where the thesis was defended (its official social mark). Owner request 2026-10-02.
     partners: [
       { img: '/img/logo-ismir2025.png', alt: 'ISMIR 2025, Daejeon' },
+      { img: '/img/logo-kaist.png', alt: 'KAIST', scale: 0.55 },
       {
         img: '/img/logo-ismir.png',
         alt: 'ISMIR, International Society for Music Information Retrieval',
         scale: 0.55,
       },
+      { img: '/img/logo-leiden.svg', alt: 'Universiteit Leiden', scale: 1.3 },
+      { img: '/img/logo-liacs.jpg', alt: 'LIACS, Leiden Institute of Advanced Computer Science' },
+      { img: '/img/logo-melly.png', alt: 'Kunstinstituut Melly' },
     ],
   },
 } as const;

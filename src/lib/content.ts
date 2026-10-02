@@ -1,6 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { SEVERITY_TONE, STATUS_TONE, label, type Tone } from './taxonomy';
 
+/** The lifecycle products (pages built by projects/[slug].astro). */
 export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn';
 
 /** One row of a project Timeline. Releases, incidents and research carry their full record,
@@ -56,7 +57,7 @@ export interface ProjectBundle {
 }
 
 /** Everything attached to one product, sorted for display. */
-export async function projectBundle(product: Product): Promise<ProjectBundle> {
+export async function projectBundle(product: Product | 'groove'): Promise<ProjectBundle> {
   const [decisions, releases, incidents, research, milestones] = await Promise.all([
     getCollection('decisions', ({ data }) => data.product === product),
     getCollection('releases', ({ data }) => data.product === product),
