@@ -1,0 +1,95 @@
+---
+/** A record list with a product filter (Releases, Incidents). Each instance binds its own
+ *  buttons, so several can share a page. Rows are IndexRow elements in the default slot. */
+import { PROJECT_META, type ProjectSlug } from '../config';
+
+interface Props {
+  /** Shown at the right of the toolbar, e.g. "21 shipped · 27 total". */
+  count: string;
+  label: string;
+  /** Filter buttons, in site order (most recent project first). */
+  products?: ProjectSlug[];
+}
+const { count, label, products = ['windchime', 'hrnsxtn', 'lichtspiel'] } = Astro.props;
+---
+
+<div class="findex">
+  <div class="toolbar">
+    <div class="filterbar" role="group" aria-label={label}>
+      <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
+      {
+        products.map((p) => (
+          <button class="filter-btn" data-filter={p} aria-pressed="false">
+            {PROJECT_META[p].label}
+          </button>
+        ))
+      }
+    </div>
+    <span class="count">{count}</span>
+  </div>
+  <div class="list" data-active="all">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .toolbar {
+    margin-top: var(--sp-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+  }
+  .filterbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    border: var(--hair) solid var(--hairline-strong);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-btn[aria-pressed='true'] {
+    color: var(--bg);
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+  .count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--faint);
+  }
+  .list {
+    margin-top: var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.findex').forEach((root) => {
+    const bar = root.querySelector<HTMLElement>('.filterbar');
+    const list = root.querySelector<HTMLElement>('.list');
+    bar?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-filter]');
+      if (!btn || !list) return;
+      const f = btn.dataset.filter;
+      list.dataset.active = f;
+      list.querySelectorAll<HTMLElement>('.irow').forEach((row) => {
+        row.hidden = f !== 'all' && row.dataset.product !== f;
+      });
+      bar
+        .querySelectorAll<HTMLElement>('[data-filter]')
+        .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    });
+  });
+</script>

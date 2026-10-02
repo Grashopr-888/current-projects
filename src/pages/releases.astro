@@ -1,38 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import IndexRow from '../components/IndexRow.astro';
-import { allReleases, recordPath } from '../lib/content';
+import FilteredList from '../components/FilteredList.astro';
+import Section from '../components/Section.astro';
+import IncidentsIndex from '../components/IncidentsIndex.astro';
+import HowIWork from '../components/HowIWork.astro';
+import { allReleases, allIncidents, recordPath } from '../lib/content';
 import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
 
 const releases = await allReleases();
 const shipped = releases.filter((r) => r.data.status === 'shipped').length;
+const incidentCount = (await allIncidents()).length;
 ---
 
 <BaseLayout
   title="Releases"
-  description="What shipped across Windchime, Lichtspiel, and HRNSXTN x RDMSXN, when, and why it mattered."
+  description="What shipped across Windchime, HRNSXTN x RDMSXN, Lichtspiel and Probing the World for Groove, the incidents behind it, and the way of working that ties them together."
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Releases</p>
     <h1>What shipped, and why it mattered.</h1>
     <p class="lead measure">
-      A reverse chronological changelog across all three products. Each entry is framed by the value
-      it delivered and the risk it carried, not the diff behind it.
+      A reverse chronological changelog across the projects. Each entry is framed by the value it
+      delivered and the risk it carried, not the diff behind it.
+    </p>
+    <p class="also">
+      Also here: <a class="plain" href="#incidents">Incidents</a> ·
+      <a class="plain" href="#how-i-work">How I work</a>
     </p>
 
-    <div class="toolbar">
-      <div class="filterbar" role="group" aria-label="Filter by product">
-        <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
-        <button class="filter-btn" data-filter="windchime" aria-pressed="false">Windchime</button>
-        <button class="filter-btn" data-filter="lichtspiel" aria-pressed="false">Lichtspiel</button>
-        <button class="filter-btn" data-filter="hrnsxtn" aria-pressed="false"
-          >HRNSXTN x RDMSXN</button
-        >
-      </div>
-      <span class="count">{shipped} shipped · {releases.length} total</span>
-    </div>
-
-    <div class="list" id="release-list" data-active="all">
+    <FilteredList
+      label="Filter releases by project"
+      products={['windchime', 'hrnsxtn', 'lichtspiel', 'groove']}
+      count={`${shipped} shipped · ${releases.length} total`}
+    >
       {
         releases.map((r) => (
           <IndexRow
@@ -45,6 +46,36 @@ const shipped = releases.filter((r) => r.data.status === 'shipped').length;
           />
         ))
       }
+    </FilteredList>
+
+    <div class="more-areas">
+      <Section
+        label="Incidents"
+        title="Bugs, and what they taught"
+        id="incidents"
+        collapsible
+        count={incidentCount}
+      >
+        <p class="area-lead measure">
+          Blameless postmortems across the products: impact, root cause, fix, and the follow
+          through.
+        </p>
+        <IncidentsIndex />
+      </Section>
+
+      <Section
+        label="How I work"
+        title="How I build, start to finish"
+        id="how-i-work"
+        collapsible
+        meta="Loop, pipeline, cadence, templates"
+      >
+        <p class="area-lead measure">
+          The operating system behind the products: the cadence behind the work, and the artifacts
+          you can lift and use.
+        </p>
+        <HowIWork />
+      </Section>
     </div>
   </section>
 </BaseLayout>
@@ -61,64 +92,22 @@ const shipped = releases.filter((r) => r.data.status === 'shipped').length;
     font-size: var(--step-1);
     color: var(--ink-soft);
   }
-  .toolbar {
-    margin-top: var(--sp-6);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--sp-4);
-    flex-wrap: wrap;
-  }
-  .filterbar {
-    display: flex;
-    gap: 0.3rem;
-  }
-  .filter-btn {
+  .also {
+    margin-top: var(--sp-3);
     font-family: var(--font-mono);
-    font-size: 0.74rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 100px;
-    border: var(--hair) solid var(--hairline-strong);
-    background: var(--surface);
+    font-size: 0.76rem;
     color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s ease;
   }
-  .filter-btn[aria-pressed='true'] {
-    color: var(--bg);
-    background: var(--ink);
-    border-color: var(--ink);
+  .also a {
+    color: var(--brand);
   }
-  .count {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--faint);
+  .also a:hover {
+    text-decoration: underline;
   }
-  .list {
-    margin-top: var(--sp-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-3);
+  .more-areas {
+    margin-top: var(--sp-8);
   }
-  .list[data-active='windchime'] :global(.irow[data-product='lichtspiel']),
-  .list[data-active='windchime'] :global(.irow[data-product='hrnsxtn']),
-  .list[data-active='lichtspiel'] :global(.irow[data-product='windchime']),
-  .list[data-active='lichtspiel'] :global(.irow[data-product='hrnsxtn']),
-  .list[data-active='hrnsxtn'] :global(.irow[data-product='windchime']),
-  .list[data-active='hrnsxtn'] :global(.irow[data-product='lichtspiel']) {
-    display: none;
+  .area-lead {
+    color: var(--ink-soft);
   }
 </style>
-
-<script>
-  const bar = document.querySelector('.filterbar');
-  const list = document.getElementById('release-list');
-  bar?.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-filter]');
-    if (!btn || !list) return;
-    list.dataset.active = btn.dataset.filter;
-    bar
-      .querySelectorAll<HTMLElement>('[data-filter]')
-      .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-  });
-</script>

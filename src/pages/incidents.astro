@@ -1,11 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import IndexRow from '../components/IndexRow.astro';
-import { allIncidents, recordPath } from '../lib/content';
-import { SEVERITY_TONE, label as lbl } from '../lib/taxonomy';
-
-const incidents = await allIncidents();
-const resolved = incidents.filter((i) => i.data.status === 'resolved').length;
+import IncidentsIndex from '../components/IncidentsIndex.astro';
 ---
 
 <BaseLayout
@@ -20,34 +15,7 @@ const resolved = incidents.filter((i) => i.data.status === 'resolved').length;
       fix, and the follow through. The postmortems say more about how the work is built than the
       feature lists do.
     </p>
-
-    <div class="toolbar">
-      <div class="filterbar" role="group" aria-label="Filter by product">
-        <button class="filter-btn" data-filter="all" aria-pressed="true">All</button>
-        <button class="filter-btn" data-filter="windchime" aria-pressed="false">Windchime</button>
-        <button class="filter-btn" data-filter="lichtspiel" aria-pressed="false">Lichtspiel</button>
-        <button class="filter-btn" data-filter="hrnsxtn" aria-pressed="false"
-          >HRNSXTN x RDMSXN</button
-        >
-      </div>
-      <span class="count">{resolved} resolved · {incidents.length} total</span>
-    </div>
-
-    <div class="list" id="incident-list" data-active="all">
-      {
-        incidents.map((i) => (
-          <IndexRow
-            href={recordPath('incident', i.data.product, i.id)}
-            tone={SEVERITY_TONE[i.data.severity] ?? 'warn'}
-            badge={lbl(i.data.severity)}
-            title={i.data.title}
-            product={i.data.product}
-            meta={lbl(i.data.status)}
-            date={i.data.date}
-          />
-        ))
-      }
-    </div>
+    <IncidentsIndex />
   </section>
 </BaseLayout>
 
@@ -63,64 +31,4 @@ const resolved = incidents.filter((i) => i.data.status === 'resolved').length;
     font-size: var(--step-1);
     color: var(--ink-soft);
   }
-  .toolbar {
-    margin-top: var(--sp-6);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--sp-4);
-    flex-wrap: wrap;
-  }
-  .filterbar {
-    display: flex;
-    gap: 0.3rem;
-  }
-  .filter-btn {
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 100px;
-    border: var(--hair) solid var(--hairline-strong);
-    background: var(--surface);
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-  .filter-btn[aria-pressed='true'] {
-    color: var(--bg);
-    background: var(--ink);
-    border-color: var(--ink);
-  }
-  .count {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--faint);
-  }
-  .list {
-    margin-top: var(--sp-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-3);
-  }
-  .list[data-active='windchime'] :global(.irow[data-product='lichtspiel']),
-  .list[data-active='windchime'] :global(.irow[data-product='hrnsxtn']),
-  .list[data-active='lichtspiel'] :global(.irow[data-product='windchime']),
-  .list[data-active='lichtspiel'] :global(.irow[data-product='hrnsxtn']),
-  .list[data-active='hrnsxtn'] :global(.irow[data-product='windchime']),
-  .list[data-active='hrnsxtn'] :global(.irow[data-product='lichtspiel']) {
-    display: none;
-  }
 </style>
-
-<script>
-  const bar = document.querySelector('.filterbar');
-  const list = document.getElementById('incident-list');
-  bar?.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-filter]');
-    if (!btn || !list) return;
-    list.dataset.active = btn.dataset.filter;
-    bar
-      .querySelectorAll<HTMLElement>('[data-filter]')
-      .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-  });
-</script>

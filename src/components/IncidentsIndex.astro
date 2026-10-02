@@ -1,0 +1,29 @@
+---
+/** Every incident, newest first, with the product filter (Incidents page and Releases). */
+import IndexRow from './IndexRow.astro';
+import FilteredList from './FilteredList.astro';
+import { allIncidents, recordPath } from '../lib/content';
+import { SEVERITY_TONE, label as lbl } from '../lib/taxonomy';
+
+const incidents = await allIncidents();
+const resolved = incidents.filter((i) => i.data.status === 'resolved').length;
+---
+
+<FilteredList
+  label="Filter incidents by product"
+  count={`${resolved} resolved · ${incidents.length} total`}
+>
+  {
+    incidents.map((i) => (
+      <IndexRow
+        href={recordPath('incident', i.data.product, i.id)}
+        tone={SEVERITY_TONE[i.data.severity] ?? 'warn'}
+        badge={lbl(i.data.severity)}
+        title={i.data.title}
+        product={i.data.product}
+        meta={lbl(i.data.status)}
+        date={i.data.date}
+      />
+    ))
+  }
+</FilteredList>
