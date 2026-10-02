@@ -13,7 +13,7 @@ import { glob } from 'astro/loaders';
  * Adding a new project later = add its slug to PRODUCTS and drop in content.
  */
 
-const PRODUCTS = ['windchime', 'lichtspiel', 'hrnsxtn', 'shared'] as const;
+const PRODUCTS = ['windchime', 'lichtspiel', 'hrnsxtn', 'groove', 'shared'] as const;
 const product = z.enum(PRODUCTS);
 
 /** A pointer to evidence — kept abstract so we can cite a PR title, a metric, or a doc

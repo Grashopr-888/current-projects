@@ -6,5 +6,5 @@ definition: >-
   learning from raw labels. In HRNSXTN, a 103k parameter student learns to predict where a
   58M parameter audio codec would place live sound in its embedding space: 560× smaller,
   cheap enough for a pedal with no neural accelerator.
-related: ['Embedding space', 'Granular synthesis']
+related: [embedding-space, granular-synthesis, music2latent]
 ---

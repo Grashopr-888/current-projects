@@ -10,14 +10,19 @@ const all = (await getCollection('glossary')).sort((a, b) =>
 const nameBySlug = new Map(all.map((t) => [t.id, t.data.term]));
 
 type Group = {
-  key: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'shared';
+  key: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove' | 'shared';
   label: string;
   blurb: string;
 };
 const GROUPS: Group[] = [
   { key: 'windchime', label: 'Windchime', blurb: 'Voice, retrieval, and the audio corpus.' },
+  { key: 'hrnsxtn', label: 'HRNSXTN x RDMSXN', blurb: 'Grains, latents, and the pedal.' },
   { key: 'lichtspiel', label: 'Lichtspiel', blurb: 'Live performance, generation, and the set.' },
-  { key: 'hrnsxtn', label: 'HRNSXTN x RDMSXN', blurb: 'Grains, latents, and compression.' },
+  {
+    key: 'groove',
+    label: 'Probing the World for Groove',
+    blurb: 'Transfer learning, evaluation, and drum style.',
+  },
   { key: 'shared', label: 'Shared', blurb: 'Hardware, reliability, and process.' },
 ];
 const grouped = GROUPS.map((g) => ({
@@ -28,7 +33,7 @@ const grouped = GROUPS.map((g) => ({
 
 <BaseLayout
   title="Glossary"
-  description="Plain-language definitions of the terms used across Windchime, Lichtspiel, and HRNSXTN x RDMSXN: audio language models, retrieval, the monome, validation gates, and more."
+  description="Plain language definitions of the terms used across Windchime, Lichtspiel, HRNSXTN x RDMSXN and Probing the World for Groove: audio language models, retrieval, distillation, transfer learning, and more."
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Glossary</p>
