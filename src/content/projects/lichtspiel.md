@@ -28,7 +28,7 @@ constraints:
   - Adapt to whatever monome is plugged in (Grid 64 / Arc 2 up to Grid 128 / Arc 4)
   - One person's judgment had to reconcile three diverging forks
 outcomes:
-  - Shipped a working live instrument at an Ableton hackathon run by Music Hackspace, hosted at Berklee College of Music (Boston, June 2026)
+  - Shipped a working live instrument for Ableton at the AIMS 2026 hackathon, cohosted by Music Hackspace with Berklee's AI Music Summit (Boston, June 2026)
   - Consolidated three diverging forks into one coherent build across 43 commits in four days
   - Generated visuals pass a five gate validation chain before they can play
   - Reused Windchime's animation core (one lineage, two products)
@@ -68,8 +68,9 @@ skills:
 
 VJ tools map an audio envelope; they do not know this is the B section. Lichtspiel reads the
 Ableton set itself (clips, scenes, locators, transport) and shapes code native visuals from
-that structure, with the monome as a latent space instrument. Built at an Ableton hackathon
-run by **Music Hackspace** at **Berklee College of Music** (June 2026), under one constraint:
+that structure, with the monome as a latent space instrument. Built at the **AIMS 2026**
+hackathon, cohosted by **Music Hackspace** with **Berklee College of Music**'s AI Music Summit
+(June 2026), under one constraint:
 a few minute performance that could not fail on stage.
 
 ## How it works, at the boundary

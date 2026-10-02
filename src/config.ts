@@ -72,7 +72,8 @@ export const PROJECT_META = {
   lichtspiel: {
     label: 'Lichtspiel',
     kind: 'Live audiovisual assistant for Ableton',
-    credit: 'Built at a Music Hackspace hackathon, Berklee College of Music',
+    credit:
+      'Built at the AIMS 2026 hackathon, Music Hackspace × Berklee AI Music Summit, Boston, June 2026',
     accent: 'var(--ls)',
     logo: '/img/lichtspiel-mark.svg',
     art: '/img/lichtspiel-hero.jpg',
@@ -80,9 +81,12 @@ export const PROJECT_META = {
     // Hackathon demo. Privacy-enhanced (nocookie) embed of youtu.be/wW3QNNuzD9M.
     demoVideoId: 'wW3QNNuzD9M',
     demoVideoTitle: 'Lichtspiel hackathon demo',
-    // Event and host marks (attribution, not endorsement). Berklee logo from berklee.edu's site
-    // header; Music Hackspace logo as used on HRNSXTN. Owner decision 2026-09-25 (log D13).
+    // Event and host marks (attribution, not endorsement). The AIMS 2026 mark is BEATL's own
+    // event graphic (the AIMS 2026 video thumbnail, margin trimmed); Berklee logo from
+    // berklee.edu's site header; Music Hackspace logo as used on HRNSXTN. Owner decisions
+    // 2026-09-25 (log D13) and 2026-10-02.
     partners: [
+      { img: '/img/logo-aims2026.jpg', alt: 'AIMS 2026, Berklee AI Music Summit', scale: 1.25 },
       { img: '/img/logo-musichackspace.png', alt: 'Music Hackspace' },
       { img: '/img/logo-berklee.svg', alt: 'Berklee College of Music', scale: 0.5 },
     ],
@@ -149,7 +153,7 @@ export const PROJECT_META = {
       },
       { img: '/img/logo-leiden.svg', alt: 'Universiteit Leiden', scale: 1.3 },
       { img: '/img/logo-liacs.jpg', alt: 'LIACS, Leiden Institute of Advanced Computer Science' },
-      { img: '/img/logo-melly.png', alt: 'Kunstinstituut Melly' },
+      { img: '/img/logo-melly.png', alt: 'Kunstinstituut Melly', scale: 1.25 },
     ],
   },
 } as const;

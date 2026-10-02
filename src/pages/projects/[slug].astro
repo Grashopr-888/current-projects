@@ -151,6 +151,31 @@ type Venue = {
   link?: { label: string; href: string };
 };
 const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
+  lichtspiel: {
+    label: 'Origin',
+    title: "Made at Berklee's AI Music Summit",
+    venues: [
+      {
+        name: 'AIMS 2026 · AI Music Summit',
+        place: 'Berklee College of Music, Boston · June 3–5, 2026',
+        detail:
+          'Musicians, educators, researchers and industry on how AI is changing music creation, production, performance and learning.',
+        logo: { src: '/img/logo-aims2026.jpg', alt: 'AIMS 2026, Berklee AI Music Summit' },
+        link: { label: 'AIMS 2026 at Berklee', href: 'https://www.berklee.edu/beatl/aims-2026' },
+      },
+      {
+        name: 'Boston Hackathon 26 · Music Hackspace',
+        place: 'Berklee College of Music · June 6–7, 2026',
+        detail:
+          'The hackathon cohosted with the summit: challenges set by industry partners, each team keeping full ownership of its work. Lichtspiel was built there, for Ableton Live.',
+        logo: { src: '/img/logo-musichackspace.png', alt: 'Music Hackspace' },
+        link: {
+          label: 'Watch the hackathon film',
+          href: 'https://www.youtube.com/watch?v=_JnFLZLFVvM',
+        },
+      },
+    ],
+  },
   hrnsxtn: {
     label: 'Recognition',
     title: 'Montréal, then Abu Dhabi',
