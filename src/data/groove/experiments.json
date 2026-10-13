@@ -215,7 +215,7 @@
     "model": "cnn",
     "f1": 0.7646,
     "notebook": "GMD_CNN_prototype5_2.ipynb",
-    "gpu": null,
+    "gpu": "A100",
     "description": "GMD-full repeat",
     "category": "Dataset",
     "roundTitle": "Repeatability",

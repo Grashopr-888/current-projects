@@ -194,7 +194,8 @@ const idx = () => String(++n).padStart(2, '0');
         <ul class="g-list">
           <li>
             Notebooks were developed and run in Google Colab on NVIDIA A100 or L4 GPUs (assigned by
-            runtime availability); each experiment took roughly 3 to 8 hours depending on GPU type.
+            runtime availability, one GPU per run); most experiments took 3 to 8 hours, from 45
+            minutes on GMD-mini to 17.5 hours for an augmented CNN.
           </li>
           <li>
             Key libraries: <a href={LINKS.passt}>passt_hear21</a>, <a

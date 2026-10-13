@@ -137,7 +137,7 @@ const idx = () => String(++n).padStart(2, '0');
     <div class="g-grid2">
       <ModelCard model="cnn">
         <li>Audio at <strong>16 kHz mono</strong></li>
-        <li>Log mel spectrogram input</li>
+        <li>Mel spectrogram input</li>
         <li>Fixed length, padded clips</li>
       </ModelCard>
       <ModelCard model="passt">
@@ -200,12 +200,12 @@ const idx = () => String(++n).padStart(2, '0');
     <dl class="g-specrow g-gap" style="--cols: 3">
       <div><dt>GPU</dt><dd>A100 / L4</dd></div>
       <div><dt>Compute</dt><dd>Google Colab</dd></div>
-      <div><dt>Training time</dt><dd>3 to 8 hours</dd></div>
+      <div><dt>Training time</dt><dd>45 min to 17.5 h</dd></div>
     </dl>
     <p class="g-small g-gap">
       Models were trained in Google Colab on NVIDIA A100 or L4 GPUs across April and May 2025; the
-      choice between the two followed runtime availability. Each run took roughly 3 to 8 hours
-      depending on GPU type and configuration.
+      choice between the two followed runtime availability, one GPU per run. Most runs took 3 to 8
+      hours; the notebooks log 45 minutes on GMD-mini and up to 17.5 hours for an augmented CNN.
     </p>
     <p class="g-small">
       Augmentation (Gaussian noise, room simulation, time stretch via <a
