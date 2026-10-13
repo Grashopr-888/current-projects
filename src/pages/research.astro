@@ -9,7 +9,7 @@ import { ASSETS } from '../lib/groove';
 
 const notes = await allResearch();
 
-/** Published and accepted work, newest first. Titles are verbatim. */
+/** Published work, newest first. Titles are verbatim. */
 const PUBLICATIONS: Array<{
   venue: string;
   status: string;
@@ -18,30 +18,37 @@ const PUBLICATIONS: Array<{
   authors: string;
   project: ProjectSlug;
   page: string;
-  link: { label: string; href: string };
+  /** One button per link; a link without href yet says when it arrives. */
+  links: Array<{ label: string; href?: string; pending?: string }>;
 }> = [
   {
     venue: 'ISMIR 2026 · Late-Breaking Demo',
-    status: 'Accepted',
+    status: 'Published',
     place: 'Abu Dhabi, UAE · November 2026',
     title: 'Neural Codec Latent Distillation for Corpus Retrieval Synthesis on the Elk Stomp',
     authors: 'Trent Eriksen, Jazz Segovia, Dennison Blackett',
     project: 'hrnsxtn',
     page: '/projects/hrnsxtn#recognition',
-    link: {
-      label: 'Paper and code',
-      href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
-    },
+    links: [
+      {
+        label: 'Paper and code',
+        href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
+      },
+      { label: 'ISMIR 2026 program', pending: 'link in November, at the conference' },
+    ],
   },
   {
     venue: 'NeurIPS 2026 · Creative AI Track',
-    status: 'Accepted',
+    status: 'Published',
     place: 'Sydney, Australia · December 2026',
     title: 'Windchime: an Audiovisual Installation with Audio-Language Model implementations',
     authors: 'Trent Eriksen, Celeste Betancur',
     project: 'windchime',
     page: '/projects/windchime#recognition',
-    link: { label: 'OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
+    links: [
+      { label: 'NeurIPS 2026 program', href: 'https://neurips.cc/virtual/2026/loc/sydney/160685' },
+      { label: 'OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
+    ],
   },
   {
     venue: 'ISMIR 2025 · Late-Breaking Demo',
@@ -51,7 +58,10 @@ const PUBLICATIONS: Array<{
     authors: 'Trent Eriksen, Edwin van der Heide, Robert Saunders',
     project: 'groove',
     page: '/projects/groove/publication',
-    link: { label: 'ISMIR 2025 page', href: 'https://ismir2025program.ismir.net/lbd_456.html' },
+    links: [
+      { label: 'ISMIR 2025 program', href: 'https://ismir2025program.ismir.net/lbd_456.html' },
+      { label: 'Paper (PDF)', href: ASSETS.lbdPdf },
+    ],
   },
   {
     venue: 'MSc thesis · Leiden University',
@@ -62,7 +72,7 @@ const PUBLICATIONS: Array<{
     authors: 'Trent Eriksen; supervised by Edwin van der Heide and Robert Saunders',
     project: 'groove',
     page: '/projects/groove',
-    link: { label: 'Thesis (PDF)', href: ASSETS.thesisPdf },
+    links: [{ label: 'Thesis (PDF)', href: ASSETS.thesisPdf }],
   },
 ];
 ---
@@ -93,9 +103,17 @@ const PUBLICATIONS: Array<{
             <p class="pub-authors">{p.authors}</p>
             <p class="pub-place">{p.place}</p>
             <div class="pub-links">
-              <a class="plain pub-link" href={p.link.href} rel="noopener">
-                {p.link.label} <span aria-hidden="true">↗</span>
-              </a>
+              {p.links.map((l) =>
+                l.href ? (
+                  <a class="plain pub-link" href={l.href} rel="noopener">
+                    {l.label} <span aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  <span class="pub-link pub-pending">
+                    {l.label} · {l.pending}
+                  </span>
+                )
+              )}
               <a class="plain pub-link pub-project" href={url(p.page)}>
                 {PROJECT_META[p.project].label} <span aria-hidden="true">→</span>
               </a>
@@ -207,6 +225,13 @@ const PUBLICATIONS: Array<{
   }
   .pub-project {
     color: var(--ink-soft);
+  }
+  .pub-pending {
+    font-weight: 400;
+    color: var(--faint);
+  }
+  .pub-pending:hover {
+    text-decoration: none;
   }
   .list {
     margin-top: var(--sp-5);

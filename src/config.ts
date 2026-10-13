@@ -7,7 +7,7 @@ export const SITE = {
   role: 'Technical Product Manager / Product Engineer',
   description:
     'Current projects by Trent Eriksen. Windchime, Lichtspiel, HRNSXTN x RDMSXN and Probing the ' +
-    'World for Groove: ML audio research meeting interactive AV prototyping, documented in depth.',
+    'World for Groove: practice based, state of the art audio ML research and multimodal installations.',
   handle: 'Grashopr-888',
   githubUrl: 'https://github.com/Grashopr-888',
   repoUrl: 'https://github.com/Grashopr-888/current-projects',
@@ -40,7 +40,8 @@ export const PROJECT_META = {
     label: 'Windchime',
     kind: 'Voice conditioned audiovisual installation',
     // One line credit: project hero and project card.
-    credit: 'Shown at Gray Area, San Francisco; accepted to NeurIPS 2026 Creative AI, Sydney',
+    credit:
+      'Shown at Gray Area, San Francisco; published at NeurIPS 2026 Creative AI, Sydney, coauthored with Stanford CCRMA',
     accent: 'var(--wc)',
     logo: '/img/windchime-mark.svg',
     art: '/img/windchime-hero.jpg',
@@ -67,7 +68,9 @@ export const PROJECT_META = {
       },
       { img: '/img/logo-stanford-block-s.png', alt: 'Stanford University' },
     ],
-    partnersNote: 'Paper coauthored with Celeste Betancur, CCRMA, Stanford University.',
+    partnersNote:
+      "Paper coauthored with Celeste Betancur of CCRMA, Stanford University's Center for Computer " +
+      'Research in Music and Acoustics, a leading center for computer music since 1975.',
   },
   lichtspiel: {
     label: 'Lichtspiel',
@@ -95,7 +98,7 @@ export const PROJECT_META = {
     label: 'HRNSXTN x RDMSXN',
     kind: 'Neural audio instruments for a screenless pedal',
     credit:
-      'Music Hackspace × MUTEK hackathon: 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab; presented at MUTEK Forum, Montréal 2026; ISMIR 2026 Late-Breaking Demo, Abu Dhabi',
+      'Music Hackspace × MUTEK hackathon: 1st, Elk Audio Challenge; 2nd, Roland Future Design Lab; presented at MUTEK Forum, Montréal 2026; published at ISMIR 2026, Late-Breaking Demo, Abu Dhabi',
     accent: 'var(--hsx)',
     logo: '/img/hrnsxtn-mark.svg',
     // Project demo. Privacy-enhanced (nocookie) embed of youtu.be/gLobf3o0Qg0.
@@ -128,7 +131,7 @@ export const PROJECT_META = {
     label: 'Probing the World for Groove',
     kind: 'Transfer learning for drum audio style classification',
     credit:
-      'ISMIR 2025 Late-Breaking Demo, KAIST, Daejeon; MSc thesis, LIACS, Leiden University, defended at Kunstinstituut Melly, Rotterdam',
+      'Published at ISMIR 2025, Late-Breaking Demo, KAIST, Daejeon; MSc thesis, LIACS, Leiden University, defended at Kunstinstituut Melly, Rotterdam',
     accent: 'var(--gr)',
     logo: '/img/groove-mark.svg',
     // Both models' t-SNE maps of the same test clips (CNN left, PaSST right), drawn from

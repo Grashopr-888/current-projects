@@ -4,7 +4,7 @@ product: hrnsxtn
 date: 2026-09-24
 source_type: experiment
 summary: >-
-  The Late-Breaking Demo accepted at ISMIR 2026 tests whether a 103k parameter student,
+  The Late-Breaking Demo published at ISMIR 2026 tests whether a 103k parameter student,
   distilled from music2latent, keeps the codec's similarity ordering, and what then limits
   real time operation on the Elk Stomp.
 questions:
@@ -25,5 +25,5 @@ provenance: The paper as submitted on 24 Sep 2026 and its public repository
 redaction_status: clean
 ---
 
-With Jazz Segovia and Dennison Blackett. Accepted to the ISMIR 2026 Late-Breaking Demo session,
+With Jazz Segovia and Dennison Blackett. Published in the ISMIR 2026 Late-Breaking Demo session,
 Abu Dhabi, November 8–12.
