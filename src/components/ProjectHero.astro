@@ -2,23 +2,28 @@
 /** The project page hero, shared by projects/[slug].astro and the research pages
  *  (projects/groove/). Identity, credit line and venue marks come from PROJECT_META;
  *  the default slot adds anything a page needs under the credits (for example links). */
-import Badge from './Badge.astro';
 import { PROJECT_META, type ProjectSlug } from '../config';
-import { STATUS_TONE, label as lbl } from '../lib/taxonomy';
 import { url } from '../lib/url';
 import { existsSync } from 'node:fs';
+
+/** One button per publication link. A link with no href yet renders as a pending pill
+ *  that says when it arrives (`pending`). */
+export type PubLink = { label: string; href?: string; primary?: boolean; pending?: string };
+export type Pubs = { label: string; links: PubLink[] };
 
 interface Props {
   slug: ProjectSlug;
   title: string;
   summary: string;
-  status: string;
   /** Label over the highlighted statement ("Thesis" on product pages). */
   thesisLabel?: string;
   thesis: string;
   tools: string[];
+  /** Publication links, shown right under the thesis. */
+  pubs?: Pubs;
 }
-const { slug, title, summary, status, thesisLabel = 'Thesis', thesis, tools } = Astro.props;
+const { slug, title, summary, thesisLabel = 'Thesis', thesis, tools, pubs } = Astro.props;
+const external = (href: string): boolean => /^https?:/.test(href);
 const meta = PROJECT_META[slug];
 
 /* A secondary hero image (top right), where a project defines one. */
@@ -38,7 +43,6 @@ const hasAsset = (p?: string): boolean =>
       <div class="phero-main">
         <div class="phero-top">
           <span class="phero-kind">{meta.kind}</span>
-          <Badge tone={STATUS_TONE[status] ?? 'neutral'}>{lbl(status)}</Badge>
         </div>
         <div class="phero-idrow">
           {meta.logo && <img class="phero-logo" src={url(meta.logo)} alt="" aria-hidden="true" />}
@@ -49,6 +53,32 @@ const hasAsset = (p?: string): boolean =>
           <span class="label"><span class="idx">✳</span> {thesisLabel}</span>
           <p>{thesis}</p>
         </div>
+        {
+          pubs && (
+            <div class="phero-pubs">
+              <span class="label phero-pubs-label">{pubs.label}</span>
+              <div class="phero-pub-row">
+                {pubs.links.map((l) =>
+                  l.href ? (
+                    <a
+                      class:list={['btn', 'phero-pub', { 'phero-pub-primary': l.primary }]}
+                      href={l.href}
+                      rel={external(l.href) ? 'noopener' : undefined}
+                    >
+                      {l.label}
+                      {external(l.href) && <span aria-hidden="true">↗</span>}
+                    </a>
+                  ) : (
+                    <span class="btn phero-pub phero-pub-pending" aria-disabled="true">
+                      {l.label}
+                      {l.pending && <span class="phero-pub-when">{l.pending}</span>}
+                    </span>
+                  )
+                )}
+              </div>
+            </div>
+          )
+        }
         <div class="phero-credits">
           <span class="credit-context">{meta.credit}</span>
           <span class="credit-tools">
@@ -212,6 +242,47 @@ const hasAsset = (p?: string): boolean =>
     font-weight: 500;
     color: var(--ink);
     text-wrap: balance;
+  }
+
+  /* Publication buttons, under the thesis: the primary link in the project color. */
+  .phero-pubs {
+    margin-top: var(--sp-5);
+  }
+  .phero-pubs-label {
+    color: var(--accent);
+  }
+  .phero-pub-row {
+    margin-top: var(--sp-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+  }
+  .phero-pub-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0d0d10;
+  }
+  .phero-pub-primary:hover {
+    border-color: var(--accent);
+    box-shadow: 0 10px 26px -12px color-mix(in oklab, var(--accent) 80%, transparent);
+  }
+  .phero-pub-pending {
+    cursor: default;
+    color: var(--muted);
+    border-style: dashed;
+  }
+  .phero-pub-pending:hover {
+    transform: none;
+    border-color: var(--hairline-strong);
+  }
+  .phero-pub-when {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-stretch: 100%;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.72rem;
+    color: var(--faint);
   }
 
   .phero-credits {

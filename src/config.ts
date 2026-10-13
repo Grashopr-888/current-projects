@@ -8,6 +8,20 @@ export const SITE = {
   description:
     'Current projects by Trent Eriksen. Windchime, Lichtspiel, HRNSXTN x RDMSXN and Probing the ' +
     'World for Groove: practice based, state of the art audio ML research and multimodal installations.',
+  /** Site wide search terms; project pages replace them with their own. */
+  keywords: [
+    'Trent Eriksen',
+    'audio machine learning',
+    'music information retrieval',
+    'NeurIPS 2026',
+    'ISMIR 2026',
+    'ISMIR 2025',
+    'knowledge distillation',
+    'transfer learning',
+    'audio language models',
+    'embedded ML',
+    'creative AI',
+  ] as string[],
   handle: 'Grashopr-888',
   githubUrl: 'https://github.com/Grashopr-888',
   repoUrl: 'https://github.com/Grashopr-888/current-projects',

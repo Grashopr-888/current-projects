@@ -17,6 +17,10 @@ import FlowDiagram from '../../components/FlowDiagram.astro';
 import Kanban from '../../components/Kanban.astro';
 import MonomeTwin from '../../components/MonomeTwin.astro';
 import LatentMap from '../../components/LatentMap.astro';
+import MethodTable, { type MethodRow } from '../../components/MethodTable.astro';
+import ResearchPipeline from '../../components/ResearchPipeline.astro';
+import type { Pubs } from '../../components/ProjectHero.astro';
+import { SITE } from '../../config';
 
 type Stage = { label: string; note?: string };
 const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: string }> = {
@@ -147,8 +151,10 @@ type Venue = {
   place: string;
   detail: string;
   logo?: { src: string; alt: string; dark?: boolean };
+  /** Why the venue matters, in one line. */
+  standing?: string;
   paper?: { title: string; summary: string };
-  link?: { label: string; href: string };
+  links?: Array<{ label: string; href: string }>;
 };
 const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
   lichtspiel: {
@@ -161,7 +167,7 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         detail:
           'Musicians, educators, researchers and industry on how AI is changing music creation, production, performance and learning.',
         logo: { src: '/img/logo-aims2026.jpg', alt: 'AIMS 2026, Berklee AI Music Summit' },
-        link: { label: 'AIMS 2026 at Berklee', href: 'https://www.berklee.edu/beatl/aims-2026' },
+        links: [{ label: 'AIMS 2026 at Berklee', href: 'https://www.berklee.edu/beatl/aims-2026' }],
       },
       {
         name: 'Boston Hackathon 26 · Music Hackspace',
@@ -169,10 +175,12 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         detail:
           'The hackathon cohosted with the summit: challenges set by industry partners, each team keeping full ownership of its work. Lichtspiel was built there, for Ableton Live.',
         logo: { src: '/img/logo-musichackspace.png', alt: 'Music Hackspace' },
-        link: {
-          label: 'Watch the hackathon film',
-          href: 'https://www.youtube.com/watch?v=_JnFLZLFVvM',
-        },
+        links: [
+          {
+            label: 'Watch the hackathon film',
+            href: 'https://www.youtube.com/watch?v=_JnFLZLFVvM',
+          },
+        ],
       },
     ],
   },
@@ -191,17 +199,21 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         name: 'ISMIR 2026 · Late-Breaking Demo',
         place: 'Abu Dhabi, UAE · November 8–12, 2026',
         detail:
-          'Accepted at the 27th ISMIR, with Jazz Segovia and Dennison Blackett. Code, board logs and notebooks are public.',
+          'Published at the 27th ISMIR, with Jazz Segovia and Dennison Blackett. Code, board logs and notebooks are public.',
+        standing:
+          'ISMIR is the leading international conference for music information retrieval, held every year since 2000.',
         paper: {
           title: 'Neural Codec Latent Distillation for Corpus Retrieval Synthesis on the Elk Stomp',
           summary:
             'A 103k parameter student distilled from the 58M parameter music2latent encoder keeps its similarity ordering (Spearman ρ .83) and runs on the pedal at about 1% of each 93 ms analysis.',
         },
         logo: { src: '/img/logo-ismir2026.png', alt: 'ISMIR 2026, Abu Dhabi' },
-        link: {
-          label: 'Paper, code and measurements on GitHub',
-          href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
-        },
+        links: [
+          {
+            label: 'Paper, code and measurements on GitHub',
+            href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
+          },
+        ],
       },
     ],
   },
@@ -218,18 +230,262 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
       {
         name: 'NeurIPS 2026 · Creative AI Track',
         place: 'Sydney, Australia · December 2026',
-        detail: 'Accepted artwork, under the track theme Agency.',
+        detail:
+          'Published artwork and paper under the track theme Agency, shown as a poster in Creative AI Session 1.',
+        standing:
+          "NeurIPS is the flagship conference in machine learning; Creative AI works are peer reviewed on OpenReview. Coauthored with Celeste Betancur of Stanford's CCRMA.",
         paper: {
           title: 'Windchime: an Audiovisual Installation with Audio-Language Model implementations',
           summary:
             'It shows how agency splits three ways: the artist authors the corpus, the model shapes what is reachable, and the visitor’s speech drives each turn.',
         },
         logo: { src: '/img/logo-neurips.svg', alt: 'NeurIPS' },
-        link: {
-          label: 'Read it on OpenReview',
-          href: 'https://openreview.net/forum?id=KKLTKVVHkM',
-        },
+        links: [
+          { label: 'Read it on OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
+          {
+            label: 'NeurIPS 2026 program',
+            href: 'https://neurips.cc/virtual/2026/loc/sydney/160685',
+          },
+        ],
       },
+    ],
+  },
+};
+
+/** Publication links, one button each, under the hero thesis. */
+const PUBS: Partial<Record<Product, Pubs>> = {
+  windchime: {
+    label: 'Published at NeurIPS 2026 · Creative AI Track',
+    links: [
+      {
+        label: 'NeurIPS 2026 program',
+        href: 'https://neurips.cc/virtual/2026/loc/sydney/160685',
+        primary: true,
+      },
+      { label: 'Paper on OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
+    ],
+  },
+  hrnsxtn: {
+    label: 'Published at ISMIR 2026 · Late-Breaking Demo',
+    links: [
+      {
+        label: 'Paper, code and board logs',
+        href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
+        primary: true,
+      },
+      { label: 'ISMIR 2026 program', pending: 'link in November, at the conference' },
+    ],
+  },
+  lichtspiel: {
+    label: 'Built at the Music Hackspace Boston Hackathon · AIMS 2026, Berklee',
+    links: [
+      {
+        label: 'Music Hackspace hackathon page',
+        href: 'https://musichackspace.org/events/hackathon-boston-june-2026',
+        primary: true,
+      },
+      { label: 'AIMS 2026 at Berklee', href: 'https://www.berklee.edu/beatl/aims-2026' },
+    ],
+  },
+};
+
+/** The ML method each project chose, against what it weighed (skim layer). */
+type Method = {
+  title: string;
+  lead: string;
+  rows: MethodRow[];
+  /** Short practice cards under the table: data, augmentation, robustness, evaluation. */
+  practices?: Array<{ title: string; body: string }>;
+};
+const METHODS: Partial<Record<Product, Method>> = {
+  windchime: {
+    title: 'Zero shot retrieval and structured outputs',
+    lead: 'Pretrained audio language models retrieve zero shot from a closed corpus, and the planner may only fill a validated schema, so the model under study stays a clean variable. As the corpus and its run log grow, finetuning becomes the next lever.',
+    rows: [
+      {
+        option: 'Zero shot retrieval with pretrained ALMs',
+        verdict: 'chosen',
+        why: 'Contrastive pretraining already aligns text and audio. Six deployable configurations (CLAP family, CLaMP 3) swap behind one interface as a controlled variable, all on CPU, offline.',
+      },
+      {
+        option: 'Structured output: an LLM fills a JSON schema',
+        verdict: 'chosen',
+        why: 'Claude, then a local Llama, then a deterministic template. A validator clamps every plan before a compiler renders the Strudel.',
+      },
+      {
+        option: 'LLM bypass',
+        verdict: 'chosen',
+        why: 'The install default: CLaMP 3 retrieval plays the stems directly, in a fraction of a second.',
+      },
+      {
+        option: 'Model writes Strudel code directly',
+        verdict: 'rejected',
+        why: 'Most expressive, but unbounded and impossible to validate before it plays.',
+      },
+      {
+        option: 'SFT of the planner on logged runs',
+        verdict: 'next',
+        why: 'Every good generation is logged as a prompt and plan pair, a dataset that grows with each visitor: first as retrieved in context examples, then as SFT data.',
+      },
+      {
+        option: 'Contrastive finetuning of an ALM',
+        verdict: 'next',
+        why: 'As the corpus grows beyond 406 stems, tuning an ALM on the artist’s audio and descriptions would sharpen retrieval toward this corpus.',
+      },
+      {
+        option: 'Generative audio',
+        verdict: 'rejected',
+        why: 'Retrieval answers with the artist’s own recordings; generation would take authorship away from the artist.',
+      },
+    ],
+    practices: [
+      {
+        title: 'Data engineering',
+        body: 'Five corpus batches (203 to 406 stems), each a new index epoch; roles from validated mapping files; RMS levelling toward the corpus median; only rows embedded from silence are reembedded, per model.',
+      },
+      {
+        title: 'Robustness',
+        body: 'The audit scores paraphrase stability and cross language consistency, not only coverage. Plans are clamped by a validator, profanity is masked, and state changing endpoints check their Origin.',
+      },
+      {
+        title: 'Evaluation without labels',
+        body: 'With no ground truth, the audit measures behavior: catalog coverage, entropy, Gini and top 10 dominance over 80 prompts, 10 paraphrase groups and 5 languages. Results stay private under review.',
+      },
+    ],
+  },
+  hrnsxtn: {
+    title: 'Knowledge distillation, a post training method, over compression',
+    lead: 'Distillation trains a small student to reproduce a large pretrained teacher. It replaced the 58M parameter music2latent encoder at the input because shrinking the teacher itself could not close the gap.',
+    rows: [
+      {
+        option: 'Distill the encoder into a student',
+        verdict: 'chosen',
+        why: 'Feature distillation: a 103k parameter MLP regresses the teacher’s 64 dim latent from one log mel frame (MSE plus a cosine term). 560× smaller, Spearman ρ .829 against the teacher’s ordering, about 1% of each 93 ms analysis on the pedal.',
+      },
+      {
+        option: 'Post training quantization and pruning',
+        verdict: 'rejected',
+        why: 'Int8 buys 2 to 3 times; the pedal needed 30 to 100 times, and no PyTorch runtime exists for its 32 bit ARM.',
+      },
+      {
+        option: 'Teacher on a laptop, streamed to the pedal',
+        verdict: 'rejected',
+        why: 'Breaks the brief (no laptop on stage) and makes venue wireless part of the instrument.',
+      },
+      {
+        option: 'Ridge regression map',
+        verdict: 'baseline',
+        why: 'A linear map from the same input: ρ .797.',
+      },
+      {
+        option: 'MFCC matching, no learning',
+        verdict: 'baseline',
+        why: 'ρ .575; its picks land in the teacher’s top 15 to 18%, the student’s in the top 4 to 7%.',
+      },
+      {
+        option: 'Recurrent student (GRU)',
+        verdict: 'compared',
+        why: 'ρ .826, a tie with the MLP; the stateless model shipped, simpler on the worker thread.',
+      },
+      {
+        option: 'Quantize or prune the student too',
+        verdict: 'rejected',
+        why: 'Not worth it at 1% of the budget. Only the matching table went to 8 bit: ρ 1.000, search 2.6 to 3.1 times faster.',
+      },
+      {
+        option: 'An inference engine (ONNX, TFLite)',
+        verdict: 'rejected',
+        why: 'RTNeural runs the exported MLP from a JSON file in plain C++, no engine on the device.',
+      },
+      {
+        option: 'An ordering term in the loss',
+        verdict: 'next',
+        why: 'Onsets are the weakest frames; training on rank directly is the next step.',
+      },
+    ],
+  },
+  lichtspiel: {
+    title: 'An LLM at authoring time, a verifier on every output',
+    lead: 'Claude writes each scene from a prompt and the set’s MIR features, and a five gate verifier decides what may play. The performance path never calls a model.',
+    rows: [
+      {
+        option: 'Generate, verify, repair',
+        verdict: 'chosen',
+        why: 'Typecheck, allowlist lint, monome playability and a headless render smoke test, inside a bounded self repair loop. The first scene through passed every gate at 60 fps.',
+      },
+      {
+        option: 'Call the model live, on the render path',
+        verdict: 'rejected',
+        why: 'Most responsive on paper; unpredictable latency, and it fails without a network.',
+      },
+      {
+        option: 'Envelope mapping, the classic VJ approach',
+        verdict: 'baseline',
+        why: 'Follows loudness, not structure: it does not know the B section.',
+      },
+      {
+        option: 'SFT or preference tuning on verified scenes',
+        verdict: 'next',
+        why: 'Every scene that passes the gates, and every one a performer keeps, is a labelled example; as the library grows, it can tune the generator itself.',
+      },
+    ],
+  },
+};
+
+/** Research to production, one step each (skim layer). */
+type Pipeline = {
+  title: string;
+  steps: Array<{ phase: string; label: string; note?: string }>;
+  caption?: string;
+};
+const PIPELINES: Partial<Record<Product, Pipeline>> = {
+  windchime: {
+    title: 'From notebook to an unattended gallery',
+    steps: [
+      { phase: 'Design', label: 'Guarded planner', note: 'schema, failover, retrieval in process' },
+      {
+        phase: 'Research',
+        label: 'ALM audit harness',
+        note: 'six deployable models, one interface',
+      },
+      {
+        phase: 'Data',
+        label: 'Corpus engineering',
+        note: '130 to 406 stems, levelled and reembedded',
+      },
+      { phase: 'Harden', label: '6 hour soak', note: '879 synthetic visitors, zero crashes' },
+      { phase: 'Deploy', label: 'Gray Area debut', note: 'offline and unattended, Aug 5–7' },
+      { phase: 'Publish', label: 'NeurIPS 2026', note: 'Creative AI poster, Sydney' },
+    ],
+  },
+  hrnsxtn: {
+    title: 'From a Python reference to a pedal, bit for bit',
+    steps: [
+      {
+        phase: 'Research',
+        label: 'Python reference',
+        note: 'music2latent embeds each corpus offline',
+      },
+      { phase: 'Train', label: 'Distill the student', note: 'PyTorch, AdamW, early stopping' },
+      { phase: 'Evaluate', label: 'Rank fidelity', note: 'ρ .829 on 12 held out queries' },
+      { phase: 'Export', label: 'RTNeural JSON', note: 'byte exact round trip' },
+      { phase: 'Port', label: 'C++ and JUCE', note: 'golden parity: 200 of 200 identical picks' },
+      { phase: 'Deploy', label: 'On the Elk Stomp', note: 'Docker cross build for 32 bit ARM' },
+      { phase: 'Publish', label: 'ISMIR 2026', note: 'paper, code and board logs public' },
+    ],
+  },
+  lichtspiel: {
+    title: 'From a hackathon fork to a stage instrument',
+    steps: [
+      { phase: 'Research', label: 'Not another VJ tool', note: 'what envelope mapping misses' },
+      { phase: 'Prototype', label: 'Hackathon build', note: 'three forks at AIMS 2026' },
+      { phase: 'Consolidate', label: 'One build', note: '43 commits in four days' },
+      {
+        phase: 'Validate',
+        label: 'Five gate chain',
+        note: 'every generated scene, before it plays',
+      },
+      { phase: 'Ship', label: 'Max for Live device', note: 'model free on stage' },
     ],
   },
 };
@@ -285,6 +541,9 @@ const diagram = DIAGRAMS[slug];
 const tools = TOOLS[slug];
 const gallery = GALLERIES[slug] ?? {};
 const venues = VENUES[slug];
+const pubs = PUBS[slug];
+const method = METHODS[slug];
+const pipeline = PIPELINES[slug];
 const demoVideoId = 'demoVideoId' in meta ? meta.demoVideoId : undefined;
 const demoVideoTitle = 'demoVideoTitle' in meta ? meta.demoVideoTitle : 'Project demo';
 
@@ -303,19 +562,41 @@ const specRows = [
   { term: 'Stack', values: d.tech },
 ];
 
+/* Search metadata: the project as a creative work, with its paper where it has one. */
+const pageUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname;
+const papers = (venues?.venues ?? []).filter((v) => v.paper);
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: d.title,
+  description: d.summary,
+  url: pageUrl,
+  author: { '@type': 'Person', name: SITE.author },
+  keywords: d.keywords.join(', '),
+  ...(papers.length > 0 && {
+    subjectOf: papers.map((v) => ({
+      '@type': 'ScholarlyArticle',
+      name: v.paper!.title,
+      url: v.links?.[0]?.href,
+      publication: { '@type': 'PublicationEvent', name: v.name, location: v.place },
+    })),
+  }),
+};
+
 let n = 0;
 const idx = () => String(++n).padStart(2, '0');
 ---
 
-<BaseLayout title={d.title} description={d.summary} accent={slug}>
+<BaseLayout title={d.title} description={d.summary} accent={slug} keywords={d.keywords}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonld)} />
   <article data-accent={slug}>
     <ProjectHero
       slug={slug}
       title={d.title}
       summary={d.summary}
-      status={d.status}
       thesis={d.thesis}
       tools={tools}
+      pubs={pubs}
     />
 
     <div class="container pbody">
@@ -389,16 +670,21 @@ const idx = () => String(++n).padStart(2, '0');
                   <p class="venue-name">{v.name}</p>
                   <p class="venue-place">{v.place}</p>
                   <p class="venue-detail">{v.detail}</p>
+                  {v.standing && <p class="venue-standing">{v.standing}</p>}
                   {v.paper && (
                     <>
                       <p class="venue-paper">“{v.paper.title}”</p>
                       <p class="venue-detail">{v.paper.summary}</p>
                     </>
                   )}
-                  {v.link && (
-                    <a class="venue-link plain" href={v.link.href}>
-                      {v.link.label} <span aria-hidden="true">→</span>
-                    </a>
+                  {v.links && (
+                    <div class="venue-links">
+                      {v.links.map((l) => (
+                        <a class="venue-link plain" href={l.href}>
+                          {l.label} <span aria-hidden="true">→</span>
+                        </a>
+                      ))}
+                    </div>
                   )}
                 </div>
               ))}
@@ -427,6 +713,25 @@ const idx = () => String(++n).padStart(2, '0');
       }
 
       {
+        method && (
+          <Section index={idx()} label="The ML method" title={method.title} id="method">
+            <p class="method-lead">{method.lead}</p>
+            <MethodTable rows={method.rows} />
+            {method.practices && method.practices.length > 0 && (
+              <div class="practices">
+                {method.practices.map((pr) => (
+                  <div class="practice">
+                    <p class="practice-title">{pr.title}</p>
+                    <p class="practice-body">{pr.body}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Section>
+        )
+      }
+
+      {
         diagram && (
           <Section index={idx()} label="Architecture" title="How it fits together">
             <FlowDiagram
@@ -434,6 +739,19 @@ const idx = () => String(++n).padStart(2, '0');
               outputs={diagram.outputs}
               caption={diagram.caption}
             />
+          </Section>
+        )
+      }
+
+      {
+        pipeline && (
+          <Section
+            index={idx()}
+            label="Research to production"
+            title={pipeline.title}
+            id="pipeline"
+          >
+            <ResearchPipeline steps={pipeline.steps} caption={pipeline.caption} />
           </Section>
         )
       }
@@ -562,6 +880,25 @@ const idx = () => String(++n).padStart(2, '0');
                 </details>
               ))}
             </div>
+          </Section>
+        )
+      }
+
+      {
+        d.keywords.length > 0 && (
+          <Section
+            index={idx()}
+            label="Keywords"
+            title="Topics, methods and venues"
+            id="keywords"
+            collapsible
+            meta={`${d.keywords.length} terms`}
+          >
+            <ul class="keywords">
+              {d.keywords.map((k) => (
+                <li class="chip">{k}</li>
+              ))}
+            </ul>
           </Section>
         )
       }
@@ -869,6 +1206,66 @@ const idx = () => String(++n).padStart(2, '0');
   }
   .venue-link:hover {
     text-decoration: underline;
+  }
+
+  .venue-standing {
+    margin-top: 0.3rem;
+    padding-left: 0.7rem;
+    border-left: 2px solid var(--accent);
+    color: var(--ink);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .venue-links {
+    margin-top: auto;
+    padding-top: var(--sp-3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2) var(--sp-5);
+  }
+  .venue-links .venue-link {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  /* The ML method (skim layer). */
+  .method-lead {
+    max-width: 64ch;
+    margin-bottom: var(--sp-5);
+    color: var(--ink-soft);
+  }
+  .practices {
+    margin-top: var(--sp-5);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+    gap: var(--sp-4);
+  }
+  .practice {
+    padding: var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .practice-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .practice-body {
+    margin-top: 0.45rem;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .keywords {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
   }
 
   /* Image sections (skim layer). */

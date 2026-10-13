@@ -11,7 +11,11 @@ role: Author of the MSc thesis; first author of the ISMIR 2025 Late-Breaking Dem
 collaborators:
   - Edwin van der Heide
   - Robert Saunders
-thesis: Can a model trained on general audio understand drum style?
+thesis: >-
+  Can a model pretrained on general audio understand drum style? Frozen PaSST, probed with
+  small trained heads, is set against a drum specific CNN trained from scratch: the CNN
+  leads on the full 74 style task (macro-F1 .908 against .875), and transfer learning
+  leads when data is scarce.
 problem: >-
   Drum classification research mostly names single hits or transcribes onsets
   into MIDI. Naming the style of a whole two bar performance from audio is a
@@ -48,4 +52,26 @@ skills:
   - CNN architecture design
   - Transfer learning
   - Audio augmentation
+keywords:
+  - transfer learning
+  - probing
+  - frozen backbone
+  - PaSST
+  - audio spectrogram transformer
+  - CNN
+  - AudioSet pretraining
+  - drum style classification
+  - music information retrieval
+  - Groove MIDI Dataset
+  - data engineering
+  - data augmentation
+  - macro-F1
+  - class imbalance
+  - embedding analysis
+  - t-SNE
+  - GPU training (A100, L4)
+  - PyTorch Lightning
+  - ISMIR 2025 Late-Breaking Demo
+  - Leiden University
+  - LIACS
 ---

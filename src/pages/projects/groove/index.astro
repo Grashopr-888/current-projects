@@ -9,9 +9,12 @@ import ModelCard from '../../../components/groove/ModelCard.astro';
 import DotPlot from '../../../components/groove/DotPlot.astro';
 import Note from '../../../components/groove/Note.astro';
 import Timeline from '../../../components/Timeline.astro';
+import MethodTable, { type MethodRow } from '../../../components/MethodTable.astro';
+import ResearchPipeline from '../../../components/ResearchPipeline.astro';
+import type { Pubs } from '../../../components/ProjectHero.astro';
 import { projectBundle, toTimeline } from '../../../lib/content';
 import { PROJECT_META } from '../../../config';
-import { GROOVE, LINKS, ASSETS, KEY_FACTS, HEADLINE, LOWDATA, gpage } from '../../../lib/groove';
+import { LINKS, ASSETS, KEY_FACTS, HEADLINE, LOWDATA, gpage } from '../../../lib/groove';
 
 const project = (await getEntry('projects', 'groove'))!;
 const d = project.data;
@@ -28,6 +31,100 @@ const flow = [
   'macro-F1',
 ];
 
+/** Publication links, one button each, under the question. */
+const pubs: Pubs = {
+  label: 'Published at ISMIR 2025 · Late-Breaking Demo · MSc thesis, Leiden University',
+  links: [
+    { label: 'ISMIR 2025 paper (PDF)', href: ASSETS.lbdPdf, primary: true },
+    { label: 'ISMIR 2025 program', href: LINKS.ismir },
+    { label: 'MSc thesis (PDF)', href: ASSETS.thesisPdf },
+    { label: 'Poster', href: ASSETS.posterPdf },
+    { label: 'Talk', href: LINKS.video },
+    { label: 'Code', href: LINKS.repo },
+  ],
+};
+
+/** The ML method against what it weighed. Facts: the notebook archive and the thesis. */
+const methodRows: MethodRow[] = [
+  {
+    option: 'Probe a frozen PaSST with trained heads',
+    verdict: 'chosen',
+    why: 'Only the new MLP heads train (2 to 7 layers, both of PaSST’s heads replaced), so the score shows what AudioSet pretraining already encodes about drum style. Best 0.8752 macro-F1, and the leader when data is scarce.',
+  },
+  {
+    option: 'VGG style CNN, supervised from scratch',
+    verdict: 'compared',
+    why: 'Depth swept from 3 to 9 convolutional layers; 7 layers reached 0.908 macro-F1, the top score on the full 74 style task.',
+  },
+  {
+    option: 'Full finetuning of PaSST',
+    verdict: 'next',
+    why: 'Would adapt the backbone to drums but blur what pretraining alone knows; the thesis names the frozen backbone as its limit on task adaptation.',
+  },
+  {
+    option: 'Parameter efficient finetuning (LoRA, adapters)',
+    verdict: 'next',
+    why: 'The middle path: a few trainable weights inside the frozen backbone, at a fraction of full finetuning’s compute.',
+  },
+  {
+    option: 'Weighted loss or resampling',
+    verdict: 'next',
+    why: 'Rock is nearly two thirds of the data. Training used plain cross entropy over a stratified split, and macro-F1 exposes the imbalance.',
+  },
+];
+
+const practices = [
+  {
+    title: 'Data engineering',
+    body: 'Clips exported from TFDS (groove, 2 bar, 16 kHz), filtered under 10 s, labelled primary or primary plus secondary style (74 classes) and split 80 / 10 / 10, stratified by style. Two input pipelines: 16 kHz mel for the CNN, 32 kHz padded to 10 s for PaSST.',
+  },
+  {
+    title: 'Data augmentation',
+    body: 'On the fly, training split only: Gaussian noise and room simulation (each at p 0.5), time stretch from 0.8 to 1.25. PaSST adds time patchout and its own time and frequency masking.',
+  },
+  {
+    title: 'Robustness',
+    body: 'Centroid shift compares class centroids across retrained variants (augmentation, padding, patchout). PaSST’s mean shift fell from 8.32 to 6.30: a more stable embedding than the CNN’s.',
+  },
+];
+
+/** How the runs were executed, and how the same study scales across GPUs. */
+const scaling = [
+  {
+    title: 'What ran',
+    body: '34 runs over 11 rounds on NVIDIA A100 (16 runs) and L4 (15) in Google Colab, one GPU per run, placed by availability: a run started on an L4 was restarted to get an A100. 45 minutes to 17.5 hours each.',
+  },
+  {
+    title: 'Run hygiene',
+    body: 'Lightning trainers keep the top 3 checkpoints by validation accuracy, clip gradients at 1.0 and stop early after 10 flat epochs; data loaders use 4 workers with pinned memory. Every run is logged in the workbook with its GPU and notebook.',
+  },
+  {
+    title: 'Where the time went',
+    body: 'Each clip was decoded, resampled and turned into a spectrogram on every step, and the frozen backbone ran forward on every batch. On the fly augmentation lengthened the runs further.',
+  },
+  {
+    title: 'How it scales next',
+    body: 'Cache the frozen PaSST embeddings once, so heads train on stored features; distributed data parallel (DDP) across GPUs for the CNN and any finetuning; bf16 mixed precision on A100 tensor cores.',
+  },
+];
+
+const pipeline = [
+  {
+    phase: 'Data',
+    label: 'GMD to audio clips',
+    note: '18,264 clips, 74 labels, stratified splits',
+  },
+  { phase: 'Train', label: '34 runs, 11 rounds', note: 'A100 and L4, one GPU per run' },
+  {
+    phase: 'Evaluate',
+    label: 'Macro-F1 and embeddings',
+    note: 'full data, low data, centroid shift',
+  },
+  { phase: 'Write', label: 'MSc thesis', note: 'LIACS, Leiden University, June 2025' },
+  { phase: 'Publish', label: 'ISMIR 2025', note: 'Late-Breaking Demo, Daejeon' },
+  { phase: 'Release', label: 'Code and notebooks', note: 'public on GitHub' },
+];
+
 let n = 0;
 const idx = () => String(++n).padStart(2, '0');
 ---
@@ -38,9 +135,9 @@ const idx = () => String(++n).padStart(2, '0');
     slug="groove"
     title={d.title}
     summary={d.summary}
-    status={d.status}
     thesisLabel="The question"
-    thesis={GROOVE.question}
+    thesis={d.thesis}
+    pubs={pubs}
     tools={[
       'Python',
       'PyTorch',
@@ -57,15 +154,7 @@ const idx = () => String(++n).padStart(2, '0');
       'matplotlib / seaborn',
       'Plotly',
     ]}
-  >
-    <div class="g-actions">
-      <a class="btn btn-primary" href={gpage('/experiments')}>Explore the results</a>
-      <a class="btn" href={ASSETS.thesisPdf}>Read the thesis</a>
-      <a class="btn" href={ASSETS.lbdPdf}>ISMIR paper</a>
-      <a class="btn" href={LINKS.video} rel="noopener">Watch the talk</a>
-      <a class="btn" href={LINKS.repo} rel="noopener">View code</a>
-    </div>
-  </ProjectHero>
+  />
 
   <Section
     index={idx()}
@@ -112,11 +201,11 @@ const idx = () => String(++n).padStart(2, '0');
           <h3>Cloud GPU training</h3>
         </header>
         <p>
-          34 runs across 11 rounds on NVIDIA A100 and L4 GPUs in Google Colab, with CUDA device
-          placement and PyTorch Lightning for the PaSST runs. Adam, batch 16, up to 50 epochs, early
-          stopping.
+          34 supervised training runs across 11 rounds on NVIDIA A100 and L4 GPUs in Google Colab,
+          with CUDA device placement and PyTorch Lightning for the PaSST runs. Adam at 1 × 10⁻⁴,
+          batch 16, up to 50 epochs, early stopping.
         </p>
-        <p class="mw-result">15 runs on A100, 15 on L4 · 3 to 8 hours each</p>
+        <p class="mw-result">16 runs on A100, 15 on L4 · 45 min to 17.5 h each</p>
       </article>
       <article class="g-card mw">
         <header>
@@ -124,7 +213,7 @@ const idx = () => String(++n).padStart(2, '0');
           <h3>Inputs and augmentation</h3>
         </header>
         <p>
-          Two input pipelines from one set of clips: 16 kHz log mel spectrograms for the CNN, 32 kHz
+          Two input pipelines from one set of clips: 16 kHz mel spectrograms for the CNN, 32 kHz
           audio padded to 10 s for PaSST. Gaussian noise, room simulation and time stretch, plus
           three padding modes.
         </p>
@@ -136,6 +225,57 @@ const idx = () => String(++n).padStart(2, '0');
         >experiment explorer</a
       >; the full protocol is on <a href={gpage('/method')}>Method</a>.
     </p>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="The ML method"
+    title="Probing a frozen transformer against training from scratch"
+    id="method"
+  >
+    <p class="g-text method-lead">
+      The title names the method. Probing trains only a small head on a frozen pretrained model to
+      measure what pretraining already encodes; it is the lightest form of transfer learning, set
+      here against supervised training of a CNN from scratch.
+    </p>
+    <MethodTable rows={methodRows} />
+    <div class="g-grid3 g-gap">
+      {
+        practices.map((pr) => (
+          <div class="g-card practice">
+            <h3>{pr.title}</h3>
+            <p>{pr.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Running the experiments"
+    title="34 GPU runs, and how they scale"
+    id="scaling"
+  >
+    <div class="g-grid2">
+      {
+        scaling.map((sc) => (
+          <div class="g-card practice">
+            <h3>{sc.title}</h3>
+            <p>{sc.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Research to production"
+    title="From a dataset to a public release"
+    id="pipeline"
+  >
+    <ResearchPipeline steps={pipeline} />
   </Section>
 
   <Section index={idx()} label="Presentation" title="Watch the talk" id="demo">
@@ -229,7 +369,7 @@ const idx = () => String(++n).padStart(2, '0');
   >
     <div class="versus">
       <ModelCard model="cnn" tag="learned from scratch">
-        <li>Log mel spectrogram input at 16 kHz</li>
+        <li>Mel spectrogram input at 16 kHz</li>
         <li>Stacked local convolutional filters</li>
         <li>VGG style, adapted for drums</li>
         <li>Best configuration: <strong>7 convolutional layers</strong></li>
@@ -287,9 +427,9 @@ const idx = () => String(++n).padStart(2, '0');
       <div>
         <p class="g-text">
           Beyond F1, the two models organize drum style differently. PaSST shows tighter clustering
-          by primary style and smaller mean centroid shifts under perturbation, evidence of a more
-          hierarchical embedding. The CNN leans on local features and is more sensitive to class
-          imbalance.
+          by primary style and smaller mean centroid shifts across augmentation and padding
+          variants, evidence of a more hierarchical embedding. The CNN leans on local features and
+          is more sensitive to class imbalance.
         </p>
         <p class="g-text">
           <a class="g-more" href={gpage('/representations')}>See the representation analysis →</a>
@@ -309,6 +449,10 @@ const idx = () => String(++n).padStart(2, '0');
     <ul class="g-list g-list-2">
       <li>Labels derive from dataset style tags, with ambiguous, overlapping genre boundaries.</li>
       <li>The 74 class target is imbalanced; rock dominates.</li>
+      <li>
+        Splits are stratified by style, not grouped by drummer, so segments of one performance can
+        sit on both sides.
+      </li>
       <li>Two bar clips omit longer musical structure.</li>
       <li>PaSST was used <strong>frozen</strong>, not finetuned, which limits task adaptation.</li>
       <li>Results are specific to GMD and its rendering conditions.</li>
@@ -325,6 +469,19 @@ const idx = () => String(++n).padStart(2, '0');
     count={timeline.length}
   >
     <Timeline events={timeline} />
+  </Section>
+
+  <Section
+    index={idx()}
+    label="Keywords"
+    title="Topics, methods and venues"
+    id="keywords"
+    collapsible
+    meta={`${d.keywords.length} terms`}
+  >
+    <ul class="keywords">
+      {d.keywords.map((k) => <li class="chip">{k}</li>)}
+    </ul>
   </Section>
 
   <Section
@@ -461,5 +618,31 @@ const idx = () => String(++n).padStart(2, '0');
 
   .pub .g-actions {
     margin-top: var(--sp-5);
+  }
+
+  .method-lead {
+    max-width: 64ch;
+    margin-bottom: var(--sp-5);
+  }
+  .practice h3 {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .practice p {
+    margin-top: 0.45rem;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .keywords {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
   }
 </style>

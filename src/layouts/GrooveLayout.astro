@@ -9,6 +9,7 @@ import '../styles/groove.css';
 import GrooveNav from '../components/groove/GrooveNav.astro';
 import NextProject from '../components/NextProject.astro';
 import { GROOVE, PUBLICATION, gpage } from '../lib/groove';
+import { getEntry } from 'astro:content';
 
 interface Props {
   /** Page name for the <title>; the overview omits it. */
@@ -23,6 +24,7 @@ interface Props {
 }
 const { title, description = GROOVE.description, current, label, heading, lede } = Astro.props;
 const pageTitle = title ? `${title} · ${GROOVE.title}` : GROOVE.title;
+const keywords = (await getEntry('projects', 'groove'))?.data.keywords ?? [];
 
 const jsonld = {
   '@context': 'https://schema.org',
@@ -35,18 +37,11 @@ const jsonld = {
   publisher: { '@type': 'Organization', name: 'Leiden University' },
   inLanguage: 'en',
   url: Astro.site ? new URL(gpage('/'), Astro.site).href : gpage('/'),
-  keywords: [
-    'music information retrieval',
-    'transfer learning',
-    'drum classification',
-    'PaSST',
-    'CNN',
-    'deep learning',
-  ],
+  keywords: keywords.join(', '),
 };
 ---
 
-<BaseLayout title={pageTitle} description={description} accent="groove">
+<BaseLayout title={pageTitle} description={description} accent="groove" keywords={keywords}>
   <Fragment slot="head">
     <meta name="citation_title" content={GROOVE.title} />
     <meta name="citation_author" content="Eriksen, Trent" />

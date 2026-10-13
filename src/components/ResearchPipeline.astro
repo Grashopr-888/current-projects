@@ -1,0 +1,100 @@
+---
+/** Research to production: the path a project took from first experiment to the thing in use,
+ *  one short step each, tagged with its phase. CSS only; steps wrap on narrow screens. */
+interface Step {
+  phase: string;
+  label: string;
+  note?: string;
+}
+interface Props {
+  steps: Step[];
+  caption?: string;
+}
+const { steps, caption } = Astro.props;
+---
+
+<figure class="rp">
+  <ol class="rp-steps" style={`--n: ${steps.length}`}>
+    {
+      steps.map((s, i) => (
+        <li class="rp-step">
+          <span class="rp-phase">
+            <span class="rp-num">{i + 1}</span>
+            {s.phase}
+          </span>
+          <span class="rp-label">{s.label}</span>
+          {s.note && <span class="rp-note">{s.note}</span>}
+        </li>
+      ))
+    }
+  </ol>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .rp {
+    margin: 0;
+  }
+  .rp-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+    gap: var(--sp-3);
+  }
+  /* Wide screens: the whole path on one row. */
+  @media (min-width: 72rem) {
+    .rp-steps {
+      grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    }
+  }
+  .rp-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: var(--sp-4);
+    border: var(--hair) solid var(--hairline);
+    border-top: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .rp-phase {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .rp-num {
+    display: grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--accent) 16%, transparent);
+    font-size: 0.64rem;
+    flex: none;
+  }
+  .rp-label {
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .rp-note {
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .rp figcaption {
+    margin-top: var(--sp-3);
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+</style>

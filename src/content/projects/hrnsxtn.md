@@ -13,10 +13,10 @@ collaborators:
   - Radu-Alex Ceban
   - Jazz Calls Home
 thesis: >-
-  A neural model too big for a device does not have to shrink; it has to think
-  less often. Run the heavy model offline, distill its judgment into something
-  tiny, and put decisions at 10 Hz so the audio thread only ever plays real
-  recordings.
+  Can a tiny student distilled from a neural codec choose sounds as the codec would, on a
+  pedal with no neural accelerator? A 103k parameter student keeps music2latent's
+  similarity ordering (Spearman ρ .83) at about 1% of each analysis, so the audio thread
+  only ever plays real recordings.
 problem: >-
   The instrument was built around music2latent, a 58M parameter neural codec
   that measures slower than real time on a laptop CPU, and the target is a
@@ -37,7 +37,7 @@ constraints:
   - The embedded C++ must reproduce the Python research instrument exactly; its selections are the sound
 outcomes:
   - '1st place, Elk Audio Challenge; 2nd place, Roland Future Design Lab Challenge (Music Hackspace × MUTEK, Montréal 2026)'
-  - 'Accepted to the ISMIR 2026 Late-Breaking Demo session (Abu Dhabi, November 2026); code, board logs and notebooks are public'
+  - 'Published at ISMIR 2026, the leading music information retrieval conference (Late-Breaking Demo, Abu Dhabi, November 2026); code, board logs and notebooks are public'
   - 58M parameter codec replaced at the input by a distilled 103k parameter student (560× smaller) that keeps its similarity ordering (Spearman ρ .83)
   - 'Runs on the Elk Stomp itself, no laptop in the signal path: the student takes about 1% of each 93 ms analysis, and every analysis finished on time'
   - An 8 bit matching table made the corpus search 2.6 to 3.1 times faster with the ordering unchanged; golden parity held at 200/200 identical grain selections
@@ -71,6 +71,25 @@ skills:
   - Cross compilation (Docker, 32 bit ARM)
   - Granular synthesis
   - Evaluation design
+keywords:
+  - knowledge distillation
+  - post training compression
+  - teacher and student models
+  - neural audio codec
+  - music2latent
+  - embedded machine learning
+  - on device inference
+  - RTNeural
+  - int8 quantization
+  - realtime audio
+  - ARM NEON
+  - Elk Audio OS
+  - JUCE
+  - granular synthesis
+  - corpus based synthesis
+  - music information retrieval
+  - ISMIR 2026 Late-Breaking Demo
+  - MUTEK hackathon
 ---
 
 ## The opportunity
@@ -107,4 +126,4 @@ settings the original instrument agrees with itself on only 2.6% of picks across
 the right measure is regret, and the student lands in the teacher's top 4–7% of candidates
 (a raw MFCC baseline fails outright at 15–18%). In September the instrument went onto the pedal
 itself, every analysis stage was timed on the board, and the study became a Late-Breaking Demo
-accepted at ISMIR 2026. What remains open is a blind listening verdict. The prototyping before the hackathon (the studio interface with its live map of 17,000 grains) is in the research notes below.
+published at ISMIR 2026. What remains open is a blind listening verdict. The prototyping before the hackathon (the studio interface with its live map of 17,000 grains) is in the research notes below.

@@ -9,8 +9,9 @@ role: Built solo (product, engineering and research); the NeurIPS paper is coaut
 collaborators:
   - Celeste Betancur (CCRMA, Stanford University), coauthor of the NeurIPS 2026 paper
 thesis: >-
-  Retrieval, not generation, is the honest interface between a voice and a sound library:
-  answer with real material, in real time, and never go silent.
+  Can a frozen audio language model curate instead of generate? Windchime answers speech
+  with real stems from an artist authored corpus, so agency splits three ways: the artist
+  authors, the model orders access, and the visitor's voice drives each turn.
 problem: >-
   Audio language models act as retrieval curators over a closed, artist authored corpus; nothing
   is synthesized. The artist authors, the visitor initiates, the model orders access. That split
@@ -63,6 +64,25 @@ skills:
   - Generative visuals (p5.js, Three.js)
   - Hardware control (monome)
   - Offline, unattended deployment
+keywords:
+  - audio language models
+  - CLAP
+  - CLaMP 3
+  - zero shot retrieval
+  - contrastive pretraining
+  - text to audio retrieval
+  - FAISS vector search
+  - speech recognition (faster-whisper)
+  - structured outputs
+  - LLM planner
+  - live coding (Strudel)
+  - generative visuals
+  - interactive installation
+  - creative AI
+  - human and AI agency
+  - NeurIPS 2026 Creative AI Track
+  - Stanford CCRMA
+  - Gray Area
 ---
 
 ## The idea

@@ -10,11 +10,9 @@ role: Product & engineering lead on a hackathon team, then solo consolidation
 collaborators:
   - A small hackathon team
 thesis: >-
-  A performer should not have to learn a second craft to have visuals. Lichtspiel
-  derives musical features from the Ableton set itself through an MIR pipeline,
-  then uses those features plus natural language prompts to generate code based
-  p5.js animation, so the set drives set aware visuals with no node based tool
-  like TouchDesigner to learn and no model call on the performance path.
+  Can a performer get set aware visuals without learning a second craft? Lichtspiel reads
+  the Ableton set through an MIR pipeline and has an LLM write p5.js scenes at authoring
+  time, behind a five gate verifier, so no model call ever sits on the performance path.
 problem: >-
   Performers in Ableton have no way to drive expressive, code native visuals that
   understand the structure of their set (clips, scenes, sections) rather than
@@ -62,6 +60,22 @@ skills:
   - LLM authoring behind validation gates
   - Audio analysis (CLAP, librosa)
   - Hardware control (monome)
+keywords:
+  - LLM code generation
+  - verifier in the loop
+  - self repair
+  - Ableton Live
+  - Max for Live
+  - music information retrieval
+  - CLAP
+  - librosa
+  - p5.js
+  - generative visuals
+  - live audiovisual performance
+  - monome
+  - WebSocket bridge
+  - Berklee AIMS 2026
+  - Music Hackspace hackathon
 ---
 
 ## The opportunity: not another VJ plugin

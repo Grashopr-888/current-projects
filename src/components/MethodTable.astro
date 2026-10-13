@@ -1,0 +1,99 @@
+---
+/** The ML method a project chose, against the alternatives it weighed. One row per option:
+ *  a verdict chip and a single line of why. The chosen row is highlighted. */
+export type MethodRow = {
+  option: string;
+  verdict: 'chosen' | 'compared' | 'baseline' | 'rejected' | 'next';
+  why: string;
+};
+interface Props {
+  rows: MethodRow[];
+}
+const { rows } = Astro.props;
+const VERDICT: Record<MethodRow['verdict'], string> = {
+  chosen: 'Chosen',
+  compared: 'Compared',
+  baseline: 'Baseline',
+  rejected: 'Ruled out',
+  next: 'Next step',
+};
+---
+
+<div class="mt" role="table" aria-label="Methods considered">
+  {
+    rows.map((r) => (
+      <div class:list={['mt-row', `mt-${r.verdict}`]} role="row">
+        <span class="mt-option" role="cell">
+          {r.option}
+        </span>
+        <span class="mt-verdict" role="cell">
+          {VERDICT[r.verdict]}
+        </span>
+        <span class="mt-why" role="cell">
+          {r.why}
+        </span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .mt {
+    display: flex;
+    flex-direction: column;
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .mt-row {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) 6.5rem minmax(0, 1fr);
+    gap: var(--sp-4);
+    align-items: baseline;
+    padding: var(--sp-3) var(--sp-4);
+  }
+  .mt-row + .mt-row {
+    border-top: var(--hair) solid var(--hairline);
+  }
+  .mt-chosen,
+  .mt-compared {
+    background: color-mix(in oklab, var(--accent) 9%, var(--surface));
+  }
+  .mt-option {
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .mt-verdict {
+    justify-self: start;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.18rem 0.55rem;
+    border-radius: 100px;
+    border: var(--hair) solid var(--hairline-strong);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .mt-chosen .mt-verdict,
+  .mt-compared .mt-verdict {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .mt-why {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  @media (max-width: 720px) {
+    .mt-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--sp-2) var(--sp-3);
+    }
+    .mt-why {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

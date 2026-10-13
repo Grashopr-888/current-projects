@@ -57,6 +57,8 @@ const projects = defineCollection({
       tech: z.array(z.string()).default([]),
       languages: z.array(z.string()).default([]), // exhaustive programming-language list
       skills: z.array(z.string()).default([]), // core skills, shown under Languages on the card
+      // Search terms: a collapsed Keywords list on the project page, plus meta keywords and JSON-LD.
+      keywords: z.array(z.string()).default([]),
       hero: image().optional(),
       related_research: z.array(reference('research')).default([]),
       related_decisions: z.array(reference('decisions')).default([]),
@@ -232,6 +234,8 @@ const glossary = defineCollection({
   schema: z.object({
     term: z.string(),
     product: product.optional(),
+    /** `methods`: an ML research method used across projects; groups it under Training and data. */
+    area: z.enum(['methods']).optional(),
     definition: z.string(),
     related: z.array(z.string()).default([]),
   }),
