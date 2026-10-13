@@ -34,6 +34,10 @@ const asideCaption = 'asideCaption' in meta ? meta.asideCaption : undefined;
    to no image rather than a broken one. `public/` is served from the root. */
 const hasAsset = (p?: string): boolean =>
   !!p && existsSync(new URL(`../../public${p}`, import.meta.url));
+
+/* The venue band: the conference's own imagery tiled behind the logo strip. */
+const band = 'venueBand' in meta ? meta.venueBand : undefined;
+const bandImages = band ? band.images.filter((im) => hasAsset(im.src)) : [];
 ---
 
 <header class="phero">
@@ -98,15 +102,34 @@ const hasAsset = (p?: string): boolean =>
     </div>
     {
       'partners' in meta && (
-        <div class="phero-partners" aria-label="Venues, events and affiliations">
-          {meta.partners.map((p) => (
-            <span
-              class:list={['partner-chip', { 'partner-dark': 'dark' in p && p.dark }]}
-              style={'scale' in p ? `--logo-scale: ${p.scale}` : undefined}
-            >
-              <img src={url(p.img)} alt={p.alt} loading="lazy" />
-            </span>
-          ))}
+        <div
+          class:list={['phero-band', { 'phero-band-on': bandImages.length > 0 }]}
+          style={`--tiles: ${Math.max(bandImages.length, 1)}`}
+        >
+          {bandImages.length > 0 && (
+            <div class="phero-band-tiles">
+              {bandImages.map((im) => (
+                <img
+                  src={url(im.src)}
+                  alt={im.alt}
+                  loading="lazy"
+                  style={'focus' in im ? `object-position: ${im.focus}` : undefined}
+                />
+              ))}
+            </div>
+          )}
+          {band && bandImages.length > 0 && <p class="phero-band-label">{band.label}</p>}
+          <div class="phero-partners" aria-label="Venues, events and affiliations">
+            {meta.partners.map((p) => (
+              <span
+                class:list={['partner-chip', { 'partner-dark': 'dark' in p && p.dark }]}
+                style={'scale' in p ? `--logo-scale: ${p.scale}` : undefined}
+              >
+                <img src={url(p.img)} alt={p.alt} loading="lazy" />
+              </span>
+            ))}
+          </div>
+          {band && bandImages.length > 0 && <p class="phero-band-credit">{band.credit}</p>}
         </div>
       )
     }
@@ -319,6 +342,88 @@ const hasAsset = (p?: string): boolean =>
     padding: 0.2rem 0.6rem;
     border: var(--hair) solid var(--hairline-strong);
     border-radius: 100px;
+  }
+
+  /* Venue band: the conference's photos tiled behind the logos, under a dark scrim so the
+     marks stay legible. Without images it is a plain wrapper and the strip looks as before. */
+  .phero-band-on {
+    position: relative;
+    isolation: isolate;
+    margin-top: 1.6rem;
+    min-height: 13rem;
+    padding: var(--sp-4) var(--sp-5) var(--sp-5);
+    display: flex;
+    flex-direction: column;
+    border: var(--hair) solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #0d0d10;
+  }
+  .phero-band-tiles {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    display: grid;
+    grid-template-columns: repeat(var(--tiles), minmax(0, 1fr));
+    /* One row exactly the band's height, so each photo crops around its focal point. */
+    grid-template-rows: minmax(0, 1fr);
+    gap: 3px;
+    background: #0d0d10;
+  }
+  .phero-band-tiles img {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+    display: block;
+  }
+  /* Scrim: darker on the left where the label sits, lighter toward the photos' right edge. */
+  .phero-band-on::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(10, 10, 14, 0.66) 0%,
+        rgba(10, 10, 14, 0.18) 40%,
+        rgba(10, 10, 14, 0.18) 70%,
+        rgba(10, 10, 14, 0.7) 100%
+      ),
+      linear-gradient(90deg, rgba(10, 10, 14, 0.3), rgba(10, 10, 14, 0) 60%);
+  }
+  .phero-band-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #fff;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+  }
+  .phero-band-on .phero-partners {
+    margin-top: var(--sp-4);
+  }
+  .phero-band-on .partner-chip {
+    box-shadow: 0 6px 22px -8px rgba(0, 0, 0, 0.6);
+  }
+  .phero-band-credit {
+    margin-top: auto;
+    padding-top: var(--sp-4);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.72);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  }
+  @media (max-width: 720px) {
+    .phero-band-on {
+      padding: var(--sp-3) var(--sp-3) var(--sp-4);
+    }
+    /* Stack the photos on phones so each stays recognizable. */
+    .phero-band-tiles {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: repeat(var(--tiles), minmax(0, 1fr));
+    }
   }
 
   /* Partner marks in the hero: attribution strip, not decoration. */

@@ -82,6 +82,20 @@ export const PROJECT_META = {
       },
       { img: '/img/logo-stanford-block-s.png', alt: 'Stanford University' },
     ],
+    // Venue band behind the logos: the conference's own imagery (owner request 2026-10-12;
+    // sydney_hero.jpg from neurips.cc, resized). Credit shown on the band.
+    venueBand: {
+      label: 'Published at NeurIPS 2026 · Sydney, Australia · December',
+      credit: 'Image: NeurIPS 2026 website',
+      images: [
+        {
+          src: '/img/venue-neurips2026-sydney.jpg',
+          alt: 'Sydney Opera House across the harbour, from the NeurIPS 2026 website',
+          // Focal point for the band's crop.
+          focus: 'center 64%',
+        },
+      ],
+    },
     partnersNote:
       "Paper coauthored with Celeste Betancur of CCRMA, Stanford University's Center for Computer " +
       'Research in Music and Acoustics, a leading center for computer music since 1975.',
@@ -107,6 +121,27 @@ export const PROJECT_META = {
       { img: '/img/logo-musichackspace.png', alt: 'Music Hackspace' },
       { img: '/img/logo-berklee.svg', alt: 'Berklee College of Music', scale: 0.5 },
     ],
+    // Venue band (owner request 2026-10-12): Berklee's own campus photo (college.berklee.edu,
+    // EXIF credit Kelly Davidson) and the Back Bay skyline from Wikimedia Commons
+    // (Bostonstraight.jpg, Riptor3000, CC BY-SA 3.0; resized). The event pages had no Boston
+    // photos without identifiable people.
+    venueBand: {
+      label: 'Built at the AIMS 2026 hackathon · Berklee College of Music, Boston · June 6–7',
+      credit:
+        'Images: Berklee College of Music, photo by Kelly Davidson; Back Bay by Riptor3000, CC BY-SA 3.0, Wikimedia Commons',
+      images: [
+        {
+          src: '/img/venue-aims2026-berklee-night.jpg',
+          alt: "Berklee College of Music's Massachusetts Avenue building at night, the Prudential Tower behind",
+          focus: 'center 45%',
+        },
+        {
+          src: '/img/venue-aims2026-back-bay.jpg',
+          alt: 'The Back Bay skyline over the Charles River, Boston',
+          focus: 'center 45%',
+        },
+      ],
+    },
   },
   hrnsxtn: {
     label: 'HRNSXTN x RDMSXN',
@@ -140,6 +175,26 @@ export const PROJECT_META = {
         scale: 0.55,
       },
     ],
+    // Venue band: two photos from the ISMIR 2026 site's carousel (owner request 2026-10-12).
+    // Qasr Al Hosn is credited there to Lucas Hemingway (Unsplash); the Louvre photo carries no credit.
+    venueBand: {
+      label: 'Published at ISMIR 2026 · Abu Dhabi, UAE · November 8–12',
+      credit: 'Images: ISMIR 2026 website; Qasr Al Hosn by Lucas Hemingway, Unsplash',
+      images: [
+        {
+          src: '/img/venue-ismir2026-qasr-al-hosn.jpg',
+          alt: 'Qasr Al Hosn in front of the Abu Dhabi skyline, from the ISMIR 2026 website',
+          // Focal point for the band's crop.
+          focus: 'center 58%',
+        },
+        {
+          src: '/img/venue-ismir2026-louvre.jpg',
+          alt: 'The Louvre Abu Dhabi dome with the city skyline, from the ISMIR 2026 website',
+          // Focal point for the band's crop.
+          focus: 'center 62%',
+        },
+      ],
+    },
   },
   groove: {
     label: 'Probing the World for Groove',
@@ -172,6 +227,25 @@ export const PROJECT_META = {
       { img: '/img/logo-liacs.jpg', alt: 'LIACS, Leiden Institute of Advanced Computer Science' },
       { img: '/img/logo-melly.png', alt: 'Kunstinstituut Melly', scale: 1.25 },
     ],
+    // Venue band: two banner photos from ismir2025.ismir.net (owner request 2026-10-12).
+    venueBand: {
+      label: 'Presented at ISMIR 2025 · KAIST, Daejeon, South Korea · September 21–25',
+      credit: 'Images: ISMIR 2025 website',
+      images: [
+        {
+          src: '/img/venue-ismir2025-daejeon.jpg',
+          alt: 'Daejeon skyline at night across the river, from the ISMIR 2025 website',
+          // Focal point for the band's crop.
+          focus: 'center 62%',
+        },
+        {
+          src: '/img/venue-ismir2025-kaist.jpg',
+          alt: 'KAIST campus with a fountain, from the ISMIR 2025 website',
+          // Focal point for the band's crop.
+          focus: 'center 60%',
+        },
+      ],
+    },
   },
 } as const;
 
