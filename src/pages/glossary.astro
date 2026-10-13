@@ -10,7 +10,7 @@ const all = (await getCollection('glossary')).sort((a, b) =>
 const nameBySlug = new Map(all.map((t) => [t.id, t.data.term]));
 
 type Group = {
-  key: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove' | 'shared';
+  key: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove' | 'methods' | 'shared';
   label: string;
   blurb: string;
 };
@@ -23,17 +23,25 @@ const GROUPS: Group[] = [
     label: 'Probing the World for Groove',
     blurb: 'Transfer learning, evaluation, and drum style.',
   },
+  {
+    key: 'methods',
+    label: 'Training, data and evaluation',
+    blurb: 'Post training, data engineering, GPU training and evaluation, across the projects.',
+  },
   { key: 'shared', label: 'Shared', blurb: 'Hardware, reliability, and process.' },
 ];
+/* A cross project method (area: methods) groups under Training, data and evaluation. */
+const groupOf = (t: (typeof all)[number]): Group['key'] =>
+  t.data.area ?? t.data.product ?? 'shared';
 const grouped = GROUPS.map((g) => ({
   ...g,
-  terms: all.filter((t) => (t.data.product ?? 'shared') === g.key),
+  terms: all.filter((t) => groupOf(t) === g.key),
 }));
 ---
 
 <BaseLayout
   title="Glossary"
-  description="Plain language definitions of the terms used across Windchime, Lichtspiel, HRNSXTN x RDMSXN and Probing the World for Groove: audio language models, retrieval, distillation, transfer learning, and more."
+  description="Plain language definitions of the terms used across Windchime, Lichtspiel, HRNSXTN x RDMSXN and Probing the World for Groove: audio language models, retrieval, knowledge distillation, transfer learning, finetuning, data engineering, GPU training and evaluation."
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Glossary</p>

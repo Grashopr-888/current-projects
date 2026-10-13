@@ -328,6 +328,7 @@ hr {
   --accent-soft: var(--gr-soft);
 }
 [data-accent='shared'],
+[data-accent='methods'],
 [data-accent='brand'] {
   --accent: var(--brand);
   --accent-soft: var(--brand-soft);
