@@ -9,9 +9,11 @@ role: Built solo (product, engineering and research); the NeurIPS paper is coaut
 collaborators:
   - Celeste Betancur (CCRMA, Stanford University), coauthor of the NeurIPS 2026 paper
 thesis: >-
-  Can a frozen audio language model curate instead of generate? Windchime answers speech
-  with real stems from an artist authored corpus, so agency splits three ways: the artist
-  authors, the model orders access, and the visitor's voice drives each turn.
+  Spoken prompts retrieve music and interactive animation from an artist authored corpus:
+  each is transcribed on device, embedded by an audio language model and matched against
+  406 stems, returning a live coded mix and a Three.js scene played on monome hardware.
+  Agency splits three ways, between the artist who authored every output, the model that
+  shapes what is reachable, and the visitor whose voice drives each turn.
 problem: >-
   Audio language models act as retrieval curators over a closed, artist authored corpus; nothing
   is synthesized. The artist authors, the visitor initiates, the model orders access. That split
