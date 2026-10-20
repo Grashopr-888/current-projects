@@ -167,7 +167,7 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         detail:
           'Musicians, educators, researchers and industry on how AI is changing music creation, production, performance and learning.',
         logo: { src: '/img/logo-aims2026.jpg', alt: 'AIMS 2026, Berklee AI Music Summit' },
-        links: [{ label: 'AIMS 2026 at Berklee', href: 'https://www.berklee.edu/beatl/aims-2026' }],
+        links: [{ label: 'AIMS 2026 page', href: 'https://www.berklee.edu/beatl/aims-2026' }],
       },
       {
         name: 'Boston Hackathon 26 · Music Hackspace',
@@ -210,7 +210,11 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         logo: { src: '/img/logo-ismir2026.png', alt: 'ISMIR 2026, Abu Dhabi' },
         links: [
           {
-            label: 'Paper, code and measurements on GitHub',
+            label: 'ISMIR 2026 page',
+            href: 'https://ismir2026program.ismir.net/lbd_679.html#paper',
+          },
+          {
+            label: 'GitHub repo',
             href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
           },
         ],
@@ -243,7 +247,7 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         links: [
           { label: 'Read it on OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
           {
-            label: 'NeurIPS 2026 program',
+            label: 'NeurIPS 2026 page',
             href: 'https://neurips.cc/virtual/2026/loc/sydney/160685',
           },
         ],
@@ -258,7 +262,7 @@ const PUBS: Partial<Record<Product, Pubs>> = {
     label: 'Published at NeurIPS 2026 · Creative AI Track',
     links: [
       {
-        label: 'NeurIPS 2026 program',
+        label: 'NeurIPS 2026 page',
         href: 'https://neurips.cc/virtual/2026/loc/sydney/160685',
         primary: true,
       },
@@ -266,25 +270,34 @@ const PUBS: Partial<Record<Product, Pubs>> = {
     ],
   },
   hrnsxtn: {
-    label: 'Published at ISMIR 2026 · Late-Breaking Demo',
+    label: 'Winners at Music Hackspace × MUTEK · Published at ISMIR 2026',
     links: [
       {
-        label: 'Paper, code and board logs',
-        href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
+        // Music Hackspace's Montréal hackathon page, which lists the winners: 1st, Elk Audio;
+        // 2nd, Roland. MUTEK Forum's Winners Showcase listing stays in the program gallery.
+        label: 'MUTEK 2026 page',
+        href: 'https://musichackspace.org/events/hackathon-montreal-august-2026',
         primary: true,
       },
-      { label: 'ISMIR 2026 program', pending: 'link in November, at the conference' },
+      {
+        label: 'ISMIR 2026 page',
+        href: 'https://ismir2026program.ismir.net/lbd_679.html#paper',
+      },
+      {
+        label: 'GitHub repo',
+        href: 'https://github.com/Grashopr-888/ISMIR_LBD_2026_submission',
+      },
     ],
   },
   lichtspiel: {
     label: 'Built at the Music Hackspace Boston Hackathon · AIMS 2026, Berklee',
     links: [
       {
-        label: 'Music Hackspace hackathon page',
+        label: 'Music Hackspace page',
         href: 'https://musichackspace.org/events/hackathon-boston-june-2026',
         primary: true,
       },
-      { label: 'AIMS 2026 at Berklee', href: 'https://www.berklee.edu/beatl/aims-2026' },
+      { label: 'AIMS 2026 page', href: 'https://www.berklee.edu/beatl/aims-2026' },
     ],
   },
 };

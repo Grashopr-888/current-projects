@@ -18,6 +18,8 @@ implications:
   - For large corpora the search, not the network, sets how short the analysis period can be
   - Onsets are the weakest frames; an ordering term in the loss is the next step
 evidence_links:
+  - label: ISMIR 2026 page
+    href: https://ismir2026program.ismir.net/lbd_679.html#paper
   - label: Paper, code, board logs and notebooks
     href: https://github.com/Grashopr-888/ISMIR_LBD_2026_submission
 tags: [distillation, embedded-ml, ismir]
