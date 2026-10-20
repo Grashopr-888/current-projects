@@ -53,6 +53,7 @@
   --ink-soft: #e5e5e8;
   --muted: #a6a8ad;
   --faint: #86888f;
+  --ascii-ink: #7b7e86; /* the contour field's lines (AsciiFields.astro): just under --faint */
   --hairline: #2b2c30;
   --hairline-strong: #3d3f45;
 
@@ -480,4 +481,30 @@ hr {
   overflow-x: auto;
   font-size: 0.84em;
   line-height: 1.5;
+}
+
+/* ---- asciify contour field (AsciiFields.astro) ----------------------------- */
+/* The host keeps the field in its own stacking context and clips the veil. Copy over the
+   field sits on a frosted veil that fades toward the characters (asciify's clear zone +
+   veil), so text never sits on raw lines. */
+[data-contour] {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+[data-contour-clear] {
+  position: relative;
+  isolation: isolate;
+}
+[data-contour-clear]::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -36px -64px;
+  pointer-events: none;
+  background: color-mix(in oklab, var(--bg) 62%, transparent);
+  -webkit-backdrop-filter: blur(9px) saturate(1.1);
+  backdrop-filter: blur(9px) saturate(1.1);
+  -webkit-mask-image: radial-gradient(closest-side, #000 52%, rgb(0 0 0 / 0.6) 74%, transparent);
+  mask-image: radial-gradient(closest-side, #000 52%, rgb(0 0 0 / 0.6) 74%, transparent);
 }

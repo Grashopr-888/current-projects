@@ -44,11 +44,11 @@ const band = 'venueBand' in meta ? meta.venueBand : undefined;
 const bandImages = band ? band.images.filter((im) => hasAsset(im.src)) : [];
 ---
 
-<header class="phero">
+<header class="phero" data-contour>
   <div class="container">
     <a class="phero-back plain" href={url('/projects')}>← All projects</a>
     <div class="phero-cols">
-      <div class="phero-main">
+      <div class="phero-main" data-contour-clear>
         <div class="phero-top">
           <span class="phero-kind">{meta.kind}</span>
         </div>

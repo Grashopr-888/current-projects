@@ -7,6 +7,7 @@ import '../styles/global.css';
 
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import AsciiFields from '../components/AsciiFields.astro';
 import { SITE } from '../config';
 import { url } from '../lib/url';
 
@@ -51,5 +52,6 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : As
       <slot />
     </main>
     <SiteFooter />
+    <AsciiFields />
   </body>
 </html>

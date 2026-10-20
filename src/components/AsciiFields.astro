@@ -1,0 +1,33 @@
+---
+/**
+ * The site's asciify backgrounds, mounted from markup. Owner requests 2026-10-19.
+ *
+ * - `[data-contour]`: the contour field (survey lines over a slowly shifting terrain)
+ *   behind the home hero and the project heroes. It fades out around the host's
+ *   `[data-contour-clear]` child, where a frosted veil sits behind the copy (global.css),
+ *   so text never sits on raw characters.
+ *
+ * It is inked from `--ascii-ink`, pauses off screen and in hidden tabs, holds a still
+ * frame under reduced motion, and leaves the page as it was without WebGL2; kit fields
+ * share one WebGL context. The engine is pinned in package.json and loaded only on pages
+ * that have a host.
+ */
+---
+
+<script>
+  const contourHosts = [...document.querySelectorAll<HTMLElement>('[data-contour]')];
+  if (contourHosts.length > 0) {
+    import('asciify-engine/kit').then(({ background, contour }) => {
+      for (const host of contourHosts) {
+        background(host, {
+          preset: contour,
+          clear: host.querySelector<HTMLElement>('[data-contour-clear]') ?? false,
+          // One ink for both grounds: the site is dark only, whatever the visitor's system says.
+          color: '--ascii-ink',
+          opacity: 0.85,
+          cursor: false,
+        });
+      }
+    });
+  }
+</script>

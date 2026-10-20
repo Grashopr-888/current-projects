@@ -60,12 +60,14 @@ const inherits = [
 ---
 
 <BaseLayout>
-  <section class="hero">
+  <section class="hero" data-contour>
     <div class="container hero-inner">
-      <h1 class="hero-title reveal" style="--d: 1">What I'm building right now.</h1>
-      <p class="hero-sub reveal measure" style="--d: 2">
-        Practice based, state of the art audio ML research and multimodal installations.
-      </p>
+      <div class="hero-copy" data-contour-clear>
+        <h1 class="hero-title reveal" style="--d: 1">What I'm building right now.</h1>
+        <p class="hero-sub reveal measure" style="--d: 2">
+          Practice based, state of the art audio ML research and multimodal installations.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -152,6 +154,11 @@ const inherits = [
   }
   .hero-eyebrow {
     color: var(--muted);
+  }
+  /* Hugs the two lines, so the contour field's clear zone fits the words. */
+  .hero-copy {
+    width: fit-content;
+    max-width: 100%;
   }
   .hero-title {
     margin-top: var(--sp-4);
