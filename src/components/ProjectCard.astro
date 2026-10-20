@@ -165,8 +165,29 @@ const partners = 'partners' in meta ? meta.partners : [];
     align-items: center;
     gap: var(--sp-3);
   }
-  .pcard-idrow:hover .pcard-title {
+  .pcard-idrow:hover .pcard-title,
+  .pcard:hover .pcard-title {
     color: var(--accent);
+  }
+  /* The whole card opens the project: the title link stretches over the card, and only
+     the Details toggle and Explore sit above it, so Details still opens in place. */
+  .pcard-idrow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .pcard-idrow:focus-visible {
+    outline: none;
+  }
+  .pcard:has(.pcard-idrow:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .pcard-more,
+  .pcard-go {
+    position: relative;
+    z-index: 2;
   }
   .pcard-logo {
     width: 2.2rem;
