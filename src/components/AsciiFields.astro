@@ -6,18 +6,22 @@
  *   behind the home hero and the project heroes. It fades out around the host's
  *   `[data-contour-clear]` child, where a frosted veil sits behind the copy (global.css),
  *   so text never sits on raw characters.
+ * - `[data-field="swell" | "drift"]`: a fainter field for the long part of a page below
+ *   its hero (FieldZone.astro): swell on the home page, drift on the project pages. Both
+ *   keep a quiet middle where the eye reads.
  *
- * It is inked from `--ascii-ink`, pauses off screen and in hidden tabs, holds a still
- * frame under reduced motion, and leaves the page as it was without WebGL2; kit fields
- * share one WebGL context. The engine is pinned in package.json and loaded only on pages
- * that have a host.
+ * All are inked from `--ascii-ink`, pause off screen and in hidden tabs, hold a still
+ * frame under reduced motion, and leave the page as it was without WebGL2; they share
+ * one WebGL context. The engine is pinned in package.json and loaded only on pages that
+ * have a host.
  */
 ---
 
 <script>
   const contourHosts = [...document.querySelectorAll<HTMLElement>('[data-contour]')];
-  if (contourHosts.length > 0) {
-    import('asciify-engine/kit').then(({ background, contour }) => {
+  const fieldHosts = [...document.querySelectorAll<HTMLElement>('[data-field]')];
+  if (contourHosts.length + fieldHosts.length > 0) {
+    import('asciify-engine/kit').then(({ background, contour, swell, drift }) => {
       for (const host of contourHosts) {
         background(host, {
           preset: contour,
@@ -25,6 +29,18 @@
           // One ink for both grounds: the site is dark only, whatever the visitor's system says.
           color: '--ascii-ink',
           opacity: 0.85,
+          cursor: false,
+        });
+      }
+      for (const host of fieldHosts) {
+        const isSwell = host.dataset.field === 'swell';
+        background(host, {
+          preset: isSwell ? swell : drift,
+          // Characters, like the contour above, rather than swell's default dots.
+          ...(isSwell ? { mark: 'glyph' as const } : {}),
+          color: '--ascii-ink',
+          // Fainter than the hero: this sits behind reading text and cards.
+          opacity: 0.3,
           cursor: false,
         });
       }

@@ -8,6 +8,7 @@ import BaseLayout from './BaseLayout.astro';
 import '../styles/groove.css';
 import GrooveNav from '../components/groove/GrooveNav.astro';
 import NextProject from '../components/NextProject.astro';
+import FieldZone from '../components/FieldZone.astro';
 import { GROOVE, PUBLICATION, gpage } from '../lib/groove';
 import { getEntry } from 'astro:content';
 
@@ -71,10 +72,12 @@ const jsonld = {
       )
     }
     <GrooveNav current={current} />
-    <div class="container gbody">
-      <slot />
-    </div>
-    <NextProject slug="groove" />
+    <FieldZone preset="drift">
+      <div class="container gbody">
+        <slot />
+      </div>
+      <NextProject slug="groove" />
+    </FieldZone>
   </article>
 </BaseLayout>
 

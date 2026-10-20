@@ -1,0 +1,40 @@
+---
+/**
+ * A quiet asciify background behind everything inside it, for the long part of a page
+ * below its hero (the contour hero keeps its own field). The field is one viewport tall
+ * and sticky, so it stays in view while the zone scrolls and a tall page needs only one
+ * small canvas. AsciiFields.astro mounts it from `data-field`. Owner request 2026-10-19.
+ */
+interface Props {
+  /** `swell` on the home page, `drift` on the project pages. */
+  preset: 'swell' | 'drift';
+}
+const { preset } = Astro.props;
+---
+
+<div class="field-zone">
+  <div class="field-track" aria-hidden="true">
+    <div class="field-stage" data-field={preset}></div>
+  </div>
+  <slot />
+</div>
+
+<style>
+  .field-zone {
+    position: relative;
+    isolation: isolate;
+  }
+  /* Spans the zone, under its content; the stage rides along inside it. */
+  .field-track {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .field-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+  }
+</style>

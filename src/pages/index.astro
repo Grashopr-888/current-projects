@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import Disclosure from '../components/Disclosure.astro';
+import FieldZone from '../components/FieldZone.astro';
 import { url } from '../lib/url';
 import { SITE } from '../config';
 
@@ -71,39 +72,41 @@ const inherits = [
     </div>
   </section>
 
-  <section class="container block" id="projects">
-    <header class="block-head">
-      <p class="label home-name">{SITE.author}</p>
-      <h2>Audio ML, audiovisual installations, practice based research.</h2>
-      <p class="block-lead measure">
-        Published at top conferences: NeurIPS 2026 (coauthored with Stanford's CCRMA), ISMIR 2026
-        and ISMIR 2025.
-      </p>
-    </header>
-    <div class="pgrid">
-      {projects.map((project) => <ProjectCard project={project} compact />)}
-    </div>
-  </section>
-
-  <section class="container block">
-    <header class="block-head">
-      <p class="label">How they relate</p>
-      <h2>Shared lineage, different problems.</h2>
-      <p class="block-lead measure">
-        Lichtspiel started from Windchime's visual runtime; HRNSXTN carries the same discipline onto
-        embedded hardware.
-      </p>
-    </header>
-    <Disclosure label="Compare them side by side" meta="6 dimensions">
-      <ComparisonTable rows={comparison} />
-      <div class="overlaps">
-        <p class="label"><span class="idx">◈</span> What Lichtspiel inherits</p>
-        <ul class="overlap-list">
-          {inherits.map((o) => <li>{o}</li>)}
-        </ul>
+  <FieldZone preset="swell">
+    <section class="container block" id="projects">
+      <header class="block-head">
+        <p class="label home-name">{SITE.author}</p>
+        <h2>Audio ML, audiovisual installations, practice based research.</h2>
+        <p class="block-lead measure">
+          Published at top conferences: NeurIPS 2026 (coauthored with Stanford's CCRMA), ISMIR 2026
+          and ISMIR 2025.
+        </p>
+      </header>
+      <div class="pgrid">
+        {projects.map((project) => <ProjectCard project={project} compact />)}
       </div>
-    </Disclosure>
-  </section>
+    </section>
+
+    <section class="container block">
+      <header class="block-head">
+        <p class="label">How they relate</p>
+        <h2>Shared lineage, different problems.</h2>
+        <p class="block-lead measure">
+          Lichtspiel started from Windchime's visual runtime; HRNSXTN carries the same discipline
+          onto embedded hardware.
+        </p>
+      </header>
+      <Disclosure label="Compare them side by side" meta="6 dimensions">
+        <ComparisonTable rows={comparison} />
+        <div class="overlaps">
+          <p class="label"><span class="idx">◈</span> What Lichtspiel inherits</p>
+          <ul class="overlap-list">
+            {inherits.map((o) => <li>{o}</li>)}
+          </ul>
+        </div>
+      </Disclosure>
+    </section>
+  </FieldZone>
 </BaseLayout>
 
 <style>

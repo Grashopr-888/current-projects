@@ -19,6 +19,7 @@ import MonomeTwin from '../../components/MonomeTwin.astro';
 import LatentMap from '../../components/LatentMap.astro';
 import MethodTable, { type MethodRow } from '../../components/MethodTable.astro';
 import ResearchPipeline from '../../components/ResearchPipeline.astro';
+import FieldZone from '../../components/FieldZone.astro';
 import type { Pubs } from '../../components/ProjectHero.astro';
 import { SITE } from '../../config';
 
@@ -612,312 +613,314 @@ const idx = () => String(++n).padStart(2, '0');
       pubs={pubs}
     />
 
-    <div class="container pbody">
-      {
-        demoVideoId && (
-          <Section index={idx()} label="Demo" title="See it running" id="demo">
-            <div class="video">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${demoVideoId}?rel=0`}
-                title={demoVideoTitle}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen
-              />
-            </div>
-          </Section>
-        )
-      }
-
-      {/* Skim layer: visible by default. */}
-      <Section index={idx()} label="At a glance" id="glance">
-        <div class="glance">
-          <SpecSheet rows={specRows} />
-          <div class="glance-side">
-            <div class="callout">
-              <span class="label">The problem</span>
-              <p>{d.problem}</p>
-            </div>
-          </div>
-        </div>
+    <FieldZone preset="drift">
+      <div class="container pbody">
         {
-          d.constraints.length > 0 && (
-            <Disclosure label="Constraints that shaped it" meta={String(d.constraints.length)}>
-              <ul class="constraint-list">
-                {d.constraints.map((c) => (
-                  <li>{c}</li>
-                ))}
-              </ul>
-            </Disclosure>
+          demoVideoId && (
+            <Section index={idx()} label="Demo" title="See it running" id="demo">
+              <div class="video">
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${demoVideoId}?rel=0`}
+                  title={demoVideoTitle}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen
+                />
+              </div>
+            </Section>
           )
         }
-      </Section>
 
-      {
-        d.outcomes.length > 0 && (
-          <Section index={idx()} label="Outcomes" title="What changed">
-            <ul class="outcomes">
-              {d.outcomes.map((o) => (
-                <li>
-                  <span class="outcome-mark" aria-hidden="true" />
-                  {o}
-                </li>
-              ))}
-            </ul>
-          </Section>
-        )
-      }
-
-      {
-        venues && (
-          <Section index={idx()} label={venues.label} title={venues.title} id="recognition">
-            <div class="venues">
-              {venues.venues.map((v) => (
-                <div class="venue">
-                  {v.logo && (
-                    <span class:list={['venue-logo', { 'venue-logo-dark': v.logo.dark }]}>
-                      <img src={url(v.logo.src)} alt={v.logo.alt} loading="lazy" />
-                    </span>
-                  )}
-                  <p class="venue-name">{v.name}</p>
-                  <p class="venue-place">{v.place}</p>
-                  <p class="venue-detail">{v.detail}</p>
-                  {v.standing && <p class="venue-standing">{v.standing}</p>}
-                  {v.paper && (
-                    <>
-                      <p class="venue-paper">“{v.paper.title}”</p>
-                      <p class="venue-detail">{v.paper.summary}</p>
-                    </>
-                  )}
-                  {v.links && (
-                    <div class="venue-links">
-                      {v.links.map((l) => (
-                        <a class="venue-link plain" href={l.href}>
-                          {l.label} <span aria-hidden="true">→</span>
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+        {/* Skim layer: visible by default. */}
+        <Section index={idx()} label="At a glance" id="glance">
+          <div class="glance">
+            <SpecSheet rows={specRows} />
+            <div class="glance-side">
+              <div class="callout">
+                <span class="label">The problem</span>
+                <p>{d.problem}</p>
+              </div>
             </div>
-          </Section>
-        )
-      }
+          </div>
+          {
+            d.constraints.length > 0 && (
+              <Disclosure label="Constraints that shaped it" meta={String(d.constraints.length)}>
+                <ul class="constraint-list">
+                  {d.constraints.map((c) => (
+                    <li>{c}</li>
+                  ))}
+                </ul>
+              </Disclosure>
+            )
+          }
+        </Section>
 
-      {
-        gallery.program && (
-          <Section index={idx()} label={gallery.program.label} title={gallery.program.title}>
-            <div class="gallery gallery-program">
-              {gallery.program.figures.map((f) => (
-                <figure>
-                  <img src={url(f.src)} alt={f.alt} loading="lazy" />
-                  <figcaption>
-                    {f.caption}
-                    {f.link && <a href={f.link.href}>{f.link.label}</a>}
-                    {f.link?.after}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </Section>
-        )
-      }
+        {
+          d.outcomes.length > 0 && (
+            <Section index={idx()} label="Outcomes" title="What changed">
+              <ul class="outcomes">
+                {d.outcomes.map((o) => (
+                  <li>
+                    <span class="outcome-mark" aria-hidden="true" />
+                    {o}
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )
+        }
 
-      {
-        method && (
-          <Section index={idx()} label="The ML method" title={method.title} id="method">
-            <p class="method-lead">{method.lead}</p>
-            <MethodTable rows={method.rows} />
-            {method.practices && method.practices.length > 0 && (
-              <div class="practices">
-                {method.practices.map((pr) => (
-                  <div class="practice">
-                    <p class="practice-title">{pr.title}</p>
-                    <p class="practice-body">{pr.body}</p>
+        {
+          venues && (
+            <Section index={idx()} label={venues.label} title={venues.title} id="recognition">
+              <div class="venues">
+                {venues.venues.map((v) => (
+                  <div class="venue">
+                    {v.logo && (
+                      <span class:list={['venue-logo', { 'venue-logo-dark': v.logo.dark }]}>
+                        <img src={url(v.logo.src)} alt={v.logo.alt} loading="lazy" />
+                      </span>
+                    )}
+                    <p class="venue-name">{v.name}</p>
+                    <p class="venue-place">{v.place}</p>
+                    <p class="venue-detail">{v.detail}</p>
+                    {v.standing && <p class="venue-standing">{v.standing}</p>}
+                    {v.paper && (
+                      <>
+                        <p class="venue-paper">“{v.paper.title}”</p>
+                        <p class="venue-detail">{v.paper.summary}</p>
+                      </>
+                    )}
+                    {v.links && (
+                      <div class="venue-links">
+                        {v.links.map((l) => (
+                          <a class="venue-link plain" href={l.href}>
+                            {l.label} <span aria-hidden="true">→</span>
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
-            )}
-          </Section>
-        )
-      }
+            </Section>
+          )
+        }
 
-      {
-        diagram && (
-          <Section index={idx()} label="Architecture" title="How it fits together">
-            <FlowDiagram
-              stages={diagram.stages}
-              outputs={diagram.outputs}
-              caption={diagram.caption}
-            />
-          </Section>
-        )
-      }
+        {
+          gallery.program && (
+            <Section index={idx()} label={gallery.program.label} title={gallery.program.title}>
+              <div class="gallery gallery-program">
+                {gallery.program.figures.map((f) => (
+                  <figure>
+                    <img src={url(f.src)} alt={f.alt} loading="lazy" />
+                    <figcaption>
+                      {f.caption}
+                      {f.link && <a href={f.link.href}>{f.link.label}</a>}
+                      {f.link?.after}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </Section>
+          )
+        }
 
-      {
-        pipeline && (
-          <Section
-            index={idx()}
-            label="Research to production"
-            title={pipeline.title}
-            id="pipeline"
-          >
-            <ResearchPipeline steps={pipeline.steps} caption={pipeline.caption} />
-          </Section>
-        )
-      }
+        {
+          method && (
+            <Section index={idx()} label="The ML method" title={method.title} id="method">
+              <p class="method-lead">{method.lead}</p>
+              <MethodTable rows={method.rows} />
+              {method.practices && method.practices.length > 0 && (
+                <div class="practices">
+                  {method.practices.map((pr) => (
+                    <div class="practice">
+                      <p class="practice-title">{pr.title}</p>
+                      <p class="practice-body">{pr.body}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Section>
+          )
+        }
 
-      {
-        slug === 'hrnsxtn' ? (
-          <Section index={idx()} label="The hardware" title="Knobs before screens">
-            <figure class="hw-board">
-              <img
-                src={url('/img/hs-board.png')}
-                alt="The Elk Stomp development board: eight pots, four encoders, footswitches and an OLED on a dark ground"
-                loading="lazy"
+        {
+          diagram && (
+            <Section index={idx()} label="Architecture" title="How it fits together">
+              <FlowDiagram
+                stages={diagram.stages}
+                outputs={diagram.outputs}
+                caption={diagram.caption}
               />
-              <figcaption>{HARDWARE[slug]}</figcaption>
-            </figure>
-          </Section>
-        ) : (
-          <Section index={idx()} label="The hardware" title="Tactile control, mirrored on screen">
-            <MonomeTwin caption={HARDWARE[slug]} />
-          </Section>
-        )
-      }
+            </Section>
+          )
+        }
 
-      {
-        gallery.prototype && (
-          <Section index={idx()} label={gallery.prototype.label} title={gallery.prototype.title}>
-            {gallery.prototype.lead && <p class="gallery-lead">{gallery.prototype.lead}</p>}
-            <div class="gallery">
-              {gallery.prototype.figures.map((f) => (
-                <figure>
-                  <img src={url(f.src)} alt={f.alt} loading="lazy" />
-                  <figcaption>{f.caption}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </Section>
-        )
-      }
+        {
+          pipeline && (
+            <Section
+              index={idx()}
+              label="Research to production"
+              title={pipeline.title}
+              id="pipeline"
+            >
+              <ResearchPipeline steps={pipeline.steps} caption={pipeline.caption} />
+            </Section>
+          )
+        }
 
-      {
-        slug === 'windchime' && (
-          <Section index={idx()} label="Under the hood" title="Retrieval in embedding space">
-            <LatentMap />
-          </Section>
-        )
-      }
+        {
+          slug === 'hrnsxtn' ? (
+            <Section index={idx()} label="The hardware" title="Knobs before screens">
+              <figure class="hw-board">
+                <img
+                  src={url('/img/hs-board.png')}
+                  alt="The Elk Stomp development board: eight pots, four encoders, footswitches and an OLED on a dark ground"
+                  loading="lazy"
+                />
+                <figcaption>{HARDWARE[slug]}</figcaption>
+              </figure>
+            </Section>
+          ) : (
+            <Section index={idx()} label="The hardware" title="Tactile control, mirrored on screen">
+              <MonomeTwin caption={HARDWARE[slug]} />
+            </Section>
+          )
+        }
 
-      {/* Detail layer: one click away. */}
-      <Section
-        index={idx()}
-        label="The story"
-        title="How it came together"
-        id="story"
-        collapsible
-        meta={readingTime(project.body)}
-      >
-        <div class="prose"><Content /></div>
-      </Section>
+        {
+          gallery.prototype && (
+            <Section index={idx()} label={gallery.prototype.label} title={gallery.prototype.title}>
+              {gallery.prototype.lead && <p class="gallery-lead">{gallery.prototype.lead}</p>}
+              <div class="gallery">
+                {gallery.prototype.figures.map((f) => (
+                  <figure>
+                    <img src={url(f.src)} alt={f.alt} loading="lazy" />
+                    <figcaption>{f.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </Section>
+          )
+        }
 
-      {
-        bundle.milestones.length > 0 && (
-          <Section
-            index={idx()}
-            label="Roadmap"
-            title="Now, next, later"
-            id="roadmap"
-            collapsible
-            count={bundle.milestones.length}
-          >
-            <Kanban milestones={bundle.milestones} />
-          </Section>
-        )
-      }
+        {
+          slug === 'windchime' && (
+            <Section index={idx()} label="Under the hood" title="Retrieval in embedding space">
+              <LatentMap />
+            </Section>
+          )
+        }
 
-      {
-        timeline.length > 0 && (
-          <Section
-            index={idx()}
-            label="Timeline"
-            title="What happened, in order"
-            id="timeline"
-            collapsible
-            count={timeline.length}
-          >
-            {/* Legacy section anchors: Releases, Incidents and Research now live in the Timeline. */}
-            <span id="releases" />
-            <span id="incidents" />
-            <span id="research" />
-            <Timeline events={timeline} />
-          </Section>
-        )
-      }
+        {/* Detail layer: one click away. */}
+        <Section
+          index={idx()}
+          label="The story"
+          title="How it came together"
+          id="story"
+          collapsible
+          meta={readingTime(project.body)}
+        >
+          <div class="prose"><Content /></div>
+        </Section>
 
-      {
-        bundle.decisions.length > 0 && (
-          <Section
-            index={idx()}
-            label="Decisions"
-            title="Decision records"
-            id="decisions"
-            collapsible
-            count={bundle.decisions.length}
-          >
-            <div class="records">
-              {bundle.decisions.map((rec) => (
-                <details class="rec" id={`rec-${rec.id}`}>
-                  <summary>
-                    <Badge tone={STATUS_TONE[rec.data.status]}>{lbl(rec.data.status)}</Badge>
-                    <span class="rec-title">{rec.data.title}</span>
-                    <time class="rec-date">{fmtDay(rec.data.date)}</time>
-                  </summary>
-                  <div class="rec-body">
-                    <p>
-                      <strong>Context.</strong> {rec.data.context}
-                    </p>
-                    <p>
-                      <strong>Decision.</strong> {rec.data.decision}
-                    </p>
-                    <p>
-                      <strong>Why.</strong> {rec.data.rationale}
-                    </p>
-                    <p>
-                      <strong>Consequences.</strong> {rec.data.consequences}
-                    </p>
-                  </div>
-                </details>
-              ))}
-            </div>
-          </Section>
-        )
-      }
+        {
+          bundle.milestones.length > 0 && (
+            <Section
+              index={idx()}
+              label="Roadmap"
+              title="Now, next, later"
+              id="roadmap"
+              collapsible
+              count={bundle.milestones.length}
+            >
+              <Kanban milestones={bundle.milestones} />
+            </Section>
+          )
+        }
 
-      {
-        d.keywords.length > 0 && (
-          <Section
-            index={idx()}
-            label="Keywords"
-            title="Topics, methods and venues"
-            id="keywords"
-            collapsible
-            meta={`${d.keywords.length} terms`}
-          >
-            <ul class="keywords">
-              {d.keywords.map((k) => (
-                <li class="chip">{k}</li>
-              ))}
-            </ul>
-          </Section>
-        )
-      }
-    </div>
+        {
+          timeline.length > 0 && (
+            <Section
+              index={idx()}
+              label="Timeline"
+              title="What happened, in order"
+              id="timeline"
+              collapsible
+              count={timeline.length}
+            >
+              {/* Legacy section anchors: Releases, Incidents and Research now live in the Timeline. */}
+              <span id="releases" />
+              <span id="incidents" />
+              <span id="research" />
+              <Timeline events={timeline} />
+            </Section>
+          )
+        }
 
-    <NextProject slug={slug} />
+        {
+          bundle.decisions.length > 0 && (
+            <Section
+              index={idx()}
+              label="Decisions"
+              title="Decision records"
+              id="decisions"
+              collapsible
+              count={bundle.decisions.length}
+            >
+              <div class="records">
+                {bundle.decisions.map((rec) => (
+                  <details class="rec" id={`rec-${rec.id}`}>
+                    <summary>
+                      <Badge tone={STATUS_TONE[rec.data.status]}>{lbl(rec.data.status)}</Badge>
+                      <span class="rec-title">{rec.data.title}</span>
+                      <time class="rec-date">{fmtDay(rec.data.date)}</time>
+                    </summary>
+                    <div class="rec-body">
+                      <p>
+                        <strong>Context.</strong> {rec.data.context}
+                      </p>
+                      <p>
+                        <strong>Decision.</strong> {rec.data.decision}
+                      </p>
+                      <p>
+                        <strong>Why.</strong> {rec.data.rationale}
+                      </p>
+                      <p>
+                        <strong>Consequences.</strong> {rec.data.consequences}
+                      </p>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </Section>
+          )
+        }
+
+        {
+          d.keywords.length > 0 && (
+            <Section
+              index={idx()}
+              label="Keywords"
+              title="Topics, methods and venues"
+              id="keywords"
+              collapsible
+              meta={`${d.keywords.length} terms`}
+            >
+              <ul class="keywords">
+                {d.keywords.map((k) => (
+                  <li class="chip">{k}</li>
+                ))}
+              </ul>
+            </Section>
+          )
+        }
+      </div>
+
+      <NextProject slug={slug} />
+    </FieldZone>
   </article>
 </BaseLayout>
 
