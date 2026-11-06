@@ -69,6 +69,8 @@
   --hsx-soft: #201d3c;
   --gr: #e6b44c; /* Probing the World for Groove: cymbal brass, after the thesis site's copper */
   --gr-soft: #2d2410;
+  --mt: #6fcf8f; /* Meteora: the contour green of the plugin's site model */
+  --mt-soft: #11281a;
   /* The thesis's two model colours, used for every CNN and PaSST mark on its pages
      (the thesis site's own dark mode values). */
   --cnn: #4fb3a8;
@@ -305,6 +307,11 @@ hr {
   border-color: color-mix(in oklab, var(--hsx) 45%, var(--hairline));
   background: color-mix(in oklab, var(--hsx-soft) 55%, var(--surface));
 }
+.chip[data-product='meteora'] {
+  color: var(--mt);
+  border-color: color-mix(in oklab, var(--mt) 45%, var(--hairline));
+  background: color-mix(in oklab, var(--mt-soft) 55%, var(--surface));
+}
 .chip[data-product='groove'] {
   color: var(--gr);
   border-color: color-mix(in oklab, var(--gr) 45%, var(--hairline));
@@ -323,6 +330,10 @@ hr {
 [data-accent='hrnsxtn'] {
   --accent: var(--hsx);
   --accent-soft: var(--hsx-soft);
+}
+[data-accent='meteora'] {
+  --accent: var(--mt);
+  --accent-soft: var(--mt-soft);
 }
 [data-accent='groove'] {
   --accent: var(--gr);

@@ -18,36 +18,42 @@ const comparison = [
     windchime: 'Voice driven installation, runs unattended.',
     lichtspiel: 'Live instrument, played on stage.',
     hrnsxtn: 'Neural instruments on an embedded pedal.',
+    meteora: 'Reverb plugin, played inside a DAW.',
   },
   {
     dimension: 'Origin',
     windchime: 'Built on Live Muse; Gray Area, SF; NeurIPS 2026.',
     lichtspiel: 'AIMS 2026 hackathon at Berklee, Boston.',
     hrnsxtn: 'Two podiums at MUTEK, Montréal; ISMIR 2026.',
+    meteora: 'Open data of Meteora, Greece; ADC 2026.',
   },
   {
     dimension: 'AI approach',
     windchime: 'Retrieval. Reflects recorded sound back.',
     lichtspiel: 'Generation. Authors new visual scenes.',
     hrnsxtn: 'Distillation: big model offline, tiny live.',
+    meteora: 'No model: audio descriptors drive a guide.',
   },
   {
     dimension: 'AI at runtime',
     windchime: 'In the loop, guarded, with failover.',
     lichtspiel: 'Authoring only, off the render path.',
     hrnsxtn: '10 Hz worker, never the audio thread.',
+    meteora: 'Light descriptors, zero latency, no heap use.',
   },
   {
     dimension: 'Coupling',
     windchime: 'Standalone: a browser and a monome.',
     lichtspiel: 'Inside Ableton Live and Max for Live.',
     hrnsxtn: 'Elk Stomp, under its own engine.',
+    meteora: 'VST3 in any host, or Standalone.',
   },
   {
     dimension: 'Success looks like',
     windchime: 'A full exhibition day, no crashes.',
     lichtspiel: 'A clean three to four minute set.',
     hrnsxtn: 'A pedal set, no laptop on stage.',
+    meteora: 'Every cliff answers on time, no clicks.',
   },
 ];
 
@@ -66,7 +72,8 @@ const inherits = [
       <div class="hero-copy" data-contour-clear>
         <h1 class="hero-title reveal" style="--d: 1">What I'm building right now.</h1>
         <p class="hero-sub reveal measure" style="--d: 2">
-          Practice based, state of the art audio ML research and multimodal installations.
+          Practice based, state of the art audio ML research, multimodal installations and audio
+          plugins.
         </p>
       </div>
     </div>
@@ -93,7 +100,8 @@ const inherits = [
         <h2>Shared lineage, different problems.</h2>
         <p class="block-lead measure">
           Lichtspiel started from Windchime's visual runtime; HRNSXTN carries the same discipline
-          onto embedded hardware.
+          onto embedded hardware; Meteora brings it into a DAW plugin, with open terrain data in
+          place of a corpus.
         </p>
       </header>
       <Disclosure label="Compare them side by side" meta="6 dimensions">

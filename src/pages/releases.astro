@@ -15,7 +15,7 @@ const incidentCount = (await allIncidents()).length;
 
 <BaseLayout
   title="Releases"
-  description="What shipped across Windchime, HRNSXTN x RDMSXN, Lichtspiel and Probing the World for Groove, the incidents behind it, and the way of working that ties them together."
+  description="What shipped across Windchime, HRNSXTN x RDMSXN, Lichtspiel, Meteora and Probing the World for Groove, the incidents behind it, and the way of working that ties them together."
 >
   <section class="container wrap">
     <p class="label"><span class="idx">§</span> Releases</p>
@@ -31,7 +31,7 @@ const incidentCount = (await allIncidents()).length;
 
     <FilteredList
       label="Filter releases by project"
-      products={['windchime', 'hrnsxtn', 'lichtspiel', 'groove']}
+      products={['windchime', 'hrnsxtn', 'lichtspiel', 'meteora', 'groove']}
       count={`${shipped} shipped · ${releases.length} total`}
     >
       {

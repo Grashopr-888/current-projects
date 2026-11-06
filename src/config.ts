@@ -6,8 +6,9 @@ export const SITE = {
   author: 'Trent Eriksen',
   role: 'Technical Product Manager / Product Engineer',
   description:
-    'Current projects by Trent Eriksen. Windchime, Lichtspiel, HRNSXTN x RDMSXN and Probing the ' +
-    'World for Groove: practice based, state of the art audio ML research and multimodal installations.',
+    'Current projects by Trent Eriksen. Windchime, Lichtspiel, HRNSXTN x RDMSXN, Meteora and Probing ' +
+    'the World for Groove: practice based, state of the art audio ML research, multimodal installations ' +
+    'and audio plugins.',
   /** Site wide search terms; project pages replace them with their own. */
   keywords: [
     'Trent Eriksen',
@@ -16,6 +17,8 @@ export const SITE = {
     'NeurIPS 2026',
     'ISMIR 2026',
     'ISMIR 2025',
+    'ADC 2026',
+    'audio plugin',
     'knowledge distillation',
     'transfer learning',
     'audio language models',
@@ -36,12 +39,13 @@ export const SHOW_EMAIL = false;
 export const NAV: ReadonlyArray<{
   label: string;
   href: string;
-  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove';
+  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'meteora' | 'groove';
 }> = [
   { label: 'Overview', href: '/' },
   { label: 'Windchime', href: '/projects/windchime', accent: 'windchime' },
   { label: 'HRNSXTN x RDMSXN', href: '/projects/hrnsxtn', accent: 'hrnsxtn' },
   { label: 'Lichtspiel', href: '/projects/lichtspiel', accent: 'lichtspiel' },
+  { label: 'Meteora', href: '/projects/meteora', accent: 'meteora' },
   { label: 'Probing the World for Groove', href: '/projects/groove', accent: 'groove' },
   // How I Work and Incidents live as collapsed sections on Releases; About sits in the footer.
   { label: 'Releases', href: '/releases' },
@@ -247,12 +251,33 @@ export const PROJECT_META = {
       ],
     },
   },
+  meteora: {
+    label: 'Meteora',
+    kind: 'Reverb plugin computed from a real landscape',
+    credit: 'Released for ADC 2026, the Audio Developer Conference, Bristol, November 2026',
+    accent: 'var(--mt)',
+    logo: '/img/meteora-mark.svg',
+    art: '/img/meteora-hero.jpg',
+    artAlt:
+      'The Meteora 0.3 plugin panel in its dark grey theme: a 3D contour model of the valley, microphone and weather modules, and colored patch cables',
+    // Event mark (attribution, not endorsement): the "audio.dev Conference, Bristol & Online
+    // 2026" lockup cropped from the ADC 2026 home page banner (audio.dev, accessed 2026-11-06);
+    // the banner's photo is left out because it shows identifiable people. Owner decision
+    // 2026-11-06.
+    partners: [
+      {
+        img: '/img/logo-adc2026.png',
+        alt: 'audio.dev Conference, ADC 2026, Bristol and online',
+        scale: 1.2,
+      },
+    ],
+  },
 } as const;
 
 export type ProjectSlug = keyof typeof PROJECT_META;
 
 /** Reading order for the "Next project" link at the foot of every project page. */
-const PROJECT_ORDER: ProjectSlug[] = ['windchime', 'hrnsxtn', 'lichtspiel', 'groove'];
+const PROJECT_ORDER: ProjectSlug[] = ['windchime', 'hrnsxtn', 'lichtspiel', 'meteora', 'groove'];
 export function nextProject(slug: ProjectSlug): ProjectSlug {
   return PROJECT_ORDER[(PROJECT_ORDER.indexOf(slug) + 1) % PROJECT_ORDER.length];
 }

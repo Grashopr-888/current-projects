@@ -2,7 +2,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { SEVERITY_TONE, STATUS_TONE, label, type Tone } from './taxonomy';
 
 /** The lifecycle products (pages built by projects/[slug].astro). */
-export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn';
+export type Product = 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'meteora';
 
 /** One row of a project Timeline. Releases, incidents and research carry their full record,
  *  rendered in place (the project page is the archive); shipped milestones link to their

@@ -68,9 +68,24 @@ const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: st
     caption:
       'The heavy model runs once, offline. On the pedal, decisions happen at 10.7 Hz and the audio thread only plays real recordings.',
   },
+  meteora: {
+    stages: [
+      { label: 'Open data', note: 'elevation and map' },
+      { label: 'Site model', note: 'pillars sharpened' },
+      { label: 'Site pack', note: '57k surface patches' },
+      { label: 'Echo field', note: 'traced per mic' },
+    ],
+    outputs: [
+      { label: 'Echo taps', note: 'first order, per band' },
+      { label: 'Late tail', note: 'traced, then convolved' },
+      { label: 'Site model view', note: 'three.js, live' },
+    ],
+    caption:
+      'The landscape is built once, offline, from open data. In the plugin, echoes are traced on a worker and the audio thread only plays delay taps and a tail.',
+  },
 };
 /** Caption for the stylized monome twin, per project. */
-const HARDWARE: Record<Product, string> = {
+const HARDWARE: Partial<Record<Product, string>> = {
   windchime:
     'A monome Grid and Arc, remapped per scene over serialosc, steer visuals only; an ' +
     'onscreen twin mirrors every LED.',
@@ -95,6 +110,27 @@ type Figure = {
 };
 type Gallery = { label: string; title: string; lead?: string; figures: Figure[] };
 const GALLERIES: Partial<Record<Product, { program?: Gallery; prototype?: Gallery }>> = {
+  meteora: {
+    prototype: {
+      label: 'On screen',
+      title: 'The landscape, and what it sends back',
+      lead: 'Every control shows its effect on the sound as it moves.',
+      figures: [
+        {
+          src: '/img/meteora-site-model.jpg',
+          alt: 'The site model: the Meteora valley as glowing contour lines, with the source, microphone A and microphone B, and echo paths fanning out to the rock faces',
+          caption:
+            'The site model: the source, both microphones and the echo paths to the rock faces that answer, redrawn as anything moves.',
+        },
+        {
+          src: '/img/meteora-echo-scope.jpg',
+          alt: 'The echo scope: every echo as a line on a 12 second time axis, the early echoes in blue and the later ones in orange over the smooth tail',
+          caption:
+            'The echo scope: every echo the two microphones hear, and the tail, on a 12 second axis.',
+        },
+      ],
+    },
+  },
   hrnsxtn: {
     program: {
       label: 'At MUTEK',
@@ -158,6 +194,29 @@ type Venue = {
   links?: Array<{ label: string; href: string }>;
 };
 const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
+  meteora: {
+    label: 'Release',
+    title: 'Released for ADC 2026',
+    venues: [
+      {
+        name: 'ADC 2026 · Audio Developer Conference',
+        place: 'Bristol, UK, and online · November 9–11, 2026',
+        detail:
+          'Meteora 0.3 was released as a free download for the conference and shared with attendees in Bristol by QR code.',
+        standing:
+          'ADC is the yearly conference of the audio software developer community, from plugins and DSP to music technology research.',
+        // ADC master logo from audio.dev's site header (white artwork, so a dark tile).
+        logo: { src: '/img/logo-adc.png', alt: 'ADC, Audio Developer Conference', dark: true },
+        links: [
+          { label: 'ADC 2026 page', href: 'https://audio.dev/' },
+          {
+            label: 'Download Meteora',
+            href: 'https://github.com/Grashopr-888/meteora-releases/releases/latest',
+          },
+        ],
+      },
+    ],
+  },
   lichtspiel: {
     label: 'Origin',
     title: "Made at Berklee's AI Music Summit",
@@ -259,6 +318,21 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
 
 /** Publication links, one button each, under the hero thesis. */
 const PUBS: Partial<Record<Product, Pubs>> = {
+  meteora: {
+    label: 'Free for macOS · Released for ADC 2026',
+    links: [
+      {
+        label: 'Download (macOS)',
+        href: 'https://github.com/Grashopr-888/meteora-releases/releases/latest',
+        primary: true,
+      },
+      {
+        label: 'Release notes',
+        href: 'https://github.com/Grashopr-888/meteora-releases/blob/main/CHANGELOG.md',
+      },
+      { label: 'ADC 2026 page', href: 'https://audio.dev/' },
+    ],
+  },
   windchime: {
     label: 'Published at NeurIPS 2026 · Creative AI Track',
     links: [
@@ -453,6 +527,17 @@ type Pipeline = {
   caption?: string;
 };
 const PIPELINES: Partial<Record<Product, Pipeline>> = {
+  meteora: {
+    title: 'From open data to a plugin',
+    steps: [
+      { phase: 'Data', label: 'Open terrain', note: 'Copernicus elevation and OpenStreetMap' },
+      { phase: 'Model', label: 'Sharpened pillars', note: 'every stylized change logged' },
+      { phase: 'Research', label: 'Python reference', note: 'echo field and reference renders' },
+      { phase: 'Port', label: 'C++ and JUCE', note: 'parity tests against the Python' },
+      { phase: 'Harden', label: 'Validation', note: 'pluginval 10, sanitizers, panel soak' },
+      { phase: 'Release', label: 'ADC 2026', note: 'free download, macOS' },
+    ],
+  },
   windchime: {
     title: 'From notebook to an unattended gallery',
     steps: [
@@ -528,6 +613,15 @@ const TOOLS: Record<Product, string[]> = {
     'CLAP + librosa',
     'Claude (authoring time)',
     'monome',
+  ],
+  meteora: [
+    'C++ / JUCE 9',
+    'WebView (TypeScript)',
+    'three.js',
+    'Python',
+    'Embree',
+    'Copernicus DEM',
+    'OpenStreetMap',
   ],
   hrnsxtn: [
     'Elk Stomp',
@@ -772,7 +866,7 @@ const idx = () => String(++n).padStart(2, '0');
         }
 
         {
-          slug === 'hrnsxtn' ? (
+          !HARDWARE[slug] ? null : slug === 'hrnsxtn' ? (
             <Section index={idx()} label="The hardware" title="Knobs before screens">
               <figure class="hw-board">
                 <img
@@ -785,7 +879,7 @@ const idx = () => String(++n).padStart(2, '0');
             </Section>
           ) : (
             <Section index={idx()} label="The hardware" title="Tactile control, mirrored on screen">
-              <MonomeTwin caption={HARDWARE[slug]} />
+              <MonomeTwin caption={HARDWARE[slug]!} />
             </Section>
           )
         }

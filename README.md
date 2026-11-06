@@ -1,12 +1,13 @@
 # Current Projects
 
-**Trent Eriksen** · practice based, state of the art audio ML research and multimodal installations<br>
-A public record of how four projects are built: Windchime, HRNSXTN x RDMSXN, Lichtspiel and Probing the World for Groove
+**Trent Eriksen** · practice based, state of the art audio ML research, multimodal installations and audio plugins<br>
+A public record of how five projects are built: Windchime, HRNSXTN x RDMSXN, Lichtspiel, Meteora and Probing the World for Groove
 
 [![Live site](https://img.shields.io/badge/site-live-2E7D32)](https://grashopr-888.github.io/current-projects/)
 [![NeurIPS 2026](https://img.shields.io/badge/NeurIPS%202026-Windchime-5A8BFF)](https://neurips.cc/virtual/2026/loc/sydney/160685)
 [![ISMIR 2026](https://img.shields.io/badge/ISMIR%202026-HRNSXTN-8F97E8)](https://ismir2026program.ismir.net/lbd_679.html)
 [![ISMIR 2025](https://img.shields.io/badge/ISMIR%202025-Groove-E6B44C)](https://ismir2025program.ismir.net/lbd_456.html)
+[![ADC 2026](https://img.shields.io/badge/ADC%202026-Meteora-6FCF8F)](https://github.com/Grashopr-888/meteora-releases/releases/latest)
 [![CI](https://github.com/Grashopr-888/current-projects/actions/workflows/ci.yml/badge.svg)](https://github.com/Grashopr-888/current-projects/actions/workflows/ci.yml)
 [![Deploy](https://github.com/Grashopr-888/current-projects/actions/workflows/deploy.yml/badge.svg)](https://github.com/Grashopr-888/current-projects/actions/workflows/deploy.yml)
 
@@ -18,6 +19,7 @@ A public record of how four projects are built: Windchime, HRNSXTN x RDMSXN, Lic
 | [Windchime](https://grashopr-888.github.io/current-projects/projects/windchime/)                 | voice conditioned audiovisual installation: audio language models retrieve an artist's own stems | NeurIPS 2026 Creative AI Track; shown at Gray Area, San Francisco     | [ALM audit notebook](https://github.com/Grashopr-888/NeurIPS2026_CreativeAI)                                                                                                                                       |
 | [HRNSXTN x RDMSXN](https://grashopr-888.github.io/current-projects/projects/hrnsxtn/)            | neural audio instruments on a screenless pedal: a distilled codec student on the Elk Stomp       | ISMIR 2026 Late-Breaking Demo; 1st and 2nd at Music Hackspace × MUTEK | [paper, code, board logs](https://github.com/Grashopr-888/ISMIR_LBD_2026_submission)                                                                                                                               |
 | [Lichtspiel](https://grashopr-888.github.io/current-projects/projects/lichtspiel/)               | live audiovisual instrument for Ableton: LLM written p5.js scenes behind a five gate verifier    | built at Berklee's AIMS 2026 hackathon                                | private                                                                                                                                                                                                            |
+| [Meteora](https://grashopr-888.github.io/current-projects/projects/meteora/)                     | reverb plugin computed from open terrain data of Meteora, Greece, that listens to the player     | released for ADC 2026, Bristol                                        | [free download](https://github.com/Grashopr-888/meteora-releases/releases/latest) (closed source)                                                                                                                  |
 | [Probing the World for Groove](https://grashopr-888.github.io/current-projects/projects/groove/) | MSc thesis: frozen PaSST probed against a drum specific CNN                                      | ISMIR 2025 Late-Breaking Demo; Leiden University                      | [notebooks, thesis, paper](https://github.com/Grashopr-888/A-comparative-study-of-Transfer-Learning-for-Drum-audio-Style-Classification-) · [history](https://github.com/Grashopr-888/drum-style-thesis-notebooks) |
 
 <p align="center"><a href="https://grashopr-888.github.io/current-projects/projects/hrnsxtn/"><img src="docs/images/readme-hrnsxtn.jpg" width="820"

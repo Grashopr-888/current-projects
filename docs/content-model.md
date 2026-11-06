@@ -5,7 +5,7 @@ Everything on the site is typed data, defined in
 `src/content/`. Cross-references are validated at build time: a dangling link fails the
 build, so the narrative can't drift from the data.
 
-`product` is one of `windchime`, `lichtspiel`, `hrnsxtn`, `shared`. Add a project by adding its slug to
+`product` is one of `windchime`, `lichtspiel`, `hrnsxtn`, `meteora`, `groove`, `shared`. Add a project by adding its slug to
 `PRODUCTS`.
 
 ## Collections

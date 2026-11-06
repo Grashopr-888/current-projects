@@ -10,7 +10,7 @@ const all = (await getCollection('glossary')).sort((a, b) =>
 const nameBySlug = new Map(all.map((t) => [t.id, t.data.term]));
 
 type Group = {
-  key: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'groove' | 'methods' | 'shared';
+  key: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'meteora' | 'groove' | 'methods' | 'shared';
   label: string;
   blurb: string;
 };

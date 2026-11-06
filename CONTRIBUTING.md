@@ -11,7 +11,7 @@ schema in [`src/content.config.ts`](src/content.config.ts); see
 
 1. Create/edit a Markdown file in the right collection folder.
 2. Fill the frontmatter to match the schema. `product` must be one of `windchime`,
-   `lichtspiel`, or `shared`.
+   `lichtspiel`, `hrnsxtn`, `meteora`, `groove`, or `shared`.
 3. Any `reference()` field (e.g. `linked_release`) must point at an entry that exists —
    otherwise the build fails. That is intentional.
 4. Run the checks below.
