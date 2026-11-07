@@ -259,7 +259,10 @@ export const PROJECT_META = {
     logo: '/img/meteora-mark.svg',
     art: '/img/meteora-hero.jpg',
     artAlt:
-      'The Meteora 0.3 plugin panel in its dark grey theme: a 3D contour model of the valley, microphone and weather modules, and colored patch cables',
+      'The Meteora 0.3 plugin panel in its dark grey theme: the 3D contour model of the valley with the echo paths to microphone A, the echo scope, and the air, microphone, faces and shape modules',
+    // Preview video. Privacy-enhanced (nocookie) embed of youtu.be/vMqgGGazfks.
+    demoVideoId: 'vMqgGGazfks',
+    demoVideoTitle: 'Meteora reverb plugin preview',
     // Event mark (attribution, not endorsement): the "audio.dev Conference, Bristol & Online
     // 2026" lockup cropped from the ADC 2026 home page banner (audio.dev, accessed 2026-11-06);
     // the banner's photo is left out because it shows identifiable people. Owner decision
