@@ -263,6 +263,15 @@ export const PROJECT_META = {
     // Preview video. Privacy-enhanced (nocookie) embed of youtu.be/vMqgGGazfks.
     demoVideoId: 'vMqgGGazfks',
     demoVideoTitle: 'Meteora reverb plugin preview',
+    // A second video under the demo (owner request 2026-11-06): youtu.be/8rZie27Bz_8.
+    moreVideos: [
+      {
+        id: '8rZie27Bz_8',
+        title: 'Meteora, an artistic preview',
+        label: 'Artistic preview',
+        note: 'Meteora 0.3, edited with photographs by the author.',
+      },
+    ],
     // Event mark (attribution, not endorsement): the "audio.dev Conference, Bristol & Online
     // 2026" lockup cropped from the ADC 2026 home page banner (audio.dev, accessed 2026-11-06);
     // the banner's photo is left out because it shows identifiable people. Owner decision

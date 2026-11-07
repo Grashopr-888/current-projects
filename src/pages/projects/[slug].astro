@@ -654,6 +654,9 @@ const method = METHODS[slug];
 const pipeline = PIPELINES[slug];
 const demoVideoId = 'demoVideoId' in meta ? meta.demoVideoId : undefined;
 const demoVideoTitle = 'demoVideoTitle' in meta ? meta.demoVideoTitle : 'Project demo';
+/** Further videos under the demo, each with its own label (e.g. an artistic preview). */
+const moreVideos: ReadonlyArray<{ id: string; title: string; label: string; note?: string }> =
+  'moreVideos' in meta ? meta.moreVideos : [];
 
 const { Content } = await render(project);
 const bundle = await projectBundle(slug);
@@ -722,6 +725,22 @@ const idx = () => String(++n).padStart(2, '0');
                   allowfullscreen
                 />
               </div>
+              {moreVideos.map((v) => (
+                <div class="more-video">
+                  <p class="label">{v.label}</p>
+                  {v.note && <p class="more-video-note">{v.note}</p>}
+                  <div class="video">
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${v.id}?rel=0`}
+                      title={v.title}
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen
+                    />
+                  </div>
+                </div>
+              ))}
             </Section>
           )
         }
@@ -1032,6 +1051,17 @@ const idx = () => String(++n).padStart(2, '0');
     overflow: hidden;
     background: #000;
     box-shadow: var(--shadow);
+  }
+  .more-video {
+    margin-top: var(--sp-6);
+  }
+  .more-video .label {
+    color: var(--accent);
+  }
+  .more-video-note {
+    margin: 0.4rem 0 var(--sp-3);
+    color: var(--ink-soft);
+    font-size: var(--step--1);
   }
   .video iframe {
     position: absolute;
