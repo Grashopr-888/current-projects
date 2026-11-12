@@ -111,6 +111,37 @@ type Figure = {
 type Gallery = { label: string; title: string; lead?: string; figures: Figure[] };
 const GALLERIES: Partial<Record<Product, { program?: Gallery; prototype?: Gallery }>> = {
   meteora: {
+    program: {
+      label: 'At ADC',
+      title: 'The ADC 2026 slides',
+      figures: [
+        {
+          src: '/img/meteora-adc2026-01-cover.jpg',
+          alt: 'Title slide of the Meteora presentation for ADC 2026, the audio.dev Conference, Bristol and online: Meteora, a reverb computed from a real landscape, Trent Eriksen',
+          caption: 'The title slide of the presentation for ADC 2026, Bristol. ',
+          link: {
+            label: 'All ten slides (PDF)',
+            href: 'https://github.com/Grashopr-888/meteora-releases/blob/main/slides/Meteora-ADC2026-slides.pdf',
+            after: '.',
+          },
+        },
+        {
+          src: '/img/meteora-adc2026-03-pipeline.jpg',
+          alt: 'Slide 3, from open data to an echo: open data, site model, site pack and echo field, with the site model',
+          caption: 'How the landscape and its echoes are computed from open data.',
+        },
+        {
+          src: '/img/meteora-adc2026-06-listens.jpg',
+          alt: 'Slide 6, a reverb that listens: the five descriptors, the modes from OFF to ALIVE, and the panel with cables',
+          caption: 'New in 0.3: a reverb that listens and can answer.',
+        },
+        {
+          src: '/img/meteora-adc2026-09-release.jpg',
+          alt: 'Slide 9, tested, then released free for ADC: the test results and a QR code to the download',
+          caption: 'Tested, then released free, with the QR code shared at the conference.',
+        },
+      ],
+    },
     prototype: {
       label: 'On screen',
       title: 'The landscape, and what it sends back',
