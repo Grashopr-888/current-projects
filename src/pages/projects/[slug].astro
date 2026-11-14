@@ -228,8 +228,8 @@ type Venue = {
 };
 const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
   meteora: {
-    label: 'Release and premiere',
-    title: 'ADC 2026, then a public premiere at tiat',
+    label: 'Release and exhibition',
+    title: 'ADC 2026, then Every Thing Computer at tiat',
     venues: [
       {
         name: 'ADC 2026 · Audio Developer Conference',
@@ -249,10 +249,33 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         ],
       },
       {
+        name: 'Every Thing Computer · tiat, supported by Era',
+        place: 'San Francisco, USA · October 23 to November 18, 2026',
+        detail:
+          "An open call exhibition of playful computing and experimental interfaces at the tiat gallery, 151 Powell St. Meteora's public premiere at new interfaces 008 is part of it.",
+        standing:
+          'Era is a personal computing company building the intelligence layer for new hardware; tiat is a San Francisco gallery for artworks using technology.',
+        // Era's lockup from era.world (site/assets/logo.png, trimmed) and the open call image
+        // from tiat and Era's post (instagram.com/p/DdZuS5-kk2q, first image), accessed
+        // 2026-11-14. Dates from tiat's exhibition page. Owner request 2026-11-14.
+        logo: { src: '/img/logo-era.png', alt: 'era' },
+        image: {
+          src: '/img/meteora-every-thing-computer.jpg',
+          alt: 'The open call image for Every Thing Computer, by era and tiat: a ring of playful computers, gadgets and screens around the title',
+        },
+        links: [
+          {
+            label: 'Every Thing Computer page',
+            href: 'https://www.tiat.place/exhibitions/every-thing-computer',
+          },
+          { label: 'The open call', href: 'https://www.instagram.com/p/DdZuS5-kk2q/' },
+        ],
+      },
+      {
         name: 'new interfaces 008 · tiat',
         place: 'San Francisco, USA · Sunday, November 15, 2026, 2–5 pm',
         detail:
-          "Meteora's public premiere: a live demo at new interfaces, an afternoon celebrating experiments in creative technology, presented by tiat at 151 Powell St.",
+          "Meteora's public premiere: a live demo at new interfaces, an afternoon celebrating experiments in creative technology, presented by tiat at 151 Powell St during Every Thing Computer.",
         standing:
           'tiat, the intersection of art & technology, is a home for creative technology in San Francisco; this is the first San Francisco edition of new interfaces.',
         // tiat's mark and the event's official image, both from the event's Luma page
@@ -368,7 +391,8 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
 /** Publication links, one button each, under the hero thesis. */
 const PUBS: Partial<Record<Product, Pubs>> = {
   meteora: {
-    label: 'Free for macOS · Released for ADC 2026 · Public premiere at tiat',
+    label:
+      'Free for macOS · Released for ADC 2026 · Public premiere at tiat, in Every Thing Computer',
     links: [
       {
         label: 'Download (macOS)',
@@ -381,6 +405,10 @@ const PUBS: Partial<Record<Product, Pubs>> = {
       },
       { label: 'ADC 2026 page', href: 'https://audio.dev/' },
       { label: 'new interfaces 008 page', href: 'https://luma.com/zrounpzl' },
+      {
+        label: 'Every Thing Computer page',
+        href: 'https://www.tiat.place/exhibitions/every-thing-computer',
+      },
     ],
   },
   windchime: {
@@ -1339,10 +1367,14 @@ const idx = () => String(++n).padStart(2, '0');
     gap: var(--sp-4);
     align-items: start;
   }
-  /* Two venues side by side on wide screens; the later, fuller card gets more room. */
+  /* Two venues side by side on wide screens; the later, fuller card gets more room.
+     Three venues share the row equally. */
   @media (min-width: 52rem) {
     .venues {
       grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    }
+    .venues:has(> .venue:nth-child(3)) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
   .venue {

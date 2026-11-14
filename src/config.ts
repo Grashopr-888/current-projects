@@ -255,7 +255,7 @@ export const PROJECT_META = {
     label: 'Meteora',
     kind: 'Reverb plugin computed from a real landscape',
     credit:
-      'Released for ADC 2026, the Audio Developer Conference, Bristol, November 2026; public premiere at new interfaces 008, tiat, San Francisco, November 15, 2026',
+      'Released for ADC 2026, the Audio Developer Conference, Bristol, November 2026; public premiere at new interfaces 008, tiat, San Francisco, November 15, 2026, part of Every Thing Computer, supported by Era',
     accent: 'var(--mt)',
     logo: '/img/meteora-mark.svg',
     art: '/img/meteora-hero.jpg',
@@ -286,6 +286,9 @@ export const PROJECT_META = {
       // tiat's mark from its Luma calendar (luma.com/tiat, accessed 2026-11-13), for the public
       // premiere at new interfaces 008. Owner request 2026-11-13.
       { img: '/img/logo-tiat.png', alt: 'tiat, the intersection of art & technology', scale: 0.9 },
+      // Era's lockup from era.world (site/assets/logo.png), for Every Thing Computer, the open call
+      // exhibition it supports at tiat. Owner request 2026-11-14.
+      { img: '/img/logo-era.png', alt: 'era', scale: 0.55 },
     ],
   },
 } as const;
