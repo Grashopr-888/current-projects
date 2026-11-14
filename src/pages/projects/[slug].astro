@@ -222,12 +222,14 @@ type Venue = {
   /** Why the venue matters, in one line. */
   standing?: string;
   paper?: { title: string; summary: string };
+  /** The event's own official image, shown whole in the card. */
+  image?: { src: string; alt: string };
   links?: Array<{ label: string; href: string }>;
 };
 const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
   meteora: {
-    label: 'Release',
-    title: 'Released for ADC 2026',
+    label: 'Release and premiere',
+    title: 'ADC 2026, then a public premiere at tiat',
     venues: [
       {
         name: 'ADC 2026 · Audio Developer Conference',
@@ -245,6 +247,22 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
             href: 'https://github.com/Grashopr-888/meteora-releases/releases/latest',
           },
         ],
+      },
+      {
+        name: 'new interfaces 008 · tiat',
+        place: 'San Francisco, USA · Sunday, November 15, 2026, 2–5 pm',
+        detail:
+          "Meteora's public premiere: a live demo at new interfaces, an afternoon celebrating experiments in creative technology, presented by tiat at 151 Powell St.",
+        standing:
+          'tiat, the intersection of art & technology, is a home for creative technology in San Francisco; this is the first San Francisco edition of new interfaces.',
+        // tiat's mark and the event's official image, both from the event's Luma page
+        // (luma.com/zrounpzl, accessed 2026-11-13). Owner request 2026-11-13.
+        logo: { src: '/img/logo-tiat.png', alt: 'tiat, the intersection of art & technology' },
+        image: {
+          src: '/img/meteora-tiat-new-interfaces.jpg',
+          alt: 'The official image for new interfaces: retro gadgets, a rotary phone, a lava lamp and circuit boards on black, with Sunday, November 15, 2:00 to 5:00 PM @ tiat',
+        },
+        links: [{ label: 'new interfaces 008 page', href: 'https://luma.com/zrounpzl' }],
       },
     ],
   },
@@ -350,7 +368,7 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
 /** Publication links, one button each, under the hero thesis. */
 const PUBS: Partial<Record<Product, Pubs>> = {
   meteora: {
-    label: 'Free for macOS · Released for ADC 2026',
+    label: 'Free for macOS · Released for ADC 2026 · Public premiere at tiat',
     links: [
       {
         label: 'Download (macOS)',
@@ -362,6 +380,7 @@ const PUBS: Partial<Record<Product, Pubs>> = {
         href: 'https://github.com/Grashopr-888/meteora-releases/blob/main/CHANGELOG.md',
       },
       { label: 'ADC 2026 page', href: 'https://audio.dev/' },
+      { label: 'new interfaces 008 page', href: 'https://luma.com/zrounpzl' },
     ],
   },
   windchime: {
@@ -830,6 +849,14 @@ const idx = () => String(++n).padStart(2, '0');
                     <p class="venue-place">{v.place}</p>
                     <p class="venue-detail">{v.detail}</p>
                     {v.standing && <p class="venue-standing">{v.standing}</p>}
+                    {v.image && (
+                      <img
+                        class="venue-image"
+                        src={url(v.image.src)}
+                        alt={v.image.alt}
+                        loading="lazy"
+                      />
+                    )}
                     {v.paper && (
                       <>
                         <p class="venue-paper">“{v.paper.title}”</p>
@@ -1362,6 +1389,15 @@ const idx = () => String(++n).padStart(2, '0');
     color: var(--ink-soft);
     font-size: var(--step--1);
     line-height: 1.55;
+  }
+  .venue-image {
+    display: block;
+    width: 100%;
+    max-width: 26rem;
+    height: auto;
+    margin-top: var(--sp-3);
+    border: var(--hair) solid var(--hairline);
+    border-radius: 12px;
   }
   .venue-paper {
     margin-top: 0.4rem;

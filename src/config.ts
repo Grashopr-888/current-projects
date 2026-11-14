@@ -254,7 +254,8 @@ export const PROJECT_META = {
   meteora: {
     label: 'Meteora',
     kind: 'Reverb plugin computed from a real landscape',
-    credit: 'Released for ADC 2026, the Audio Developer Conference, Bristol, November 2026',
+    credit:
+      'Released for ADC 2026, the Audio Developer Conference, Bristol, November 2026; public premiere at new interfaces 008, tiat, San Francisco, November 15, 2026',
     accent: 'var(--mt)',
     logo: '/img/meteora-mark.svg',
     art: '/img/meteora-hero.jpg',
@@ -282,6 +283,9 @@ export const PROJECT_META = {
         alt: 'audio.dev Conference, ADC 2026, Bristol and online',
         scale: 1.2,
       },
+      // tiat's mark from its Luma calendar (luma.com/tiat, accessed 2026-11-13), for the public
+      // premiere at new interfaces 008. Owner request 2026-11-13.
+      { img: '/img/logo-tiat.png', alt: 'tiat, the intersection of art & technology', scale: 0.9 },
     ],
   },
 } as const;
