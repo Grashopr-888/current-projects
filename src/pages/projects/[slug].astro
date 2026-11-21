@@ -83,6 +83,22 @@ const DIAGRAMS: Record<Product, { stages: Stage[]; outputs: Stage[]; caption: st
     caption:
       'The landscape is built once, offline, from open data. In the plugin, echoes are traced on a worker and the audio thread only plays delay taps and a tail.',
   },
+  // From the performance pipeline diagram on the owner's portfolio page.
+  livemuse: {
+    stages: [
+      { label: 'monome grid', note: 'control input' },
+      { label: 'Processing', note: 'visuals, OSC out' },
+      { label: 'Sonic Pi', note: 'synth and MIDI' },
+      { label: 'Ableton Live', note: 'multitrack audio' },
+    ],
+    outputs: [
+      { label: 'Generative visuals', note: 'visual stems' },
+      { label: 'Music', note: 'live code with original stems' },
+      { label: 'Two assistants', note: 'code on request' },
+    ],
+    caption:
+      'The performer plays the grid and prompts two assistants; their code updates the visuals and the MIDI while the set runs.',
+  },
 };
 /** Caption for the stylized monome twin, per project. */
 const HARDWARE: Partial<Record<Product, string>> = {
@@ -99,6 +115,9 @@ const HARDWARE: Partial<Record<Product, string>> = {
     'encoders, four footswitches and a small OLED that the instrument deliberately ignores. ' +
     'Shaping controls, grain size, wet and randomness sit on the pots and the rotary switches ' +
     'between five sound worlds live, so the corpus is played by feel, the way the challenge asked.',
+  livemuse:
+    'A monome grid is the control input: it plays the visuals in Processing, which pass ' +
+    'OSC events on to Sonic Pi, so one surface drives both image and sound.',
 };
 
 /** Image sections shown in the skim layer, so screenshots are never hidden in the story. */
@@ -110,6 +129,50 @@ type Figure = {
 };
 type Gallery = { label: string; title: string; lead?: string; figures: Figure[] };
 const GALLERIES: Partial<Record<Product, { program?: Gallery; prototype?: Gallery }>> = {
+  // Stills from the owner's master of the full installation (6:10, 4:10, 10:10, 0:20).
+  livemuse: {
+    // Sixteen stills from the same master, one about every minute from 0:20 to 15:10, side
+    // bars cropped. Owner request 2026-11-21.
+    program: {
+      label: 'The album',
+      title: 'Sixteen scenes, one a minute',
+      figures: [
+        {
+          src: '/img/livemuse-album-grid.jpg',
+          alt: 'A four by four grid of stills from the Live.Muse installation: flat color fields in coral, green, purple, red and blue, with wireframe cubes, discs and spheres',
+          caption:
+            'One frame about every minute of the 15 minute installation, from 0:20 to 15:10, read left to right. ',
+          link: {
+            label: 'Watch it in full (4K)',
+            href: 'https://www.youtube.com/watch?v=TfMPCyXtrzo',
+            after: '',
+          },
+        },
+      ],
+    },
+    prototype: {
+      label: 'Visual stems',
+      title: 'Scenes from the installation',
+      lead: 'Full screen scenes that layer and trigger like the parts of a track.',
+      figures: [
+        {
+          src: '/img/livemuse-stem-cube.jpg',
+          alt: 'A glowing green wireframe cube with red tiles, seen from below against a purple field',
+          caption: 'A wireframe cube, lit cell by cell, turning above the viewer.',
+        },
+        {
+          src: '/img/livemuse-stem-orbs.jpg',
+          alt: 'Two bright green discs and faint wireframe shapes floating over a red and pink field',
+          caption: 'Discs and wireframe forms drifting over a flat color field.',
+        },
+        {
+          src: '/img/livemuse-stem-planes.jpg',
+          alt: 'Overlapping coral and pink planes with a magenta sphere and translucent wireframe rings',
+          caption: 'Planes and spheres in close, warm colors, a slower scene.',
+        },
+      ],
+    },
+  },
   meteora: {
     program: {
       label: 'At ADC',
@@ -218,7 +281,8 @@ type Venue = {
   name: string;
   place: string;
   detail: string;
-  logo?: { src: string; alt: string; dark?: boolean };
+  /** `scale` sets the mark's height within its tile, as for the hero partners. */
+  logo?: { src: string; alt: string; dark?: boolean; scale?: number };
   /** Why the venue matters, in one line. */
   standing?: string;
   paper?: { title: string; summary: string };
@@ -227,6 +291,59 @@ type Venue = {
   links?: Array<{ label: string; href: string }>;
 };
 const VENUES: Partial<Record<Product, { label: string; title: string; venues: Venue[] }>> = {
+  // Dates and wording from the owner's portfolio (events page) and the Mutacions poster
+  // (Downloads/livemuse poster.jpg). Owner request 2026-11-21.
+  livemuse: {
+    label: 'Residency, workshop, festival',
+    title: 'Berlin, then Barcelona',
+    venues: [
+      {
+        name: 'Petersburg Art Space · Artist residency',
+        place: 'Berlin, Germany · August to November 2024',
+        detail:
+          'Three months developing audiovisual work and exhibiting alongside an international cohort of artists. The first Live.Muse experiments began here.',
+        standing:
+          'PAS is a nonprofit art space, venue and residency in Moabit, Berlin, for experimental art and music.',
+        logo: { src: '/img/logo-pas.png', alt: 'PAS, Petersburg Art Space, Berlin' },
+      },
+      {
+        name: 'Universitat Pompeu Fabra · Generative Music workshop',
+        place: 'Barcelona, Spain · December 2024',
+        detail:
+          'Live.Muse was formally conceived and presented at the workshop led by Valerio Velardo and Xavier Serra.',
+        standing:
+          "UPF's Music Technology Group is one of the leading research groups in sound and music computing.",
+        logo: { src: '/img/logo-upf.svg', alt: 'Universitat Pompeu Fabra, Barcelona' },
+      },
+      {
+        name: 'Mutacions Festival · Talk',
+        place: 'ESEIAAT, UPC, Terrassa, Barcelona · September 24, 2025',
+        detail:
+          '"Live.Muse: A Multimodal Generative Audiovisual Performance Framework", in Mutacions Sonores, a free session at ESEIAAT on the opening day of the festival.',
+        standing:
+          'Mutacions is a festival of urban music and applied technologies in Terrassa, with UPC and the support of ICEC and the Generalitat de Catalunya.',
+        logo: { src: '/img/logo-mutacions.png', alt: 'Mutacions', dark: true, scale: 0.45 },
+        image: {
+          src: '/img/livemuse-mutacions-poster.jpg',
+          alt: 'The Mutacions Festival poster, Terrassa, September 24 to 27: the September 24 session at ESEIAAT lists Live.Muse, A Multimodal Generative Audiovisual Performance Framework',
+        },
+        links: [{ label: 'Mutacions page', href: 'https://mutacions.com/' }],
+      },
+      {
+        name: 'Live.Muse · Installation',
+        place: 'Barcelona, Spain · December 2025',
+        detail:
+          'The framework built as an installation, funded by a Mutacions artistic production grant: generative visuals, hardware control and live coded music with original compositions.',
+        logo: { src: '/img/logo-mutacions.png', alt: 'Mutacions', dark: true, scale: 0.45 },
+        links: [
+          {
+            label: 'Watch the full album (4K)',
+            href: 'https://www.youtube.com/watch?v=TfMPCyXtrzo',
+          },
+        ],
+      },
+    ],
+  },
   meteora: {
     label: 'Release and exhibition',
     title: 'ADC 2026, then Every Thing Computer at tiat',
@@ -252,7 +369,7 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         name: 'Every Thing Computer · tiat, supported by Era',
         place: 'San Francisco, USA · October 23 to November 18, 2026',
         detail:
-          "An open call exhibition of playful computing and experimental interfaces at the tiat gallery, 151 Powell St. Meteora's public premiere at new interfaces 008 is part of it.",
+          "An open call exhibition of playful computing and experimental interfaces at the tiat gallery, 151 Powell St. Meteora's public premiere at new interfaces 008 was part of it.",
         standing:
           'Era is a personal computing company building the intelligence layer for new hardware; tiat is a San Francisco gallery for artworks using technology.',
         // Era's lockup from era.world (site/assets/logo.png, trimmed) and the open call image
@@ -390,6 +507,18 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
 
 /** Publication links, one button each, under the hero thesis. */
 const PUBS: Partial<Record<Product, Pubs>> = {
+  livemuse: {
+    label: 'Installation, Barcelona, December 2025 · Talk at Mutacions 2025, Terrassa',
+    links: [
+      {
+        label: 'Watch the installation (4K)',
+        href: 'https://www.youtube.com/watch?v=TfMPCyXtrzo',
+        primary: true,
+      },
+      { label: 'Spatial audio mix', href: 'https://www.youtube.com/watch?v=Unm8JM2CbD0' },
+      { label: 'Mutacions page', href: 'https://mutacions.com/' },
+    ],
+  },
   meteora: {
     label:
       'Free for macOS · Released for ADC 2026 · Public premiere at tiat, in Every Thing Computer',
@@ -605,6 +734,18 @@ type Pipeline = {
   caption?: string;
 };
 const PIPELINES: Partial<Record<Product, Pipeline>> = {
+  livemuse: {
+    title: 'From a residency to an installation',
+    steps: [
+      { phase: 'Experiment', label: 'Berlin residency', note: 'Petersburg Art Space, 2024' },
+      { phase: 'Concept', label: 'UPF workshop', note: 'generative music, December 2024' },
+      { phase: 'Present', label: 'Innovation Lab', note: 'Utrecht, June 2025' },
+      { phase: 'Present', label: 'Mutacions talk', note: 'Terrassa, September 2025' },
+      { phase: 'Present', label: 'dorkbot London', note: 'November 2025' },
+      { phase: 'Build', label: 'Installation', note: 'Barcelona, December 2025' },
+      { phase: 'Evolve', label: 'Windchime', note: 'Gray Area and NeurIPS 2026' },
+    ],
+  },
   meteora: {
     title: 'From open data to a plugin',
     steps: [
@@ -700,6 +841,16 @@ const TOOLS: Record<Product, string[]> = {
     'Embree',
     'Copernicus DEM',
     'OpenStreetMap',
+  ],
+  livemuse: [
+    'Processing',
+    'p5.js',
+    'Sonic Pi',
+    'Strudel',
+    'Ableton Live',
+    'monome',
+    'OSC and MIDI',
+    'Language model assistants',
   ],
   hrnsxtn: [
     'Elk Stomp',
@@ -869,7 +1020,10 @@ const idx = () => String(++n).padStart(2, '0');
                 {venues.venues.map((v) => (
                   <div class="venue">
                     {v.logo && (
-                      <span class:list={['venue-logo', { 'venue-logo-dark': v.logo.dark }]}>
+                      <span
+                        class:list={['venue-logo', { 'venue-logo-dark': v.logo.dark }]}
+                        style={v.logo.scale ? `--logo-scale: ${v.logo.scale}` : undefined}
+                      >
                         <img src={url(v.logo.src)} alt={v.logo.alt} loading="lazy" />
                       </span>
                     )}
@@ -1376,6 +1530,10 @@ const idx = () => String(++n).padStart(2, '0');
     .venues:has(> .venue:nth-child(3)) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+    /* Four venues: two by two. */
+    .venues:has(> .venue:nth-child(4)) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
   .venue {
     display: flex;
@@ -1399,7 +1557,8 @@ const idx = () => String(++n).padStart(2, '0');
     background: #161a1d;
   }
   .venue-logo img {
-    height: 100%;
+    height: calc(100% * var(--logo-scale, 1));
+    align-self: center;
     width: auto;
     display: block;
   }

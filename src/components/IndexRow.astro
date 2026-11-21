@@ -20,6 +20,7 @@ const { href, title, product, tone = 'neutral', badge, meta, date } = Astro.prop
 /* Enum values render as-is except where the public name differs. */
 const PROD_LABEL: Record<string, string> = {
   hrnsxtn: 'HRNSXTN x RDMSXN',
+  livemuse: 'Live.Muse',
   groove: 'Probing the World for Groove',
 };
 ---
@@ -83,6 +84,9 @@ const PROD_LABEL: Record<string, string> = {
   }
   .irow-prod[data-product='meteora'] {
     color: var(--mt);
+  }
+  .irow-prod[data-product='livemuse'] {
+    color: var(--lm);
   }
   .irow-prod[data-product='groove'] {
     color: var(--gr);

@@ -30,7 +30,7 @@ public_visibility_note: >-
   are public. Every number on these pages comes from saved notebook outputs and
   the workbook; no model was retrained for the site.
 featured: true
-order: 4
+order: 6
 tech:
   - PyTorch and PyTorch Lightning
   - CUDA on NVIDIA A100 and L4 GPUs (Google Colab)

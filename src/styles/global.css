@@ -71,6 +71,8 @@
   --gr-soft: #2d2410;
   --mt: #6fcf8f; /* Meteora: the contour green of the plugin's site model */
   --mt-soft: #11281a;
+  --lm: #f06bb4; /* Live.Muse: the magenta of its visual stems */
+  --lm-soft: #2e1424;
   /* The thesis's two model colours, used for every CNN and PaSST mark on its pages
      (the thesis site's own dark mode values). */
   --cnn: #4fb3a8;
@@ -312,6 +314,11 @@ hr {
   border-color: color-mix(in oklab, var(--mt) 45%, var(--hairline));
   background: color-mix(in oklab, var(--mt-soft) 55%, var(--surface));
 }
+.chip[data-product='livemuse'] {
+  color: var(--lm);
+  border-color: color-mix(in oklab, var(--lm) 45%, var(--hairline));
+  background: color-mix(in oklab, var(--lm-soft) 55%, var(--surface));
+}
 .chip[data-product='groove'] {
   color: var(--gr);
   border-color: color-mix(in oklab, var(--gr) 45%, var(--hairline));
@@ -334,6 +341,10 @@ hr {
 [data-accent='meteora'] {
   --accent: var(--mt);
   --accent-soft: var(--mt-soft);
+}
+[data-accent='livemuse'] {
+  --accent: var(--lm);
+  --accent-soft: var(--lm-soft);
 }
 [data-accent='groove'] {
   --accent: var(--gr);

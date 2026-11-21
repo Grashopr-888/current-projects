@@ -6,8 +6,8 @@ export const SITE = {
   author: 'Trent Eriksen',
   role: 'Technical Product Manager / Product Engineer',
   description:
-    'Current projects by Trent Eriksen. Windchime, Lichtspiel, HRNSXTN x RDMSXN, Meteora and Probing ' +
-    'the World for Groove: practice based, state of the art audio ML research, multimodal installations ' +
+    'Current projects by Trent Eriksen. Windchime, Lichtspiel, HRNSXTN x RDMSXN, Meteora, Live.Muse ' +
+    'and Probing the World for Groove: practice based, state of the art audio ML research, multimodal installations ' +
     'and audio plugins.',
   /** Site wide search terms; project pages replace them with their own. */
   keywords: [
@@ -39,13 +39,14 @@ export const SHOW_EMAIL = false;
 export const NAV: ReadonlyArray<{
   label: string;
   href: string;
-  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'meteora' | 'groove';
+  accent?: 'windchime' | 'lichtspiel' | 'hrnsxtn' | 'meteora' | 'livemuse' | 'groove';
 }> = [
   { label: 'Overview', href: '/' },
   { label: 'Windchime', href: '/projects/windchime', accent: 'windchime' },
   { label: 'HRNSXTN x RDMSXN', href: '/projects/hrnsxtn', accent: 'hrnsxtn' },
   { label: 'Lichtspiel', href: '/projects/lichtspiel', accent: 'lichtspiel' },
   { label: 'Meteora', href: '/projects/meteora', accent: 'meteora' },
+  { label: 'Live.Muse', href: '/projects/livemuse', accent: 'livemuse' },
   { label: 'Probing the World for Groove', href: '/projects/groove', accent: 'groove' },
   // How I Work and Incidents live as collapsed sections on Releases; About sits in the footer.
   { label: 'Releases', href: '/releases' },
@@ -291,12 +292,61 @@ export const PROJECT_META = {
       { img: '/img/logo-era.png', alt: 'era', scale: 0.55 },
     ],
   },
+  livemuse: {
+    label: 'Live.Muse',
+    kind: 'Generative audiovisual performance framework',
+    credit:
+      'Begun in residency at Petersburg Art Space, Berlin, 2024; presented at the UPF Generative Music workshop, Barcelona, December 2024; a talk at Mutacions, Terrassa, September 2025; an installation in Barcelona, December 2025',
+    accent: 'var(--lm)',
+    logo: '/img/livemuse-mark.svg',
+    // A still from the installation's full audiovisual album (the owner's own master,
+    // livemuse360_fullinstall_spatialaudiomix.mov, at 6:10), resized.
+    art: '/img/livemuse-hero.jpg',
+    artAlt:
+      'A visual stem from the Live.Muse installation: a red wireframe cube with green tiles, seen from below against a flat blue field',
+    // The full installation. Privacy-enhanced (nocookie) embed of youtu.be/TfMPCyXtrzo.
+    demoVideoId: 'TfMPCyXtrzo',
+    demoVideoTitle: 'LiveMuse360 installation, the full audiovisual album in 4K',
+    // The spatial mix and the project diary, as on the owner's portfolio page (owner request
+    // 2026-11-21).
+    moreVideos: [
+      {
+        id: 'Unm8JM2CbD0',
+        title: 'LiveMuse360 installation, spatial audio mix in 4K',
+        label: 'Spatial audio mix',
+        note: 'The full installation again, with its spatial audio mix.',
+      },
+      {
+        id: 'y0s3Z8UtBIg',
+        title: 'LiveMuse project diary and behind the scenes',
+        label: 'Project diary',
+        note: 'How the piece was made, from the studio to the installation.',
+      },
+    ],
+    // Institution and festival marks (attribution, not endorsement), owner request 2026-11-21:
+    // PAS's lettermark is its site icon (pas-berlin.org, cropped-android-chrome-512x512-2.png,
+    // resized; the site itself is not linked because it carries injected spam links); UPF's red
+    // logo from upf.edu (storybook/images/svg/upf-logo-red.svg); the Mutacions wordmark from
+    // mutacions.com's header (MUTACIONS-1.png, white artwork, so a dark tile).
+    partners: [
+      { img: '/img/logo-pas.png', alt: 'PAS, Petersburg Art Space, Berlin' },
+      { img: '/img/logo-upf.svg', alt: 'Universitat Pompeu Fabra, Barcelona', scale: 0.8 },
+      { img: '/img/logo-mutacions.png', alt: 'Mutacions', dark: true, scale: 0.4 },
+    ],
+  },
 } as const;
 
 export type ProjectSlug = keyof typeof PROJECT_META;
 
 /** Reading order for the "Next project" link at the foot of every project page. */
-const PROJECT_ORDER: ProjectSlug[] = ['windchime', 'hrnsxtn', 'lichtspiel', 'meteora', 'groove'];
+const PROJECT_ORDER: ProjectSlug[] = [
+  'windchime',
+  'hrnsxtn',
+  'lichtspiel',
+  'meteora',
+  'livemuse',
+  'groove',
+];
 export function nextProject(slug: ProjectSlug): ProjectSlug {
   return PROJECT_ORDER[(PROJECT_ORDER.indexOf(slug) + 1) % PROJECT_ORDER.length];
 }

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 214">
+  <!-- Live.Muse mark: the wireframe cube of the installation's visual stems, floating over a
+       row of monome grid keys, the controller that plays it. Magenta from the visual stems. -->
+  <defs>
+    <linearGradient id="lmCube" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffb3dc"/>
+      <stop offset=".55" stop-color="#f06bb4"/>
+      <stop offset="1" stop-color="#8a2f66"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#lmCube)" stroke-linejoin="round" stroke-linecap="round">
+    <!-- outer cube, seen from below like the scenes in the installation -->
+    <path d="M100 18 172 58 172 128 100 168 28 128 28 58Z" stroke-width="7"/>
+    <path d="M28 58 100 98 172 58M100 98V168" stroke-width="6"/>
+    <!-- grid lines on the faces -->
+    <path d="M52 71V141M76 85V155M124 85V155M148 71V141" stroke-width="2.5" opacity=".55"/>
+    <path d="M28 81 100 121 172 81M28 105 100 145 172 105" stroke-width="2.5" opacity=".55"/>
+    <path d="M52 45 124 85M76 31 148 71M76 85 148 45M52 71 124 31" stroke-width="2.5" opacity=".45"/>
+  </g>
+  <!-- lit cells, like the cubes' coloured tiles -->
+  <g fill="#7dffb0">
+    <rect x="60" y="102" width="9" height="9" rx="1.5"/>
+    <rect x="132" y="124" width="9" height="9" rx="1.5"/>
+    <rect x="96" y="54" width="9" height="9" rx="1.5"/>
+  </g>
+  <!-- monome keys -->
+  <g fill="#f06bb4">
+    <rect x="34" y="190" width="16" height="16" rx="3" opacity=".35"/>
+    <rect x="58" y="190" width="16" height="16" rx="3"/>
+    <rect x="82" y="190" width="16" height="16" rx="3" opacity=".35"/>
+    <rect x="106" y="190" width="16" height="16" rx="3" opacity=".7"/>
+    <rect x="130" y="190" width="16" height="16" rx="3" opacity=".35"/>
+    <rect x="154" y="190" width="16" height="16" rx="3"/>
+  </g>
+</svg>

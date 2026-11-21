@@ -54,7 +54,14 @@ const bandImages = band ? band.images.filter((im) => hasAsset(im.src)) : [];
         </div>
         <div class="phero-idrow">
           {meta.logo && <img class="phero-logo" src={url(meta.logo)} alt="" aria-hidden="true" />}
-          <h1 class="phero-title">{title}</h1>
+          {/* A title with a dot (Live.Muse) may wrap after it on phones instead of clipping. */}
+          <h1 class="phero-title">
+            {
+              title
+                .split('.')
+                .map((part, i, all) => (i < all.length - 1 ? [part, '.', <wbr />] : part))
+            }
+          </h1>
         </div>
         <p class="phero-summary">{summary}</p>
         <div class="phero-thesis">

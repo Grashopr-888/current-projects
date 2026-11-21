@@ -90,7 +90,7 @@ keywords:
 ## The idea
 
 Speech shapes music and visuals, answered from real recordings rather than fixed rules. It builds
-on **Live Muse**, a separate earlier installation shown at **Mutaciones**, Barcelona.
+on **Live.Muse**, a separate earlier framework and installation shown at **Mutacions**, Barcelona.
 
 ## The pipeline
 
