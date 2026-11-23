@@ -24,8 +24,8 @@ A public record of how six projects are built: Windchime, HRNSXTN x RDMSXN, Lich
 | [Live.Muse](https://grashopr-888.github.io/current-projects/projects/livemuse/)                  | generative audiovisual performance framework: a monome grid, Processing and Sonic Pi, with language model assistants that write code mid set | talk at Mutacions 2025, Terrassa; installation in Barcelona, December 2025                                    | private                                                                                                                                                                                                            |
 | [Probing the World for Groove](https://grashopr-888.github.io/current-projects/projects/groove/) | MSc thesis: frozen PaSST probed against a drum specific CNN                                                                                  | ISMIR 2025 Late-Breaking Demo; Leiden University                                                              | [notebooks, thesis, paper](https://github.com/Grashopr-888/A-comparative-study-of-Transfer-Learning-for-Drum-audio-Style-Classification-) · [history](https://github.com/Grashopr-888/drum-style-thesis-notebooks) |
 
-<p align="center"><a href="https://grashopr-888.github.io/current-projects/projects/hrnsxtn/"><img src="docs/images/readme-hrnsxtn.jpg" width="820"
-  alt="A project page: HRNSXTN x RDMSXN with its thesis, the MUTEK, ISMIR and GitHub buttons, and the contour field"></a></p>
+<p align="center"><a href="https://grashopr-888.github.io/current-projects/projects/windchime/"><img src="docs/images/readme-windchime.jpg" width="820"
+  alt="A project page: Windchime with its thesis, the NeurIPS 2026, arXiv and OpenReview buttons, and the technical rider"></a></p>
 
 This repository is the site's source. It shows technical product management and product engineering practice
 (discovery, decisions, roadmap, releases, incidents, research) **without exposing the products' private source
