@@ -494,6 +494,8 @@ const VENUES: Partial<Record<Product, { label: string; title: string; venues: Ve
         },
         logo: { src: '/img/logo-neurips.svg', alt: 'NeurIPS' },
         links: [
+          // arXiv first: the JSON-LD takes the first link as the paper's URL.
+          { label: 'Read it on arXiv', href: 'https://arxiv.org/abs/2611.26759' },
           { label: 'Read it on OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
           {
             label: 'NeurIPS 2026 page',
@@ -548,6 +550,7 @@ const PUBS: Partial<Record<Product, Pubs>> = {
         href: 'https://neurips.cc/virtual/2026/loc/sydney/160685',
         primary: true,
       },
+      { label: 'Paper on arXiv', href: 'https://arxiv.org/abs/2611.26759' },
       { label: 'Paper on OpenReview', href: 'https://openreview.net/forum?id=KKLTKVVHkM' },
     ],
   },
